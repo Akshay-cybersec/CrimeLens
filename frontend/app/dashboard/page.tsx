@@ -1,7 +1,6 @@
-import Dashboard from '@/component/Dashboard'; // Adjust this path if your folder structure is slightly different
+// app/dashboard/page.tsx
+import ForensicsDashboard from '@/component/dashboard/ForensicsDashboard';
 
 export default function DashboardRoute() {
-  return (
-    <Dashboard />
-  );
+  return <ForensicsDashboard />;
 }
