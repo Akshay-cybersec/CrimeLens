@@ -1,5 +1,7 @@
-from datetime import UTC, datetime
-from typing import Any
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import Any, Optional
 
 from bson import ObjectId
 from pymongo import DESCENDING
@@ -18,7 +20,7 @@ class CaseRepository(BaseRepository):
         case.id = result.inserted_id
         return case
 
-    async def get_by_id(self, case_id: str) -> CaseDocument | None:
+    async def get_by_id(self, case_id: str) -> Optional[CaseDocument]:
         data = await self.collection.find_one({"_id": ObjectId(case_id)})
         return CaseDocument(**data) if data else None
 
@@ -29,5 +31,5 @@ class CaseRepository(BaseRepository):
     async def update_timestamp(self, case_id: str) -> None:
         await self.collection.update_one(
             {"_id": ObjectId(case_id)},
-            {"$set": {"updated_at": datetime.now(UTC)}},
+            {"$set": {"updated_at": datetime.now(timezone.utc)}},
         )

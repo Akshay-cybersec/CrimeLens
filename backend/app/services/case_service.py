@@ -1,4 +1,6 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import Any, Optional
 
 from bson import ObjectId
 from fastapi import HTTPException, UploadFile, status
@@ -31,7 +33,7 @@ class CaseService:
         self,
         file: UploadFile,
         title: str,
-        description: str | None,
+        description: Optional[str],
         user: AuthUser,
     ) -> CaseCreateResponse:
         file_bytes = await file.read()
@@ -68,7 +70,7 @@ class CaseService:
         if case_doc is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Case not found")
 
-        if user.role == "Admin":
+        if user.role in {"SUPER_ADMIN", "ADMIN"}:
             return case_doc
 
         allowed = user.id == case_doc.owner_id or user.id in case_doc.assigned_user_ids

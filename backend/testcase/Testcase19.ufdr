@@ -1,0 +1,229 @@
+{
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00399",
+        "crime_type": "Bank Robbery – Armed Gang (4 persons)",
+        "status": "Active – 2 at large",
+        "city": "Lucknow",
+        "state": "Uttar Pradesh",
+        "incident_date": "2024-09-11",
+        "investigation_start": "2024-09-11",
+        "reporting_agency": "UP STF – Lucknow Unit",
+        "fir_number": "FIR-LKO-2024-1811"
+      },
+      "target_info": {
+        "bank_type": "Public Sector (Nationalised)",
+        "bank_name": "Awadh Rashtriya Gramin Bank (Fictional)",
+        "branch_name": "Hazratganj Branch",
+        "branch_address": "15, Shahnajaf Road, Hazratganj, Lucknow – 226001",
+        "branch_ifsc": "ARGB0000231",
+        "incident_time": "2024-09-11T12:40:00+05:30",
+        "incident_duration_minutes": 26,
+        "estimated_loss_inr": 9300000,
+        "vault_accessed": true,
+        "weapons_reported": "Four firearms – mix of katta and revolver",
+        "hostages_reported": 13,
+        "casualties": "One guard injured – baton strike",
+        "cctv_status": "Three cameras operational – partial faces visible; one suspect identified via footage"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Rajesh Kumar Tiwari",
+          "age": 45,
+          "alias": [
+            "RKT",
+            "Master"
+          ],
+          "role_in_crime": "Gang leader and vault negotiator",
+          "phone_number": "+91-94152-70318",
+          "address": "Kapoorthala Colony, Aliganj, Lucknow – 226024",
+          "occupation": "Unemployed – former transport contractor",
+          "prior_record": "2015 – dacoity case – acquitted on witnesses turning hostile",
+          "seized_device": "Yes – primary"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Sonu Lal Yadav",
+          "age": 27,
+          "alias": [
+            "Sonu",
+            "SL"
+          ],
+          "role_in_crime": "Armed gunman – customer suppression",
+          "phone_number": "+91-85552-41019",
+          "address": "Mau District, UP – 275101",
+          "occupation": "Daily labourer",
+          "prior_record": "2022 – arms act – bail granted",
+          "seized_device": "No – at large"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "Tecno Camon 20",
+        "os_version": "Android 13 (HiOS 13)",
+        "imei_1": "356140048271903",
+        "phone_number_on_device": "+91-94152-70318",
+        "seizure_time": "2024-09-12T02:44:00+05:30",
+        "seized_by": "DSP Virendra P., UP STF",
+        "extraction_type": "Logical",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "c1e9f4a7d06285943c0e9f5b4d8a3c62"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "Sonu",
+            "phone_number": "+91-85552-41019",
+            "timestamp": "2024-09-09T22:41:04+05:30",
+            "duration_seconds": 391,
+            "sim_used": "SIM2 – Jio Prepaid",
+            "notes": "Night coordination call – 2 days before robbery"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "OUTGOING",
+            "contact_name": "UNKNOWN",
+            "phone_number": "+91-89074-22104",
+            "timestamp": "2024-09-10T01:11:44+05:30",
+            "duration_seconds": 254,
+            "sim_used": "SIM2 – Jio Prepaid",
+            "notes": "Unregistered number – night before robbery – possible third/fourth gang member"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "OUTGOING",
+            "contact_name": "Sonu",
+            "phone_number": "+91-85552-41019",
+            "timestamp": "2024-09-11T12:22:09+05:30",
+            "duration_seconds": 19,
+            "sim_used": "SIM2 – Jio Prepaid",
+            "notes": "Entry confirmation call 18 minutes before robbery"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Sonu",
+            "phone_number": "+91-85552-41019",
+            "timestamp": "2024-09-09T22:14:09+05:30",
+            "content": "Char log chahiye. 2 andar, 1 bahar gaadi mein, 1 corner pe watch. Hazratganj mein traffic 12 baje peak hota hai – tab andar jaana hai.",
+            "translation_en": "Need 4 people. 2 inside, 1 outside in car, 1 watching the corner. Traffic in Hazratganj peaks at noon – go in then.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Sonu",
+            "phone_number": "+91-85552-41019",
+            "timestamp": "2024-09-11T13:24:04+05:30",
+            "content": "93 lakh mila. Sab ko Mau side bhej do. Mere paas 40 rakhta hoon. Tera aur baaki ka baad mein. Apna number delete karo.",
+            "translation_en": "Got 93 lakh. Send everyone to Mau side. I'll keep 40 with me. Yours and rest later. Delete my number.",
+            "deleted": true,
+            "deleted_timestamp": "2024-09-11T17:44:09+05:30",
+            "recovery_method": "WhatsApp msgstore.db WAL recovery"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "PhonePe",
+            "direction": "OUTGOING",
+            "amount_inr": 8000,
+            "recipient_name": "Sonu Lal Yadav",
+            "timestamp": "2024-09-09T19:04:07+05:30",
+            "remarks": "expenses",
+            "flagged": true,
+            "flag_reason": "Pre-robbery advance to gang member"
+          },
+          {
+            "transaction_id": "FT-002",
+            "app": "BHIM UPI",
+            "direction": "OUTGOING",
+            "amount_inr": 3100,
+            "recipient_name": "Shyam Fuel Station – Aliganj",
+            "timestamp": "2024-09-10T20:44:09+05:30",
+            "remarks": "",
+            "flagged": true,
+            "flag_reason": "Fuel purchase night before robbery – getaway vehicle preparation"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-09-10T11:22:07+05:30",
+            "latitude": 26.8524,
+            "longitude": 80.9394,
+            "resolved_address": "Shahnajaf Road, Hazratganj, Lucknow",
+            "notes": "Day-before reconnaissance"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-09-11T12:37:44+05:30",
+            "latitude": 26.8526,
+            "longitude": 80.9391,
+            "resolved_address": "ARGB Bank Hazratganj – AT CRIME SCENE",
+            "notes": "Device at scene 3 minutes before robbery – consistent with entry at 12:40"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-09-11T13:44:09+05:30",
+            "latitude": 26.8941,
+            "longitude": 80.9871,
+            "resolved_address": "Faizabad Road, Lucknow – toward UP highway",
+            "notes": "Rapid northward exit post-robbery toward Mau district"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "SIM_INSERTED",
+            "timestamp": "2024-09-06T11:04:22+05:30",
+            "sim_network": "Jio Prepaid – no KYC",
+            "notes": "Anonymous SIM 5 days before robbery"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-09-11T17:41:04+05:30",
+            "app_name": "WhatsApp",
+            "notes": "Removed after deletion of proceeds message"
+          },
+          {
+            "event_id": "SYS-003",
+            "event_type": "DEVICE_POWER_OFF",
+            "timestamp": "2024-09-11T22:04:09+05:30",
+            "notes": "Device powered off – seized at suspect home next morning"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "HIGH",
+          "recovery_rate_percent": 70
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "gang_coordination": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "details": "4-person gang role assignment in messages – traffic timing used tactically – proceeds split and dispersal to Mau confirmed"
+        }
+      }
+    },

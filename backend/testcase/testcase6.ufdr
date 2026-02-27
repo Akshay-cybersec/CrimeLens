@@ -1,0 +1,195 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2024-006",
+    "crime_type": "Bank Locker Room Break-in",
+    "status": "Active Investigation",
+    "location": "T. Nagar, Chennai, Tamil Nadu, India",
+    "incident_date": "2024-11-18",
+    "investigation_start": "2024-11-19"
+  },
+  "victim_info": {
+    "bank_name": "SouthTrust Bank",
+    "branch": "T. Nagar Main Branch",
+    "lockers_breached": 23,
+    "estimated_loss_inr": 14800000,
+    "incident_window": "01:10 AM – 02:05 AM"
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Prakash Natarajan",
+      "age": 41,
+      "role": "Former Security Contractor",
+      "phone_number": "+91-9884011122",
+      "address": "Saidapet, Chennai",
+      "prior_record": "Theft of office equipment – 2018"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Arun K",
+      "age": 34,
+      "role": "Technical Executor",
+      "phone_number": "+91-9790893344",
+      "address": "Ambattur, Chennai",
+      "prior_record": "None"
+    }
+  ],
+  "device_info": {
+    "device_model": "iQOO Neo 7",
+    "os_version": "Android 14",
+    "imei": "864590123456780",
+    "phone_number": "+91-9884011122",
+    "seizure_time": "2024-11-19T10:15:00+05:30",
+    "seized_by": "Chennai City Crime Branch",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Arun",
+      "phone_number": "+91-9790893344",
+      "timestamp": "2024-11-17T23:48:12+05:30",
+      "duration_seconds": 419,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Pre-incident coordination call"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Unknown",
+      "phone_number": "+91-9043211188",
+      "timestamp": "2024-11-18T01:06:54+05:30",
+      "duration_seconds": 19,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Call received minutes before CCTV blackout"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "Signal",
+      "direction": "OUTGOING",
+      "contact_name": "Arun",
+      "timestamp": "2024-11-17T23:59:40+05:30",
+      "content": "Power panel behind branch. Cut feed to DVR first. 12 mins max inside.",
+      "status": "SENT",
+      "deleted": true,
+      "deleted_timestamp": "2024-11-18T03:12:44+05:30",
+      "recovery_method": "Physical extraction"
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "Signal",
+      "direction": "INCOMING",
+      "contact_name": "Arun",
+      "timestamp": "2024-11-18T00:04:28+05:30",
+      "content": "Locker row C – premium clients. Skip biometric vault.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2024-11-18T03:12:55+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 350000,
+      "sender": "A. K",
+      "timestamp": "2024-11-18T09:22:17+05:30",
+      "memo": "Construction payment",
+      "flagged": true,
+      "flag_reason": "Transfer within 8 hours of robbery"
+    },
+    {
+      "transaction_id": "FT-002",
+      "app": "Cash Deposit",
+      "direction": "INCOMING",
+      "amount_inr": 950000,
+      "timestamp": "2024-11-19T11:08:04+05:30",
+      "flagged": true,
+      "flag_reason": "High-value structured deposit in 3 installments"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2024-11-18T01:08:33+05:30",
+      "latitude": 13.0418,
+      "longitude": 80.2341,
+      "accuracy_meters": 6,
+      "source": "GPS",
+      "resolved_address": "SouthTrust Bank – T. Nagar",
+      "notes": "Device present during CCTV blackout window"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2024-11-18T02:17:55+05:30",
+      "latitude": 13.0827,
+      "longitude": 80.2707,
+      "accuracy_meters": 17,
+      "source": "Cell Tower",
+      "resolved_address": "Anna Salai Flyover",
+      "notes": "Movement away from bank immediately post-break-in"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2024-11-16T19:14:21+05:30",
+        "action": "SEARCH",
+        "query": "bank CCTV DVR power panel location",
+        "notes": "Pre-planning search"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2024-11-15T14:42:19+05:30",
+        "action": "PHOTO_CAPTURED",
+        "file_name": "IMG_20241115_144219.jpg",
+        "gps_embedded": true,
+        "location": "SouthTrust Bank Side Entrance",
+        "status": "DELETED",
+        "deleted_timestamp": "2024-11-18T03:09:11+05:30",
+        "recovery_status": "Recovered – thumbnail"
+      }
+    ],
+    "flashlight_activity": [
+      {
+        "activity_id": "FL-001",
+        "timestamp": "2024-11-18T01:12:02+05:30",
+        "action": "FLASHLIGHT_ON",
+        "duration_seconds": 733,
+        "notes": "Extended flashlight use during robbery window"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "SIM_CHANGE",
+      "timestamp": "2024-11-15T09:08:17+05:30",
+      "notes": "New prepaid SIM activated 3 days prior"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2024-11-18T02:22:44+05:30",
+      "notes": "Device powered off after exiting premises"
+    },
+    {
+      "event_id": "SYS-003",
+      "event_type": "APP_UNINSTALL",
+      "timestamp": "2024-11-18T03:05:22+05:30",
+      "app_name": "Signal",
+      "notes": "Secure messaging app removed post-incident"
+    }
+  ]
+}

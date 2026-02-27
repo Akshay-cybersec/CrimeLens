@@ -1,0 +1,183 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2024-004",
+    "crime_type": "Luxury Residential Robbery with Insider Facilitation",
+    "status": "Active Investigation",
+    "location": "Whitefield, Bengaluru, Karnataka, India",
+    "incident_date": "2024-09-12",
+    "investigation_start": "2024-09-13"
+  },
+  "victim_info": {
+    "victim_name": "Sanjay Raghavan",
+    "age": 52,
+    "profession": "Tech Entrepreneur",
+    "residence": "Prestige Lakeside Habitat, Whitefield",
+    "loss_estimate_inr": 7600000,
+    "items_stolen": [
+      "Diamond Necklace",
+      "Rolex Watch",
+      "Cash ₹18 Lakhs",
+      "Property Documents"
+    ]
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Meena Kumari",
+      "age": 34,
+      "role": "Domestic Help",
+      "phone_number": "+91-9845012234",
+      "address": "Kadugodi, Bengaluru",
+      "prior_record": "None"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Ravi Gowda",
+      "age": 30,
+      "role": "Primary Executor",
+      "phone_number": "+91-9900087654",
+      "address": "KR Puram, Bengaluru",
+      "prior_record": "House-breaking – 2022"
+    }
+  ],
+  "device_info": {
+    "device_model": "Realme GT 2 Pro",
+    "os_version": "Android 13",
+    "imei": "865432109887654",
+    "phone_number": "+91-9845012234",
+    "seizure_time": "2024-09-13T07:45:00+05:30",
+    "seized_by": "Whitefield Police Station – Bengaluru City Police",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Ravi",
+      "phone_number": "+91-9900087654",
+      "timestamp": "2024-09-11T22:08:14+05:30",
+      "duration_seconds": 376,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Late-night planning call"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Ravi",
+      "phone_number": "+91-9900087654",
+      "timestamp": "2024-09-12T18:42:05+05:30",
+      "duration_seconds": 21,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Call during robbery window"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "WhatsApp",
+      "direction": "OUTGOING",
+      "contact_name": "Ravi",
+      "timestamp": "2024-09-11T23:11:44+05:30",
+      "content": "Family leaves for dinner at 7 PM tomorrow. CCTV near back gate not working.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "WhatsApp",
+      "direction": "INCOMING",
+      "contact_name": "Ravi",
+      "timestamp": "2024-09-11T23:14:19+05:30",
+      "content": "Open balcony door latch before leaving. We enter 7:20.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2024-09-12T22:12:33+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 180000,
+      "sender": "R. Gowda",
+      "timestamp": "2024-09-13T02:18:21+05:30",
+      "memo": "Old dues",
+      "flagged": true,
+      "flag_reason": "Unusual transfer after robbery"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2024-09-12T19:18:02+05:30",
+      "latitude": 12.9698,
+      "longitude": 77.7499,
+      "accuracy_meters": 5,
+      "source": "GPS",
+      "resolved_address": "Prestige Lakeside Habitat, Whitefield",
+      "notes": "Device present at victim residence during robbery"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2024-09-12T20:04:47+05:30",
+      "latitude": 12.9886,
+      "longitude": 77.7213,
+      "accuracy_meters": 16,
+      "source": "Cell Tower",
+      "resolved_address": "Old Madras Road",
+      "notes": "Rapid movement post-incident"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2024-09-10T18:42:31+05:30",
+        "action": "SEARCH",
+        "query": "Whitefield gated community security shifts timing",
+        "notes": "Recon search"
+      }
+    ],
+    "wifi_activity": [
+      {
+        "activity_id": "WF-001",
+        "timestamp": "2024-09-11T21:22:14+05:30",
+        "action": "WIFI_SCAN",
+        "network_detected": "Raghavan_5G",
+        "notes": "WiFi reconnaissance prior to robbery"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2024-09-09T11:05:44+05:30",
+        "action": "PHOTO_CAPTURED",
+        "file_name": "IMG_20240909_110544.jpg",
+        "gps_embedded": true,
+        "location": "Victim Master Bedroom",
+        "status": "DELETED",
+        "deleted_timestamp": "2024-09-12T22:10:11+05:30",
+        "recovery_status": "Recovered – thumbnail"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2024-09-12T20:12:55+05:30",
+      "notes": "Device powered off after robbery"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "APP_CACHE_CLEARED",
+      "timestamp": "2024-09-12T22:09:01+05:30",
+      "notes": "WhatsApp cache manually cleared"
+    }
+  ]
+}

@@ -11,10 +11,11 @@ from app.repositories.audits import AuditRepository
 from app.repositories.cases import CaseRepository
 from app.repositories.clusters import ClusterRepository
 from app.repositories.events import EventRepository
-from app.repositories.insights import InsightRepository
-from app.repositories.users import UserRepository
+from app.repositories.insight_repository import InsightRepository
+from app.repositories.user_repository import UserRepository
 from app.services.auth_service import AuthService
 from app.services.background_worker import BackgroundWorkerService
+from app.services.case_behavior_service import CaseBehaviorService
 from app.services.case_service import CaseService
 from app.services.evidence_service import EvidenceService
 from app.services.insight_service import InsightService
@@ -23,7 +24,7 @@ from app.services.search_service import SearchService
 from app.services.similar_case_service import SimilarCaseService
 from app.services.timeline_service import TimelineService
 from app.services.ufdr_parser import UFDRParserService
-from app.vector.chroma_store import ChromaStore
+from app.vector.chroma_client import ChromaCloudStore
 
 
 def get_app_settings() -> Settings:
@@ -34,16 +35,19 @@ def get_redis_service(request: Request) -> RedisService:
     return request.app.state.redis_service
 
 
-def get_vector_store(request: Request) -> ChromaStore:
+def get_vector_store(request: Request) -> ChromaCloudStore:
     return request.app.state.vector_store
 
 
-def get_user_repository(request: Request) -> UserRepository:
-    return request.app.state.user_repository
+def get_user_repository(db: AsyncIOMotorDatabase[Any] = Depends(get_db)) -> UserRepository:
+    return UserRepository(db)
 
 
-def get_auth_service(users_repo: UserRepository = Depends(get_user_repository)) -> AuthService:
-    return AuthService(users_repo)
+def get_auth_service(
+    users_repo: UserRepository = Depends(get_user_repository),
+    settings: Settings = Depends(get_app_settings),
+) -> AuthService:
+    return AuthService(users_repo, settings)
 
 
 def get_case_repository(db: AsyncIOMotorDatabase[Any] = Depends(get_db)) -> CaseRepository:
@@ -111,7 +115,7 @@ def get_search_service(
     event_repo: EventRepository = Depends(get_event_repository),
     embedding_service: EmbeddingService = Depends(get_embedding_service),
     llm_service: LLMService = Depends(get_llm_service),
-    vector_store: ChromaStore = Depends(get_vector_store),
+    vector_store: ChromaCloudStore = Depends(get_vector_store),
 ) -> SearchService:
     return SearchService(
         event_repo=event_repo,
@@ -125,20 +129,49 @@ def get_insight_service(
     event_repo: EventRepository = Depends(get_event_repository),
     insight_repo: InsightRepository = Depends(get_insight_repository),
     llm_service: LLMService = Depends(get_llm_service),
+    redis_service: RedisService = Depends(get_redis_service),
+    settings: Settings = Depends(get_app_settings),
 ) -> InsightService:
-    return InsightService(event_repo, insight_repo, llm_service)
+    return InsightService(event_repo, insight_repo, llm_service, redis_service, settings)
+
+
+def get_case_behavior_service(
+    case_repo: CaseRepository = Depends(get_case_repository),
+    event_repo: EventRepository = Depends(get_event_repository),
+    embedding_service: EmbeddingService = Depends(get_embedding_service),
+    vector_store: ChromaCloudStore = Depends(get_vector_store),
+    redis_service: RedisService = Depends(get_redis_service),
+    llm_service: LLMService = Depends(get_llm_service),
+    settings: Settings = Depends(get_app_settings),
+) -> CaseBehaviorService:
+    return CaseBehaviorService(
+        case_repo=case_repo,
+        event_repo=event_repo,
+        embedding_service=embedding_service,
+        vector_store=vector_store,
+        redis_service=redis_service,
+        llm_service=llm_service,
+        settings=settings,
+    )
 
 
 def get_similar_case_service(
-    vector_store: ChromaStore = Depends(get_vector_store),
+    case_behavior_service: CaseBehaviorService = Depends(get_case_behavior_service),
 ) -> SimilarCaseService:
-    return SimilarCaseService(vector_store)
+    return SimilarCaseService(case_behavior_service)
 
 
 def get_background_worker(
     case_repo: CaseRepository = Depends(get_case_repository),
     event_repo: EventRepository = Depends(get_event_repository),
     embedding_service: EmbeddingService = Depends(get_embedding_service),
-    vector_store: ChromaStore = Depends(get_vector_store),
+    vector_store: ChromaCloudStore = Depends(get_vector_store),
+    case_behavior_service: CaseBehaviorService = Depends(get_case_behavior_service),
 ) -> BackgroundWorkerService:
-    return BackgroundWorkerService(case_repo, event_repo, embedding_service, vector_store)
+    return BackgroundWorkerService(
+        case_repo=case_repo,
+        event_repo=event_repo,
+        embedding_service=embedding_service,
+        vector_store=vector_store,
+        case_behavior_service=case_behavior_service,
+    )

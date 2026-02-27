@@ -1,5 +1,5 @@
 import json
-from typing import Any
+from typing import Any, Optional
 
 import httpx
 
@@ -20,7 +20,14 @@ class LLMService:
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
 
-    async def structured_json(self, task_prompt: str, schema_hint: dict[str, Any]) -> dict[str, Any]:
+    async def structured_json(
+        self,
+        task_prompt: str,
+        schema_hint: dict[str, Any],
+        *,
+        system_prompt: Optional[str] = None,
+        temperature: Optional[float] = None,
+    ) -> dict[str, Any]:
         if not self.settings.deepinfra_api_key:
             return {
                 "interpreted_query": task_prompt,
@@ -35,10 +42,10 @@ class LLMService:
 
         payload = {
             "model": self.settings.deepinfra_llm_model,
-            "temperature": self.settings.deepinfra_temperature,
+            "temperature": temperature if temperature is not None else self.settings.deepinfra_temperature,
             "response_format": {"type": "json_object"},
             "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": system_prompt or SYSTEM_PROMPT},
                 {
                     "role": "user",
                     "content": (

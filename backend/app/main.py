@@ -9,10 +9,10 @@ from app.core.logging import configure_logging
 from app.middleware.audit import AuditMiddleware
 from app.middleware.error_handler import generic_exception_handler
 from app.middleware.rate_limit import RateLimitMiddleware
-from app.repositories.users import UserRepository
-from app.routers import auth, cases, health
+from app.repositories.user_repository import UserRepository
+from app.routers import auth, cases, health, insight_router
 from app.services.redis_service import RedisService
-from app.vector.chroma_store import ChromaStore
+from app.vector.chroma_client import ChromaCloudStore
 
 
 @asynccontextmanager
@@ -27,8 +27,15 @@ async def lifespan(app: FastAPI):
     await redis_service.connect()
 
     app.state.redis_service = redis_service
-    app.state.vector_store = ChromaStore(settings)
-    app.state.user_repository = UserRepository()
+    app.state.vector_store = ChromaCloudStore(settings)
+    await app.state.vector_store.initialize()
+    user_repo = UserRepository(mongo_manager.db)
+    await user_repo.ensure_indexes()
+    await user_repo.ensure_super_admin(
+        email=settings.super_admin_email,
+        password=settings.super_admin_password,
+        full_name=settings.super_admin_full_name,
+    )
 
     yield
 
@@ -63,6 +70,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(auth.router, prefix=settings.api_prefix)
     app.include_router(cases.router, prefix=settings.api_prefix)
+    app.include_router(insight_router.router, prefix=settings.api_prefix)
 
     return app
 

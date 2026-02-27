@@ -1,5 +1,5 @@
 import re
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from io import BytesIO
 
 import fitz
@@ -92,7 +92,7 @@ class UFDRParserService:
             raw = timestamp_match.group(0)
             for fmt in DATE_PATTERNS:
                 try:
-                    return datetime.strptime(raw, fmt).replace(tzinfo=UTC)
+                    return datetime.strptime(raw, fmt).replace(tzinfo=timezone.utc)
                 except ValueError:
                     continue
-        return datetime.now(UTC)
+        return datetime.now(timezone.utc)

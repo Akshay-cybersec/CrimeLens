@@ -28,19 +28,25 @@ class Settings(BaseSettings):
     deepinfra_embedding_model: str = "BAAI/bge-large-en-v1.5"
     deepinfra_temperature: float = 0.1
 
-    vector_backend: Literal["chromadb"] = "chromadb"
-    chroma_persist_dir: str = "./data/chroma"
+    vector_backend: Literal["chromadb_cloud"] = "chromadb_cloud"
+    chroma_api_key: str = ""
+    chroma_tenant: str = ""
+    chroma_database: str = ""
+    chroma_collection_events: str = "case_events"
+    chroma_collection_cases: str = "case_summaries"
     embedding_dimensions: int = 1024
 
     max_upload_size_mb: int = 50
     rate_limit_per_minute: int = 120
+    insight_cache_ttl_seconds: int = 600
+    insight_regenerate_cooldown_seconds: int = 60
+    behavior_cache_ttl_seconds: int = 600
+    insight_cache_ttl_seconds: int = 600
+    insight_regenerate_cooldown_seconds: int = 60
 
-    admin_username: str = "admin"
-    admin_password: str = "admin123!"
-    investigator_username: str = "investigator"
-    investigator_password: str = "investigator123!"
-    analyst_username: str = "analyst"
-    analyst_password: str = "analyst123!"
+    super_admin_email: str = "superadmin@crimelens.local"
+    super_admin_password: str = "change-super-admin-password"
+    super_admin_full_name: str = "Super Admin"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

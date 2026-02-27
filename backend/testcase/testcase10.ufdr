@@ -1,0 +1,196 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2025-010",
+    "crime_type": "Interstate Jewel Courier Interception",
+    "status": "Active Investigation",
+    "location": "NH-48, Between Vapi (Gujarat) and Palghar (Maharashtra), India",
+    "incident_date": "2025-03-22",
+    "investigation_start": "2025-03-23"
+  },
+  "victim_info": {
+    "company_name": "National Jewel Transit Services",
+    "cargo_description": "Diamond and Gold Jewelry Consignment",
+    "route": "Surat (Gujarat) to Mumbai (Maharashtra)",
+    "escort_vehicle_present": true,
+    "estimated_loss_inr": 168000000
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Faizan Khan",
+      "age": 36,
+      "role": "Convoy Tracker",
+      "phone_number": "+91-9892011144",
+      "address": "Bhiwandi, Maharashtra",
+      "prior_record": "Highway cargo theft – 2019"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Ritesh Solanki",
+      "age": 33,
+      "role": "Interception Lead",
+      "phone_number": "+91-9825098877",
+      "address": "Vapi, Gujarat",
+      "prior_record": "Illegal arms possession – 2022"
+    },
+    {
+      "suspect_id": "S-003",
+      "name": "Yusuf Pathan",
+      "age": 40,
+      "role": "Financial Distributor (Hawala Handler)",
+      "phone_number": "+91-9768112233",
+      "address": "Kurla, Mumbai",
+      "prior_record": "Money laundering – 2021"
+    }
+  ],
+  "device_info": {
+    "device_model": "Samsung Galaxy S23 FE",
+    "os_version": "Android 14",
+    "imei": "359771234567881",
+    "phone_number": "+91-9892011144",
+    "seizure_time": "2025-03-23T10:05:00+05:30",
+    "seized_by": "Maharashtra ATS + Gujarat Crime Branch (Joint Operation)",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Ritesh",
+      "phone_number": "+91-9825098877",
+      "timestamp": "2025-03-22T04:41:12+05:30",
+      "duration_seconds": 388,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Convoy position update before interception"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Yusuf",
+      "phone_number": "+91-9768112233",
+      "timestamp": "2025-03-22T06:09:44+05:30",
+      "duration_seconds": 61,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Confirmation of distribution plan"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "Telegram",
+      "direction": "OUTGOING",
+      "contact_name": "Ritesh",
+      "timestamp": "2025-03-21T23:14:55+05:30",
+      "content": "Courier left Surat 11:40 PM. Escort SUV ahead. Intercept near Km 124 bridge.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "Telegram",
+      "direction": "INCOMING",
+      "contact_name": "Ritesh",
+      "timestamp": "2025-03-22T00:05:18+05:30",
+      "content": "Block rear vehicle first. Switch cargo to tempo within 6 mins.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2025-03-22T08:12:11+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "Hawala Ledger Entry",
+      "direction": "INCOMING",
+      "amount_inr": 25000000,
+      "timestamp": "2025-03-23T02:14:18+05:30",
+      "flagged": true,
+      "flag_reason": "Large undocumented settlement recorded in encrypted notes app"
+    },
+    {
+      "transaction_id": "FT-002",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 850000,
+      "sender": "R. Solanki",
+      "timestamp": "2025-03-23T05:08:11+05:30",
+      "memo": "Transport fee",
+      "flagged": true,
+      "flag_reason": "Transfer within 24h of robbery"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2025-03-22T05:57:44+05:30",
+      "latitude": 20.3923,
+      "longitude": 72.9111,
+      "accuracy_meters": 8,
+      "source": "GPS",
+      "resolved_address": "NH-48 Km 124 Bridge (Near Vapi Border)",
+      "notes": "Device present at interception point"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2025-03-22T06:22:31+05:30",
+      "latitude": 19.7433,
+      "longitude": 72.7581,
+      "accuracy_meters": 19,
+      "source": "Cell Tower",
+      "resolved_address": "Palghar Exit, Maharashtra",
+      "notes": "Interstate movement post-interception"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2025-03-21T20:42:14+05:30",
+        "action": "SEARCH",
+        "query": "NH-48 bridges with low CCTV coverage",
+        "notes": "Reconnaissance search"
+      }
+    ],
+    "vehicle_activity": [
+      {
+        "activity_id": "VH-001",
+        "timestamp": "2025-03-22T06:01:08+05:30",
+        "action": "VEHICLE_SWAP",
+        "notes": "Cargo transferred from courier truck to unregistered tempo"
+      }
+    ],
+    "secure_notes_activity": [
+      {
+        "activity_id": "SN-001",
+        "timestamp": "2025-03-23T01:58:11+05:30",
+        "action": "ENCRYPTED_LEDGER_UPDATE",
+        "notes": "Hawala distribution entries recorded"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "SIM_CHANGE",
+      "timestamp": "2025-03-19T09:14:11+05:30",
+      "notes": "New prepaid SIM activated 72h before robbery"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2025-03-22T06:25:14+05:30",
+      "notes": "Device powered off immediately after state border crossing"
+    },
+    {
+      "event_id": "SYS-003",
+      "event_type": "APP_UNINSTALL",
+      "timestamp": "2025-03-22T08:10:21+05:30",
+      "app_name": "Telegram",
+      "notes": "Secure messaging removed post-incident"
+    }
+  ]
+}

@@ -1,6 +1,11 @@
+from __future__ import annotations
+
+from typing import Any, Optional
+
 from pydantic import BaseModel, Field
 
 from app.schemas.event import EventResponse
+from app.schemas.insight_schema import InsightResponse
 
 
 class EvidenceClusterResponse(BaseModel):
@@ -27,15 +32,16 @@ class SearchResponse(BaseModel):
     explanation: str
 
 
-class InsightResponse(BaseModel):
-    id: str
-    summary: str
-    supporting_event_ids: list[str]
-    confidence_score: float
-    reasoning: str
-
-
 class SimilarCaseResponse(BaseModel):
-    similar_case_id: str
+    case_id: str
     similarity_score: float
+    crime_type: Optional[str] = None
     explanation: str
+    shared_behavioral_signals: list[str] = Field(default_factory=list)
+
+
+class BehavioralIndexResponse(BaseModel):
+    case_id: str
+    indexed: bool
+    behavioral_features: dict[str, Any]
+    behavioral_summary: str

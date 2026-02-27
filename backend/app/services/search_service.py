@@ -3,7 +3,7 @@ from app.ai.llm_service import LLMService
 from app.repositories.events import EventRepository
 from app.schemas.analysis import SearchRequest, SearchResponse
 from app.schemas.event import EventResponse
-from app.vector.chroma_store import ChromaStore
+from app.vector.chroma_client import ChromaCloudStore
 
 
 class SearchService:
@@ -12,7 +12,7 @@ class SearchService:
         event_repo: EventRepository,
         embedding_service: EmbeddingService,
         llm_service: LLMService,
-        vector_store: ChromaStore,
+        vector_store: ChromaCloudStore,
     ) -> None:
         self.event_repo = event_repo
         self.embedding_service = embedding_service

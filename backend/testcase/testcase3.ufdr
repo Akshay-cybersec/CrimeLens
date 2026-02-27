@@ -1,0 +1,201 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2024-003",
+    "crime_type": "Highway Gold Transport Heist",
+    "status": "Active Investigation",
+    "location": "Vadodara–Ahmedabad Expressway, Gujarat, India",
+    "incident_date": "2024-08-21",
+    "investigation_start": "2024-08-22"
+  },
+  "victim_info": {
+    "company_name": "Shree Bullion Logistics Pvt. Ltd.",
+    "cargo_description": "Gold bars – 24K (Bank Transfer Consignment)",
+    "cargo_weight_kg": 18,
+    "estimated_value_inr": 108000000,
+    "route": "Surat Refinery to Ahmedabad Bullion Vault"
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Harshad Solanki",
+      "age": 38,
+      "role": "Highway Spotter",
+      "phone_number": "+91-9904422211",
+      "address": "Nadiad, Gujarat",
+      "prior_record": "Vehicle theft – 2019"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Manish Parmar",
+      "age": 35,
+      "role": "Convoy Interceptor",
+      "phone_number": "+91-9898556677",
+      "address": "Anand, Gujarat",
+      "prior_record": "Armed robbery – 2021 (pending trial)"
+    },
+    {
+      "suspect_id": "S-003",
+      "name": "Ketan Bhatt",
+      "age": 32,
+      "role": "Logistics Planner",
+      "phone_number": "+91-9876543321",
+      "address": "Vadodara, Gujarat",
+      "prior_record": "None"
+    }
+  ],
+  "device_info": {
+    "device_model": "Vivo V27 Pro",
+    "os_version": "Android 13",
+    "imei": "862309874561234",
+    "phone_number": "+91-9904422211",
+    "seizure_time": "2024-08-22T11:07:00+05:30",
+    "seized_by": "Gujarat ATS + Highway Patrol Unit",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Manish",
+      "phone_number": "+91-9898556677",
+      "timestamp": "2024-08-21T05:41:12+05:30",
+      "duration_seconds": 302,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Call placed 18 minutes before convoy interception"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Ketan",
+      "phone_number": "+91-9876543321",
+      "timestamp": "2024-08-21T04:12:44+05:30",
+      "duration_seconds": 148,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Pre-dawn coordination call"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "Telegram",
+      "direction": "OUTGOING",
+      "contact_name": "Manish",
+      "timestamp": "2024-08-20T22:44:08+05:30",
+      "content": "Escort vehicle ahead of truck. Target truck plate GJ-06-T-9182. Slow near Toll Gate 3.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "Telegram",
+      "direction": "INCOMING",
+      "contact_name": "Ketan",
+      "timestamp": "2024-08-20T23:01:14+05:30",
+      "content": "Block from rear. Diversion vehicle already positioned.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2024-08-21T07:12:55+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 1200000,
+      "sender": "M. Parmar",
+      "timestamp": "2024-08-21T15:44:29+05:30",
+      "memo": "Vehicle sale",
+      "flagged": true,
+      "flag_reason": "High-value transfer post-incident"
+    },
+    {
+      "transaction_id": "FT-002",
+      "app": "Cash Deposit",
+      "direction": "INCOMING",
+      "amount_inr": 3000000,
+      "timestamp": "2024-08-22T09:18:02+05:30",
+      "flagged": true,
+      "flag_reason": "Structured deposits across 3 branches"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2024-08-21T05:56:33+05:30",
+      "latitude": 22.3072,
+      "longitude": 73.1812,
+      "accuracy_meters": 8,
+      "source": "GPS",
+      "resolved_address": "Vadodara–Ahmedabad Expressway, Toll Gate 3",
+      "notes": "Device location matches convoy ambush point"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2024-08-21T06:14:09+05:30",
+      "latitude": 22.5448,
+      "longitude": 72.9289,
+      "accuracy_meters": 17,
+      "source": "Cell Tower",
+      "resolved_address": "Near Anand Exit",
+      "notes": "Rapid northbound movement after robbery"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2024-08-20T20:12:44+05:30",
+        "action": "SEARCH",
+        "query": "expressway toll CCTV blind spots Gujarat",
+        "notes": "Pre-incident reconnaissance"
+      },
+      {
+        "activity_id": "GM-002",
+        "timestamp": "2024-08-20T20:15:21+05:30",
+        "action": "NAVIGATION_STARTED",
+        "destination": "Vadodara–Ahmedabad Expressway Toll Gate 3",
+        "mode": "DRIVING",
+        "notes": "Route simulation prior to attack"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2024-08-19T16:08:31+05:30",
+        "action": "PHOTO_CAPTURED",
+        "file_name": "IMG_20240819_160831.jpg",
+        "gps_embedded": true,
+        "location": "Expressway Toll Gate 3",
+        "status": "DELETED",
+        "deleted_timestamp": "2024-08-21T07:09:41+05:30",
+        "recovery_status": "Recovered – full resolution"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "SIM_CHANGE",
+      "timestamp": "2024-08-19T09:21:14+05:30",
+      "notes": "Prepaid SIM activated 48 hours before robbery"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2024-08-21T06:16:32+05:30",
+      "notes": "Device powered off during escape phase"
+    },
+    {
+      "event_id": "SYS-003",
+      "event_type": "APP_UNINSTALL",
+      "timestamp": "2024-08-21T07:05:48+05:30",
+      "app_name": "Telegram",
+      "notes": "Secure messaging app removed post-incident"
+    }
+  ]
+}

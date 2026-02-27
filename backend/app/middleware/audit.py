@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import Request
@@ -26,7 +26,7 @@ class AuditMiddleware(BaseHTTPMiddleware):
             token = auth.split(" ", 1)[1]
             try:
                 payload = decode_access_token(token)
-                user_id = payload.sub
+                user_id = payload.user_id
                 role = payload.role
             except Exception:
                 user_id = None
@@ -39,7 +39,7 @@ class AuditMiddleware(BaseHTTPMiddleware):
             path=request.url.path,
             status_code=response.status_code,
             context={"query": dict(request.query_params)},
-            created_at=datetime.now(UTC),
+            created_at=datetime.now(timezone.utc),
         )
         await audit_repo.create(log)
 

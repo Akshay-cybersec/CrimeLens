@@ -1,3 +1,3 @@
-from app.routers import auth, cases, health
+from app.routers import auth, cases, health, insight_router
 
-__all__ = ["auth", "cases", "health"]
+__all__ = ["auth", "cases", "health", "insight_router"]

@@ -1,27 +1,31 @@
+from __future__ import annotations
+
+from typing import Optional
+
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, Query, UploadFile
 
 from app.core.deps import (
     get_background_worker,
+    get_case_behavior_service,
     get_case_service,
     get_evidence_service,
-    get_insight_service,
     get_search_service,
     get_similar_case_service,
     get_timeline_service,
 )
 from app.core.security import AuthUser, get_current_user, require_roles
 from app.schemas.analysis import (
+    BehavioralIndexResponse,
     EvidenceAnalysisResponse,
-    InsightResponse,
     SearchRequest,
     SearchResponse,
     SimilarCaseResponse,
 )
 from app.schemas.case import CaseCreateResponse, TimelineResponse
 from app.services.background_worker import BackgroundWorkerService
+from app.services.case_behavior_service import CaseBehaviorService
 from app.services.case_service import CaseService
 from app.services.evidence_service import EvidenceService
-from app.services.insight_service import InsightService
 from app.services.search_service import SearchService
 from app.services.similar_case_service import SimilarCaseService
 from app.services.timeline_service import TimelineService
@@ -34,14 +38,25 @@ async def upload_case(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     title: str = Form(...),
-    description: str | None = Form(default=None),
-    user: AuthUser = Depends(require_roles("Admin", "Investigator")),
+    description: Optional[str] = Form(default=None),
+    user: AuthUser = Depends(require_roles(["SUPER_ADMIN", "ADMIN", "INVESTIGATOR"])),
     case_service: CaseService = Depends(get_case_service),
     background_worker: BackgroundWorkerService = Depends(get_background_worker),
 ) -> CaseCreateResponse:
     created = await case_service.upload_case(file=file, title=title, description=description, user=user)
     background_tasks.add_task(background_worker.process_case, created.case_id)
     return created
+
+
+@router.post("/{case_id}/behavioral-index", response_model=BehavioralIndexResponse)
+async def behavioral_index(
+    case_id: str,
+    user: AuthUser = Depends(get_current_user),
+    case_service: CaseService = Depends(get_case_service),
+    behavior_service: CaseBehaviorService = Depends(get_case_behavior_service),
+) -> BehavioralIndexResponse:
+    await case_service.authorize_case_access(case_id, user)
+    return await behavior_service.index_case_behavior(case_id)
 
 
 @router.get("/{case_id}/timeline", response_model=TimelineResponse)
@@ -78,17 +93,6 @@ async def semantic_search(
 ) -> SearchResponse:
     await case_service.authorize_case_access(case_id, user)
     return await search_service.semantic_search(case_id, payload)
-
-
-@router.get("/{case_id}/insights", response_model=list[InsightResponse])
-async def investigative_insights(
-    case_id: str,
-    user: AuthUser = Depends(get_current_user),
-    case_service: CaseService = Depends(get_case_service),
-    insight_service: InsightService = Depends(get_insight_service),
-) -> list[InsightResponse]:
-    await case_service.authorize_case_access(case_id, user)
-    return await insight_service.generate(case_id)
 
 
 @router.get("/{case_id}/similar-cases", response_model=list[SimilarCaseResponse])

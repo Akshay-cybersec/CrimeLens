@@ -1,0 +1,274 @@
+{
+  "dataset_classification": "FICTIONAL – ACADEMIC AND TRAINING USE ONLY",
+  "generated_for": "Hackathon / Forensic AI Research / Digital Evidence Training",
+  "all_names_fictional": true,
+  "all_numbers_fictional": true,
+  "all_bank_details_fictional": true,
+  "no_real_persons_represented": true,
+  "jurisdiction_simulated": "India",
+  "total_cases": 9,
+  "timestamp_format": "ISO 8601 with IST offset (+05:30)",
+  "dataset_version": "1.0",
+  "cases": [
+    {
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00392",
+        "crime_type": "Armed Bank Robbery with Digital Conspiracy",
+        "status": "Active Investigation",
+        "city": "Pune",
+        "state": "Maharashtra",
+        "incident_date": "2024-02-09",
+        "investigation_start": "2024-02-09",
+        "reporting_agency": "Pune City Police – Crime Branch Unit II",
+        "fir_number": "FIR-PCP-2024-0312"
+      },
+      "target_info": {
+        "bank_type": "Private Sector",
+        "bank_name": "Bharat Samridhi Bank Ltd (Fictional)",
+        "branch_name": "Deccan Gymkhana Branch",
+        "branch_address": "Plot 8, FC Road, Deccan Gymkhana, Pune – 411004",
+        "branch_ifsc": "BSBL0003317",
+        "incident_time": "2024-02-09T15:10:00+05:30",
+        "incident_duration_minutes": 22,
+        "estimated_loss_inr": 6200000,
+        "vault_accessed": true,
+        "weapons_reported": "One licensed-looking replica pistol, one genuine country-made revolver",
+        "hostages_reported": 8,
+        "casualties": "None",
+        "cctv_status": "Three of five cameras spray-painted before entry"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Omkar Vishwas Deshmukh",
+          "age": 31,
+          "alias": [
+            "OVD",
+            "Omya"
+          ],
+          "role_in_crime": "Mastermind and Vault Breaker",
+          "phone_number": "+91-96234-51807",
+          "address": "D-4, Parvati Darshan Society, Sinhagad Road, Pune – 411030",
+          "occupation": "Locksmith (self-employed)",
+          "prior_record": "2019 – housebreaking – served 8 months",
+          "seized_device": "Yes – primary device"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Suresh Pandurang Gaikwad",
+          "age": 38,
+          "alias": [
+            "SP",
+            "Gaikya"
+          ],
+          "role_in_crime": "Armed Guard and Customer Control",
+          "phone_number": "+91-88057-30412",
+          "address": "Chawl 6, Bibwewadi, Pune – 411037",
+          "occupation": "Unemployed – ex-security guard",
+          "prior_record": "2021 – illegal arms possession – bail pending",
+          "seized_device": "Partial – SIM only"
+        },
+        {
+          "suspect_id": "S-003",
+          "fictional_full_name": "Rekha Madhav Shinde",
+          "age": 27,
+          "alias": [
+            "RMS",
+            "Rexy"
+          ],
+          "role_in_crime": "Decoy Customer and Surveillance Disabler",
+          "phone_number": "+91-73841-20955",
+          "address": "Near Warje Market, Pune – 411058",
+          "occupation": "Beautician",
+          "prior_record": "None on file",
+          "seized_device": "No – at large"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "Vivo V29 Pro",
+        "os_version": "Android 13 (Funtouch OS 13)",
+        "imei_1": "861430057821934",
+        "imei_2": "861430057821942",
+        "phone_number_on_device": "+91-96234-51807",
+        "seizure_time": "2024-02-10T04:30:00+05:30",
+        "seized_by": "Inspector Rahul S. Kamble, Crime Branch Pune",
+        "extraction_type": "Full File System",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "b4e8d3c1a9f07264510c3d8b2a4e9f31",
+        "hash_sha256": "8c2df7a31b05e9461703e5c8b12a8d461703e5c8b12a8d461703e5c8b12a8d46"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "Gaikya",
+            "phone_number": "+91-88057-30412",
+            "timestamp": "2024-02-07T23:11:05+05:30",
+            "duration_seconds": 374,
+            "sim_used": "SIM2 – Jio Prepaid",
+            "notes": "Late-night planning call – 2 days before robbery"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "OUTGOING",
+            "contact_name": "Rexy",
+            "phone_number": "+91-73841-20955",
+            "timestamp": "2024-02-08T01:02:44+05:30",
+            "duration_seconds": 218,
+            "sim_used": "SIM2 – Jio Prepaid",
+            "notes": "Post-midnight briefing call to decoy suspect"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "OUTGOING",
+            "contact_name": "Gaikya",
+            "phone_number": "+91-88057-30412",
+            "timestamp": "2024-02-09T14:47:22+05:30",
+            "duration_seconds": 41,
+            "sim_used": "SIM2 – Jio Prepaid",
+            "notes": "Short confirmation call 23 minutes before robbery – 'go' signal suspected"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Gaikya",
+            "phone_number": "+91-88057-30412",
+            "timestamp": "2024-02-07T22:44:11+05:30",
+            "content": "Vault ka lock tumbler type hai. Mujhe 4 minute chahiye andar jaane ke liye.",
+            "translation_en": "The vault lock is tumbler type. I need 4 minutes to get inside.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "WhatsApp",
+            "direction": "INCOMING",
+            "contact_name": "Gaikya",
+            "phone_number": "+91-88057-30412",
+            "timestamp": "2024-02-07T23:02:37+05:30",
+            "content": "Rexy andar 3 baje jayegi customer ban ke. CCTV wali spray woh karegi.",
+            "translation_en": "Rexy will enter at 3 PM as a customer. She will do the CCTV spray.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-003",
+            "platform": "Telegram",
+            "direction": "OUTGOING",
+            "contact_name": "Gaikya",
+            "phone_number": "+91-88057-30412",
+            "timestamp": "2024-02-09T15:59:04+05:30",
+            "content": "62 lakh mila. Rexy ko 5, tujhe 18, baaki mera. Kal milte hain Katraj ke paas.",
+            "translation_en": "Got 62 lakh. Rexy gets 5, you get 18, rest is mine. Meet tomorrow near Katraj.",
+            "deleted": true,
+            "deleted_timestamp": "2024-02-09T20:11:33+05:30",
+            "recovery_method": "Telegram SQLite WAL recovery"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "PhonePe",
+            "direction": "OUTGOING",
+            "amount_inr": 12000,
+            "recipient_name": "Suresh P. Gaikwad",
+            "timestamp": "2024-02-07T18:34:09+05:30",
+            "remarks": "tools",
+            "flagged": true,
+            "flag_reason": "Pre-robbery advance payment to armed suspect"
+          },
+          {
+            "transaction_id": "FT-002",
+            "app": "Google Pay",
+            "direction": "OUTGOING",
+            "amount_inr": 3500,
+            "recipient_name": "Rekha M. Shinde",
+            "timestamp": "2024-02-08T11:21:44+05:30",
+            "remarks": "expenses",
+            "flagged": true,
+            "flag_reason": "Payment to decoy suspect day before robbery"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-02-08T14:22:11+05:30",
+            "latitude": 18.5176,
+            "longitude": 73.8397,
+            "resolved_address": "FC Road, Deccan Gymkhana, Pune – 411004",
+            "notes": "Reconnaissance visit to target bank – day before robbery"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-02-09T15:08:44+05:30",
+            "latitude": 18.5178,
+            "longitude": 73.8401,
+            "resolved_address": "Bharat Samridhi Bank, Deccan Branch, Pune",
+            "notes": "Device at crime scene 2 minutes before robbery"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-02-09T15:44:02+05:30",
+            "latitude": 18.4891,
+            "longitude": 73.867,
+            "resolved_address": "Sinhagad Road, near Anandnagar, Pune",
+            "notes": "Fleeing toward suspect's home area after robbery"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "SIM_INSERTED",
+            "timestamp": "2024-02-05T10:14:22+05:30",
+            "sim_network": "Jio Prepaid – no KYC",
+            "notes": "Anonymous SIM inserted 4 days before robbery"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-02-09T20:08:41+05:30",
+            "app_name": "Signal Private Messenger",
+            "notes": "Encrypted app removed post-robbery"
+          },
+          {
+            "event_id": "SYS-003",
+            "event_type": "DEVICE_POWER_OFF",
+            "timestamp": "2024-02-09T20:19:55+05:30",
+            "notes": "Device powered off after evidence destruction attempt"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "recovery_rate_percent": 79
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "anti_forensic_behavior": {
+          "flag": true,
+          "severity": "HIGH",
+          "methods_detected": [
+            "Prepaid anonymous SIM",
+            "Signal uninstall",
+            "Telegram chat deletion",
+            "Device shutdown"
+          ]
+        }
+      }
+    }
