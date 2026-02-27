@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Added Next.js router
 
 // --- CUSTOM CSS FOR ANIMATIONS (Injected to keep it single-file) ---
 const CustomStyles = () => (
@@ -81,6 +82,7 @@ const featuresData = [
 
 // --- MAIN PAGE COMPONENT ---
 export default function CrimeLensHome() {
+  const router = useRouter(); // Initialize Next.js router
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -107,11 +109,13 @@ export default function CrimeLensHome() {
     return () => clearInterval(timer);
   }, []);
 
+  // --- UPDATED NAVIGATION LOGIC ---
   const handleDashboardClick = () => {
     if (!isLoggedIn) {
       setIsAuthModalOpen(true);
     } else {
-      alert("Redirecting to CrimeLens Dashboard...");
+      // Routes to the dashboard page
+      router.push('/dashboard'); 
     }
   };
 
@@ -347,10 +351,12 @@ export default function CrimeLensHome() {
                 <p>WARNING: Authorized personnel only. Access to the UFDR Terminal requires active credentials.</p>
               </div>
 
+              {/* --- UPDATED FORM ONSUBMIT --- */}
               <form className="space-y-5" onSubmit={(e) => {
                 e.preventDefault();
                 setIsLoggedIn(true);
                 setIsAuthModalOpen(false);
+                router.push('/dashboard'); // Route directly on successful login
               }}>
                 <div>
                   <label className="block text-xs font-mono text-[#7B8794] mb-2 uppercase tracking-wider">Badge / Email ID</label>
