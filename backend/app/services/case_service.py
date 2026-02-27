@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from bson import ObjectId
 from fastapi import HTTPException, UploadFile, status
 
 from app.core.security import AuthUser
@@ -150,8 +149,3 @@ class CaseService:
     async def get_dashboard_metrics(self) -> DashboardMetricsResponse:
         data = await self.metrics_repo.get_metrics()
         return DashboardMetricsResponse(**data)
-
-    async def as_object_id(self, case_id: str) -> ObjectId:
-        if not ObjectId.is_valid(case_id):
-            raise HTTPException(status_code=400, detail="Invalid case id")
-        return ObjectId(case_id)

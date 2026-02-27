@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { FileBox } from 'lucide-react';
 import { caseService } from '@/services/caseService';
+import { toastError } from '@/lib/toast';
 import type { SearchResponse, TimelineEvent, TimelineResponse } from '@/types/api';
 
 type Props = {
@@ -40,7 +41,7 @@ export default function ParsedDataView({ caseId, timeline }: Props) {
       });
       setSearchApplied(true);
     } catch {
-      window.alert('Search failed. Please try again.');
+      toastError('Search failed. Please try again.');
     } finally {
       setIsSearching(false);
     }

@@ -238,28 +238,3 @@ class ChromaCloudStore:
                 }
             )
         return rows
-
-    async def similar_cases(self, case_id: str, top_k: int) -> list[tuple[str, float]]:
-        collection = self._cases()
-        try:
-            data = await asyncio.to_thread(collection.get, ids=[case_id], include=["embeddings"])
-            emb: list[list[float]] = data.get("embeddings", [])
-            if not emb:
-                return []
-            result = await asyncio.to_thread(collection.query, query_embeddings=emb, n_results=top_k + 1)
-        except Exception as exc:
-            raise APIException(
-                message="Failed to compute similar cases from Chroma Cloud.",
-                status_code=503,
-                code="CHROMA_SIMILAR_QUERY_FAILED",
-                details={"case_id": case_id, "error": str(exc)},
-            ) from exc
-        ids = result.get("ids", [[]])[0]
-        distances = result.get("distances", [[]])[0]
-        pairs: list[tuple[str, float]] = []
-        for other_case_id, distance in zip(ids, distances):
-            if other_case_id == case_id:
-                continue
-            score = max(0.0, 1.0 - float(distance))
-            pairs.append((other_case_id, score))
-        return pairs[:top_k]

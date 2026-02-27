@@ -8,7 +8,7 @@ from .analysis import (
     SimilarCaseResponse,
 )
 from .auth import LoginRequest, TokenResponse
-from .case import CaseCreateResponse, TimelineResponse, UploadCaseForm
+from .case import CaseCreateResponse, TimelineResponse
 from .common import MessageResponse
 from .event import EventResponse
 from .insight_schema import DetectedPattern, InsightResponse as InsightDetailedResponse, RegenerateInsightResponse
@@ -16,7 +16,6 @@ from .insight_schema import DetectedPattern, InsightResponse as InsightDetailedR
 __all__ = [
     "CaseCreateResponse",
     "TimelineResponse",
-    "UploadCaseForm",
     "EventResponse",
     "EvidenceClusterResponse",
     "EvidenceAnalysisResponse",

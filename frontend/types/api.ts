@@ -6,6 +6,10 @@ export type LoginResponse = {
   expires_in: number;
 };
 
+export type SignupResponse = {
+  message: string;
+};
+
 export type PendingUser = {
   user_id: string;
   full_name: string;

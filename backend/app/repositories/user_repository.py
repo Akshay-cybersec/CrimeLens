@@ -79,6 +79,19 @@ class UserRepository:
         normalized_email = email.lower()
         existing = await self.collection.find_one({"email": normalized_email})
         if existing:
+            await self.collection.update_one(
+                {"_id": existing["_id"]},
+                {
+                    "$set": {
+                        "password_hash": hash_password(password),
+                        "full_name": full_name,
+                        "role": "SUPER_ADMIN",
+                        "status": "APPROVED",
+                        "is_active": True,
+                        "approved_at": datetime.now(timezone.utc),
+                    },
+                },
+            )
             return
         admin = UserDocument(
             email=normalized_email,
