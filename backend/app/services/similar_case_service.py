@@ -1,9 +1,9 @@
 from app.schemas.analysis import SimilarCaseResponse
-from app.vector.chroma_store import ChromaStore
+from app.vector.chroma_client import ChromaCloudStore
 
 
 class SimilarCaseService:
-    def __init__(self, vector_store: ChromaStore) -> None:
+    def __init__(self, vector_store: ChromaCloudStore) -> None:
         self.vector_store = vector_store
 
     async def find_similar(self, case_id: str, top_k: int = 5) -> list[SimilarCaseResponse]:

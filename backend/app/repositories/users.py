@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 from app.core.config import get_settings
 from app.core.security import hash_password
 from app.models.user import UserDocument
@@ -27,5 +31,5 @@ class UserRepository:
             ),
         }
 
-    async def get_by_username(self, username: str) -> UserDocument | None:
+    async def get_by_username(self, username: str) -> Optional[UserDocument]:
         return self._users.get(username)

@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -15,7 +18,7 @@ class CaseCreateResponse(BaseModel):
 
 class TimelineResponse(BaseModel):
     case_id: str
-    time_range: dict[str, datetime | None]
+    time_range: dict[str, Optional[datetime]]
     activity_density_score: float
     suspicious_windows: list[dict]
     pagination: PageMeta
@@ -24,4 +27,4 @@ class TimelineResponse(BaseModel):
 
 class UploadCaseForm(BaseModel):
     title: str = Field(min_length=3, max_length=200)
-    description: str | None = None
+    description: Optional[str] = None

@@ -1,5 +1,7 @@
-from datetime import UTC, datetime
-from typing import Any, Literal
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -9,14 +11,14 @@ EventType = Literal["CALL", "MESSAGE", "LOCATION", "APP_USAGE", "DELETION", "SYS
 
 
 class EventDocument(BaseModel):
-    id: PyObjectId | None = Field(default=None, alias="_id")
+    id: Optional[PyObjectId] = Field(default=None, alias="_id")
     case_id: PyObjectId
     event_type: EventType
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     metadata: dict[str, Any] = Field(default_factory=dict)
     raw_text: str
     is_deleted: bool = False
-    embedding_id: str | None = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    embedding_id: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     model_config = {"populate_by_name": True}

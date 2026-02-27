@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 from redis.asyncio import Redis
 
 from app.core.config import Settings
@@ -6,7 +10,7 @@ from app.core.config import Settings
 class RedisService:
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
-        self._client: Redis | None = None
+        self._client: Optional[Redis] = None
 
     async def connect(self) -> None:
         if not self._settings.redis_enabled:
@@ -18,7 +22,7 @@ class RedisService:
             await self._client.aclose()
 
     @property
-    def client(self) -> Redis | None:
+    def client(self) -> Optional[Redis]:
         return self._client
 
     async def enqueue_case_job(self, case_id: str) -> None:

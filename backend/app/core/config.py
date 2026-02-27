@@ -28,8 +28,12 @@ class Settings(BaseSettings):
     deepinfra_embedding_model: str = "BAAI/bge-large-en-v1.5"
     deepinfra_temperature: float = 0.1
 
-    vector_backend: Literal["chromadb"] = "chromadb"
-    chroma_persist_dir: str = "./data/chroma"
+    vector_backend: Literal["chromadb_cloud"] = "chromadb_cloud"
+    chroma_api_key: str = ""
+    chroma_tenant: str = ""
+    chroma_database: str = ""
+    chroma_collection_events: str = "case_events"
+    chroma_collection_cases: str = "case_summaries"
     embedding_dimensions: int = 1024
 
     max_upload_size_mb: int = 50

@@ -32,4 +32,13 @@ class EmbeddingService:
             data: dict[str, Any] = response.json()
 
         emb = data.get("data", [{}])[0].get("embedding", [])
-        return [float(x) for x in emb]
+        vector = [float(x) for x in emb]
+        return self._normalize_dimensions(vector)
+
+    def _normalize_dimensions(self, vector: list[float]) -> list[float]:
+        target = self.settings.embedding_dimensions
+        if not vector:
+            return [0.0] * target
+        if len(vector) >= target:
+            return vector[:target]
+        return vector + ([0.0] * (target - len(vector)))

@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from collections.abc import AsyncIterator
-from typing import Any
+from typing import Any, Optional
 
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from pymongo import ASCENDING, IndexModel
@@ -9,8 +11,8 @@ from app.core.config import get_settings
 
 class MongoManager:
     def __init__(self) -> None:
-        self._client: AsyncIOMotorClient[Any] | None = None
-        self._db: AsyncIOMotorDatabase[Any] | None = None
+        self._client: Optional[AsyncIOMotorClient[Any]] = None
+        self._db: Optional[AsyncIOMotorDatabase[Any]] = None
 
     async def connect(self) -> None:
         settings = get_settings()

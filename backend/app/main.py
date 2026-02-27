@@ -12,7 +12,7 @@ from app.middleware.rate_limit import RateLimitMiddleware
 from app.repositories.users import UserRepository
 from app.routers import auth, cases, health
 from app.services.redis_service import RedisService
-from app.vector.chroma_store import ChromaStore
+from app.vector.chroma_client import ChromaCloudStore
 
 
 @asynccontextmanager
@@ -27,7 +27,8 @@ async def lifespan(app: FastAPI):
     await redis_service.connect()
 
     app.state.redis_service = redis_service
-    app.state.vector_store = ChromaStore(settings)
+    app.state.vector_store = ChromaCloudStore(settings)
+    await app.state.vector_store.initialize()
     app.state.user_repository = UserRepository()
 
     yield

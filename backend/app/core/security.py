@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Literal
 
 from fastapi import Depends, HTTPException, status
@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from app.core.config import get_settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256", "bcrypt_sha256", "bcrypt"], deprecated="auto")
 auth_scheme = HTTPBearer(auto_error=True)
 
 Role = Literal["Admin", "Investigator", "Analyst"]
@@ -38,7 +38,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def create_access_token(subject: str, role: Role) -> str:
     settings = get_settings()
     expires_delta = timedelta(minutes=settings.jwt_access_token_expire_minutes)
-    expire = datetime.now(UTC) + expires_delta
+    expire = datetime.now(timezone.utc) + expires_delta
     payload: dict[str, Any] = {"sub": subject, "role": role, "exp": expire}
     return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
 

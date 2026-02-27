@@ -1,4 +1,6 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import Any, Optional
 
 from bson import ObjectId
 from fastapi import HTTPException, UploadFile, status
@@ -31,7 +33,7 @@ class CaseService:
         self,
         file: UploadFile,
         title: str,
-        description: str | None,
+        description: Optional[str],
         user: AuthUser,
     ) -> CaseCreateResponse:
         file_bytes = await file.read()

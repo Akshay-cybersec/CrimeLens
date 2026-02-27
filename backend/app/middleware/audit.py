@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import Request
@@ -39,7 +39,7 @@ class AuditMiddleware(BaseHTTPMiddleware):
             path=request.url.path,
             status_code=response.status_code,
             context={"query": dict(request.query_params)},
-            created_at=datetime.now(UTC),
+            created_at=datetime.now(timezone.utc),
         )
         await audit_repo.create(log)
 

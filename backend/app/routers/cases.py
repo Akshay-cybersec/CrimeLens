@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, Query, UploadFile
 
 from app.core.deps import (
@@ -34,7 +38,7 @@ async def upload_case(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     title: str = Form(...),
-    description: str | None = Form(default=None),
+    description: Optional[str] = Form(default=None),
     user: AuthUser = Depends(require_roles("Admin", "Investigator")),
     case_service: CaseService = Depends(get_case_service),
     background_worker: BackgroundWorkerService = Depends(get_background_worker),

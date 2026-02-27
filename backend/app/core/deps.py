@@ -23,7 +23,7 @@ from app.services.search_service import SearchService
 from app.services.similar_case_service import SimilarCaseService
 from app.services.timeline_service import TimelineService
 from app.services.ufdr_parser import UFDRParserService
-from app.vector.chroma_store import ChromaStore
+from app.vector.chroma_client import ChromaCloudStore
 
 
 def get_app_settings() -> Settings:
@@ -34,7 +34,7 @@ def get_redis_service(request: Request) -> RedisService:
     return request.app.state.redis_service
 
 
-def get_vector_store(request: Request) -> ChromaStore:
+def get_vector_store(request: Request) -> ChromaCloudStore:
     return request.app.state.vector_store
 
 
@@ -111,7 +111,7 @@ def get_search_service(
     event_repo: EventRepository = Depends(get_event_repository),
     embedding_service: EmbeddingService = Depends(get_embedding_service),
     llm_service: LLMService = Depends(get_llm_service),
-    vector_store: ChromaStore = Depends(get_vector_store),
+    vector_store: ChromaCloudStore = Depends(get_vector_store),
 ) -> SearchService:
     return SearchService(
         event_repo=event_repo,
@@ -130,7 +130,7 @@ def get_insight_service(
 
 
 def get_similar_case_service(
-    vector_store: ChromaStore = Depends(get_vector_store),
+    vector_store: ChromaCloudStore = Depends(get_vector_store),
 ) -> SimilarCaseService:
     return SimilarCaseService(vector_store)
 
@@ -139,6 +139,6 @@ def get_background_worker(
     case_repo: CaseRepository = Depends(get_case_repository),
     event_repo: EventRepository = Depends(get_event_repository),
     embedding_service: EmbeddingService = Depends(get_embedding_service),
-    vector_store: ChromaStore = Depends(get_vector_store),
+    vector_store: ChromaCloudStore = Depends(get_vector_store),
 ) -> BackgroundWorkerService:
     return BackgroundWorkerService(case_repo, event_repo, embedding_service, vector_store)
