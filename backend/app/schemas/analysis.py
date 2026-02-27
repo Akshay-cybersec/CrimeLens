@@ -12,6 +12,7 @@ class EvidenceClusterResponse(BaseModel):
     id: str
     risk_score: float
     related_event_ids: list[str]
+    related_events: list[EventResponse] = Field(default_factory=list)
     anomaly_type: str
     reasoning: str
 

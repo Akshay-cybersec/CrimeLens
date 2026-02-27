@@ -9,6 +9,7 @@ from app.core.config import Settings, get_settings
 from app.core.database import get_db
 from app.repositories.audits import AuditRepository
 from app.repositories.cases import CaseRepository
+from app.repositories.dashboard_metrics import DashboardMetricsRepository
 from app.repositories.clusters import ClusterRepository
 from app.repositories.events import EventRepository
 from app.repositories.insight_repository import InsightRepository
@@ -54,6 +55,10 @@ def get_case_repository(db: AsyncIOMotorDatabase[Any] = Depends(get_db)) -> Case
     return CaseRepository(db)
 
 
+def get_dashboard_metrics_repository(db: AsyncIOMotorDatabase[Any] = Depends(get_db)) -> DashboardMetricsRepository:
+    return DashboardMetricsRepository(db)
+
+
 def get_event_repository(db: AsyncIOMotorDatabase[Any] = Depends(get_db)) -> EventRepository:
     return EventRepository(db)
 
@@ -84,6 +89,7 @@ def get_parser_service() -> UFDRParserService:
 
 def get_case_service(
     case_repo: CaseRepository = Depends(get_case_repository),
+    metrics_repo: DashboardMetricsRepository = Depends(get_dashboard_metrics_repository),
     event_repo: EventRepository = Depends(get_event_repository),
     parser_service: UFDRParserService = Depends(get_parser_service),
     redis_service: RedisService = Depends(get_redis_service),
@@ -91,6 +97,7 @@ def get_case_service(
 ) -> CaseService:
     return CaseService(
         case_repo=case_repo,
+        metrics_repo=metrics_repo,
         event_repo=event_repo,
         parser_service=parser_service,
         redis_service=redis_service,

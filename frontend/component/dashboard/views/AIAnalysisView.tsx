@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { SimilarCaseResponse, TimelineResponse } from '@/types/api';
 
 interface CrimeEvidence {
   label: string;
@@ -11,18 +12,83 @@ interface CrimeEvidence {
   timestamp: string;
 }
 
-const evidenceData: CrimeEvidence[] = [
-  { label: 'Jan', count: 420, type: 'Cyber', evidence: 'IP Trace: 192.168.1.1', timestamp: '2026-01-12 04:20:01' },
-  { label: 'Feb', count: 210, type: 'Patrol', evidence: 'Unauthorized Entry: Sec-B', timestamp: '2026-02-14 14:32:01' },
-  { label: 'Mar', count: 540, type: 'Phishing', evidence: 'Mail-Server Breach', timestamp: '2026-03-21 09:15:44' },
-  { label: 'Apr', count: 890, type: 'Fraud', evidence: 'Transaction Loophole', timestamp: '2026-04-05 22:11:10' },
-  { label: 'May', count: 450, type: 'Breach', evidence: 'Encrypted File Access', timestamp: '2026-05-18 11:04:22' },
-  { label: 'Jun', count: 980, type: 'System', evidence: 'Kernel Exploit Detected', timestamp: '2026-06-30 23:59:59' },
-  { label: 'Jul', count: 720, type: 'Network', evidence: 'Packet Sniffing Alert', timestamp: '2026-07-15 16:40:05' },
-  { label: 'Aug', count: 850, type: 'Leak', evidence: 'Database Dump Found', timestamp: '2026-08-27 19:18:39' },
-];
+type Props = {
+  similarCases?: SimilarCaseResponse[];
+  timeline?: TimelineResponse | null;
+};
 
-export default function ForensicTimeline() {
+function parseRawEventText(rawText: string): { eventTime: Date | null; fields: Record<string, string>; fallback: string } {
+  const fields: Record<string, string> = {};
+  const parts = rawText.split('|').map((item) => item.trim()).filter(Boolean);
+  let eventTime: Date | null = null;
+
+  if (parts.length > 0) {
+    const maybeTs = new Date(parts[0]);
+    if (!Number.isNaN(maybeTs.getTime())) {
+      eventTime = maybeTs;
+      parts.shift();
+    }
+  }
+
+  for (const part of parts) {
+    const index = part.indexOf(':');
+    if (index > 0) {
+      const key = part.slice(0, index).trim();
+      const value = part.slice(index + 1).trim();
+      if (key && value) {
+        fields[key] = value;
+      }
+    } else if (!fields.action) {
+      fields.action = part;
+    }
+  }
+
+  return { eventTime, fields, fallback: rawText };
+}
+
+export default function ForensicTimeline({ timeline }: Props) {
+  const evidenceData = useMemo<CrimeEvidence[]>(() => {
+    const timelineEvents = timeline?.timeline ?? [];
+    if (!timelineEvents.length) {
+      return [
+        {
+          label: 'N/A',
+          count: 120,
+          type: 'SYSTEM',
+          evidence: 'No parsed events available for this case yet.',
+          timestamp: new Date().toLocaleString(),
+        },
+      ];
+    }
+
+    return [...timelineEvents]
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+      .map((event) => {
+      const parsed = parseRawEventText(event.raw_text);
+      const baseDate = parsed.eventTime ?? new Date(event.timestamp);
+      const label = baseDate.toLocaleString('en-US', { month: 'short', day: '2-digit' });
+      const lineLength = Number(event.metadata?.line_length ?? event.raw_text.length ?? 0);
+      const count = Math.max(120, Math.min(980, lineLength * 4 + (event.is_deleted ? 120 : 0)));
+      const evidence =
+        parsed.fields.content ||
+        parsed.fields.notes ||
+        parsed.fields.query ||
+        parsed.fields.flag_reason ||
+        parsed.fields.memo ||
+        parsed.fields.resolved_address ||
+        parsed.fields.action ||
+        event.raw_text;
+
+      return {
+        label,
+        count,
+        type: event.event_type || 'Event',
+        evidence,
+        timestamp: baseDate.toLocaleString(),
+      };
+    });
+  }, [timeline]);
+
   const [activeStep, setActiveStep] = useState(0);
   const isComplete = activeStep === evidenceData.length - 1;
 
@@ -32,6 +98,7 @@ export default function ForensicTimeline() {
   const paddingY = 60;
 
   useEffect(() => {
+    setActiveStep(0);
     const timer = setInterval(() => {
       setActiveStep((prev) => {
         if (prev < evidenceData.length - 1) return prev + 1;
@@ -40,9 +107,14 @@ export default function ForensicTimeline() {
       });
     }, 2500); // Slightly faster for testing
     return () => clearInterval(timer);
-  }, []);
+  }, [evidenceData.length]);
 
-  const getX = (index: number) => (index * (width - paddingX * 2)) / (evidenceData.length - 1) + paddingX;
+  const getX = (index: number) => {
+    if (evidenceData.length <= 1) {
+      return width / 2;
+    }
+    return (index * (width - paddingX * 2)) / (evidenceData.length - 1) + paddingX;
+  };
   const getY = (value: number) => height - (value * (height - paddingY * 2)) / 1000 - paddingY;
 
   const generateProgressivePath = (step: number) => {

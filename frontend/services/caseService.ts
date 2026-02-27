@@ -1,5 +1,8 @@
 import api from '@/lib/api';
 import type {
+  CaseListItem,
+  CaseOverview,
+  DashboardMetrics,
   EvidenceResponse,
   SearchResponse,
   SimilarCaseResponse,
@@ -30,6 +33,21 @@ export const caseService = {
     return data;
   },
 
+  async listCases(limit = 100): Promise<CaseListItem[]> {
+    const { data } = await api.get<CaseListItem[]>(`/cases`, { params: { limit } });
+    return data;
+  },
+
+  async getCaseOverview(caseId: string): Promise<CaseOverview> {
+    const { data } = await api.get<CaseOverview>(`/cases/${caseId}/overview`);
+    return data;
+  },
+
+  async getDashboardMetrics(): Promise<DashboardMetrics> {
+    const { data } = await api.get<DashboardMetrics>(`/cases/dashboard/metrics`);
+    return data;
+  },
+
   async getEvidence(caseId: string): Promise<EvidenceResponse> {
     const { data } = await api.get<EvidenceResponse>(`/cases/${caseId}/evidence-analysis`);
     return data;
@@ -40,8 +58,8 @@ export const caseService = {
     return data;
   },
 
-  async semanticSearch(caseId: string, query: string): Promise<SearchResponse> {
-    const { data } = await api.post<SearchResponse>(`/cases/${caseId}/search`, { query });
+  async semanticSearch(caseId: string, query: string, topK = 25): Promise<SearchResponse> {
+    const { data } = await api.post<SearchResponse>(`/cases/${caseId}/search`, { query, top_k: topK });
     return data;
   },
 };

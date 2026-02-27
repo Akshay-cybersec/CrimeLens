@@ -10,6 +10,7 @@ from app.middleware.audit import AuditMiddleware
 from app.middleware.error_handler import generic_exception_handler
 from app.middleware.rate_limit import RateLimitMiddleware
 from app.repositories.user_repository import UserRepository
+from app.repositories.dashboard_metrics import DashboardMetricsRepository
 from app.routers import auth, cases, health, insight_router
 from app.services.redis_service import RedisService
 from app.vector.chroma_client import ChromaCloudStore
@@ -30,12 +31,14 @@ async def lifespan(app: FastAPI):
     app.state.vector_store = ChromaCloudStore(settings)
     await app.state.vector_store.initialize()
     user_repo = UserRepository(mongo_manager.db)
+    metrics_repo = DashboardMetricsRepository(mongo_manager.db)
     await user_repo.ensure_indexes()
     await user_repo.ensure_super_admin(
         email=settings.super_admin_email,
         password=settings.super_admin_password,
         full_name=settings.super_admin_full_name,
     )
+    await metrics_repo.ensure_demo_defaults()
 
     yield
 

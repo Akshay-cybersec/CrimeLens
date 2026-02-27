@@ -2,8 +2,13 @@
 
 import React, { useState, useRef } from 'react';
 import { UploadCloud, AlertTriangle, FileBox, X, CheckCircle2 } from 'lucide-react';
+import { caseService } from '@/services/caseService';
 
-export default function UploadDataView() {
+type Props = {
+  onUploadComplete?: (caseId: string) => void;
+};
+
+export default function UploadDataView({ onUploadComplete }: Props) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -60,25 +65,43 @@ export default function UploadDataView() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleMockUpload = (e: React.MouseEvent) => {
+  const handleMockUpload = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!selectedFile) {
+      return;
+    }
+
     setIsUploading(true);
-    
-    // Mock upload progress
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 10;
-      setUploadProgress(progress);
-      if (progress >= 100) {
-        clearInterval(interval);
-        setTimeout(() => {
-          alert("File successfully ingested into Nexus DB.");
-          setSelectedFile(null);
-          setIsUploading(false);
-          setUploadProgress(0);
-        }, 500);
+
+    // Keep existing progress UX while making real API calls.
+    setUploadProgress(10);
+    try {
+      const title = selectedFile.name.replace(/\.[^/.]+$/, '') || `UFDR-${Date.now()}`;
+      const uploaded = await caseService.uploadCase(selectedFile, title, `Uploaded UFDR file: ${selectedFile.name}`);
+      setUploadProgress(70);
+      try {
+        await caseService.buildBehavioralIndex(uploaded.case_id);
+      } catch {
+        // Allow timeline flow even if behavioral indexing fails.
       }
-    }, 300);
+      setUploadProgress(100);
+
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('active_case_id', uploaded.case_id);
+      }
+
+      setTimeout(() => {
+        alert("File successfully ingested into Nexus DB.");
+        setSelectedFile(null);
+        setIsUploading(false);
+        setUploadProgress(0);
+        onUploadComplete?.(uploaded.case_id);
+      }, 500);
+    } catch {
+      setIsUploading(false);
+      setUploadProgress(0);
+      alert('Upload failed. Please verify UFDR file and try again.');
+    }
   };
 
   return (

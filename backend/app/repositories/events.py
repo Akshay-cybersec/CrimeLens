@@ -17,7 +17,7 @@ class EventRepository(BaseRepository):
             return []
         payloads = [event.model_dump(by_alias=True, exclude_none=True) for event in events]
         result = await self.collection.insert_many(payloads)
-        for event, event_id in zip(events, result.inserted_ids, strict=False):
+        for event, event_id in zip(events, result.inserted_ids):
             event.id = event_id
         return events
 

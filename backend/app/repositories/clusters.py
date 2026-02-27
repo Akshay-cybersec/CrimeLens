@@ -15,10 +15,14 @@ class ClusterRepository(BaseRepository):
             return []
         docs = [item.model_dump(by_alias=True, exclude_none=True) for item in clusters]
         result = await self.collection.insert_many(docs)
-        for cluster, cluster_id in zip(clusters, result.inserted_ids, strict=False):
+        for cluster, cluster_id in zip(clusters, result.inserted_ids):
             cluster.id = cluster_id
         return clusters
 
     async def list_by_case(self, case_id: str) -> list[ClusterDocument]:
         cursor = self.collection.find({"case_id": ObjectId(case_id)}).sort("risk_score", -1)
         return [ClusterDocument(**row) async for row in cursor]
+
+    async def replace_for_case(self, case_id: str, clusters: list[ClusterDocument]) -> list[ClusterDocument]:
+        await self.collection.delete_many({"case_id": ObjectId(case_id)})
+        return await self.insert_many(clusters)
