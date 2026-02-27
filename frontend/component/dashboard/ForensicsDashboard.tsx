@@ -16,6 +16,10 @@ import {
   ChevronRight,
   ArrowLeft
 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { caseService } from '@/services/caseService';
+import { insightService } from '@/services/insightService';
+import type { EvidenceResponse, InsightResponse, SimilarCaseResponse, TimelineResponse } from '@/types/api';
 
 // --- Import separated view components ---
 import IntelligenceDashboardView from '../dashboard/views/IntelligenceDashboardView';
@@ -56,12 +60,12 @@ export default function ForensicsDashboard() {
   // Dynamic content renderer based on active sidebar tab
   const renderActiveView = () => {
     switch (activeStep) {
-      case 'dashboard': return <IntelligenceDashboardView />;
+      case 'dashboard': return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} />;
       case 'create': return <CreateCaseView />;
       case 'upload': return <UploadDataView />;
-      case 'parse': return <ParsedDataView />;
-      case 'analyze': return <AIAnalysisView />;
-      case 'evidence': return <ReviewEvidenceView />;
+      case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
+      case 'analyze': return <AIAnalysisView similarCases={similarCases} />;
+      case 'evidence': return <ReviewEvidenceView evidence={evidence} />;
       case 'export': return <ExportReportView />;
       default: return <IntelligenceDashboardView />;
     }

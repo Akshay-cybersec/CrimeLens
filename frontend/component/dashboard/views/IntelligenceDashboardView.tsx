@@ -15,7 +15,6 @@ import {
   Plus
 } from 'lucide-react';
 
-export default function IntelligenceDashboardView() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 bg-slate-50 min-h-screen p-6">
       
