@@ -39,7 +39,7 @@ async def upload_case(
     file: UploadFile = File(...),
     title: str = Form(...),
     description: Optional[str] = Form(default=None),
-    user: AuthUser = Depends(require_roles("Admin", "Investigator")),
+    user: AuthUser = Depends(require_roles(["SUPER_ADMIN", "ADMIN", "INVESTIGATOR"])),
     case_service: CaseService = Depends(get_case_service),
     background_worker: BackgroundWorkerService = Depends(get_background_worker),
 ) -> CaseCreateResponse:

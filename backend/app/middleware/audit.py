@@ -26,7 +26,7 @@ class AuditMiddleware(BaseHTTPMiddleware):
             token = auth.split(" ", 1)[1]
             try:
                 payload = decode_access_token(token)
-                user_id = payload.sub
+                user_id = payload.user_id
                 role = payload.role
             except Exception:
                 user_id = None
