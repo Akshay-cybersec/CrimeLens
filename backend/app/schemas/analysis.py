@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Any, Optional
+
 from pydantic import BaseModel, Field
 
 from app.schemas.event import EventResponse
@@ -36,6 +40,15 @@ class InsightResponse(BaseModel):
 
 
 class SimilarCaseResponse(BaseModel):
-    similar_case_id: str
+    case_id: str
     similarity_score: float
+    crime_type: Optional[str] = None
     explanation: str
+    shared_behavioral_signals: list[str] = Field(default_factory=list)
+
+
+class BehavioralIndexResponse(BaseModel):
+    case_id: str
+    indexed: bool
+    behavioral_features: dict[str, Any]
+    behavioral_summary: str

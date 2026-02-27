@@ -1,0 +1,240 @@
+{
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00394",
+        "crime_type": "ATM Van Heist – Transit Robbery",
+        "status": "Active Investigation",
+        "city": "Chennai",
+        "state": "Tamil Nadu",
+        "incident_date": "2024-04-05",
+        "investigation_start": "2024-04-05",
+        "reporting_agency": "Tamil Nadu Q Branch – Chennai Metropolitan",
+        "fir_number": "FIR-CHN-2024-0588"
+      },
+      "target_info": {
+        "bank_type": "Private Sector – ATM Replenishment Van",
+        "bank_name": "Dravida Nidhi Bank Ltd (Fictional)",
+        "branch_name": "Cash Logistics Transit – Nungambakkam to Velachery Route",
+        "branch_address": "In transit – Sardar Patel Road, Chennai – 600020",
+        "branch_ifsc": "N/A – Transit vehicle",
+        "incident_time": "2024-04-05T09:45:00+05:30",
+        "incident_duration_minutes": 8,
+        "estimated_loss_inr": 8900000,
+        "vault_accessed": false,
+        "weapons_reported": "Three firearms – one AK-pattern replica, two genuine revolvers",
+        "hostages_reported": 3,
+        "casualties": "One cash guard – non-fatal gunshot wound to leg",
+        "cctv_status": "Van dashcam disabled 15 minutes before robbery by inside agent"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Murugan Arumugam Krishnasamy",
+          "age": 39,
+          "alias": [
+            "MAK",
+            "Murugan Anna"
+          ],
+          "role_in_crime": "Heist Leader – intercepted van at traffic signal",
+          "phone_number": "+91-94432-71908",
+          "address": "18, Kannagi Street, Vyasarpadi, Chennai – 600039",
+          "occupation": "Auto driver (freelance)",
+          "prior_record": "2018 – robbery attempt – acquitted on technical grounds",
+          "seized_device": "Yes – primary"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Selvam Duraisamy Pillai",
+          "age": 33,
+          "alias": [
+            "Selva",
+            "SD"
+          ],
+          "role_in_crime": "Inside Contact – Van Guard (dismissed post-incident)",
+          "phone_number": "+91-78940-53614",
+          "address": "42, Rajaji Nagar, Ambattur, Chennai – 600053",
+          "occupation": "Contracted Cash Van Guard – Dravida Nidhi Bank",
+          "prior_record": "None",
+          "seized_device": "Yes – secondary"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "Oppo Reno 11",
+        "os_version": "Android 14 (ColorOS 14)",
+        "imei_1": "864731052947310",
+        "phone_number_on_device": "+91-94432-71908",
+        "seizure_time": "2024-04-06T05:20:00+05:30",
+        "seized_by": "Inspector Kannan V., Q Branch Chennai",
+        "extraction_type": "Full File System + Logical",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "d5f1c4b2a8e06375820d4f9c3b6e2a57"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "Selva",
+            "phone_number": "+91-78940-53614",
+            "timestamp": "2024-04-03T23:07:11+05:30",
+            "duration_seconds": 447,
+            "sim_used": "SIM2 – BSNL Prepaid",
+            "notes": "Late-night coordination – route and timing discussed"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "INCOMING",
+            "contact_name": "Selva",
+            "phone_number": "+91-78940-53614",
+            "timestamp": "2024-04-05T09:29:18+05:30",
+            "duration_seconds": 22,
+            "sim_used": "SIM2 – BSNL Prepaid",
+            "notes": "22-second call 16 minutes before heist – van location update from inside contact"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "OUTGOING",
+            "contact_name": "UNKNOWN",
+            "phone_number": "+91-63809-44112",
+            "timestamp": "2024-04-05T10:01:44+05:30",
+            "duration_seconds": 94,
+            "sim_used": "SIM2 – BSNL Prepaid",
+            "notes": "Post-heist call to unidentified number – proceeds handoff coordination"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "WhatsApp",
+            "direction": "INCOMING",
+            "contact_name": "Selva",
+            "phone_number": "+91-78940-53614",
+            "timestamp": "2024-04-03T22:14:09+05:30",
+            "content": "Van route Friday Nungambakkam se Velachery – Sardar Patel road mein signal pe rukti hai 9:45 ke around.",
+            "translation_en": "Van route Friday from Nungambakkam to Velachery – stops at signal on Sardar Patel road around 9:45.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Selva",
+            "phone_number": "+91-78940-53614",
+            "timestamp": "2024-04-03T22:44:01+05:30",
+            "content": "Dashcam ka wire loosen kar do 15 minute pehle. Kahin recording mat hone do.",
+            "translation_en": "Loosen the dashcam wire 15 minutes earlier. Don't let any recording happen.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-003",
+            "platform": "Telegram",
+            "direction": "OUTGOING",
+            "contact_name": "Selva",
+            "phone_number": "+91-78940-53614",
+            "timestamp": "2024-04-05T10:15:33+05:30",
+            "content": "89 lakh mila. Tera 12 lakh aaj raat milega. Mumbai mat ja abhi. Idhar reh.",
+            "translation_en": "Got 89 lakh. Your 12 lakh will come tonight. Don't go to Mumbai now. Stay here.",
+            "deleted": true,
+            "deleted_timestamp": "2024-04-05T14:22:11+05:30",
+            "recovery_method": "Telegram SQLite WAL recovery"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "PhonePe",
+            "direction": "OUTGOING",
+            "amount_inr": 7500,
+            "recipient_name": "Selvam D. Pillai",
+            "timestamp": "2024-04-02T16:44:09+05:30",
+            "remarks": "advance",
+            "flagged": true,
+            "flag_reason": "Pre-heist payment to inside contact guard"
+          },
+          {
+            "transaction_id": "FT-002",
+            "app": "Google Pay",
+            "direction": "OUTGOING",
+            "amount_inr": 4800,
+            "recipient_name": "Rajesh Bike Repairs",
+            "timestamp": "2024-04-04T10:11:04+05:30",
+            "remarks": "bike service",
+            "flagged": true,
+            "flag_reason": "Likely getaway motorcycle serviced day before heist"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-04-04T11:31:07+05:30",
+            "latitude": 13.0604,
+            "longitude": 80.2496,
+            "resolved_address": "Sardar Patel Road Signal Area, Nungambakkam, Chennai",
+            "notes": "Reconnaissance of interception point day before heist"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-04-05T09:43:22+05:30",
+            "latitude": 13.0606,
+            "longitude": 80.2499,
+            "resolved_address": "Sardar Patel Road, Chennai – AT CRIME SCENE",
+            "notes": "Device at exact interception location at time of heist"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-04-05T10:08:44+05:30",
+            "latitude": 13.0271,
+            "longitude": 80.2136,
+            "resolved_address": "Guindy Industrial Estate, Chennai – 600032",
+            "notes": "Rapid southward movement post-heist – suspected cash transfer point"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "SIM_INSERTED",
+            "timestamp": "2024-04-01T08:44:22+05:30",
+            "sim_network": "BSNL Prepaid – anonymous",
+            "notes": "New SIM 4 days before heist"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-04-05T14:19:07+05:30",
+            "app_name": "Telegram",
+            "notes": "Removed post-heist after deleting payout messages"
+          },
+          {
+            "event_id": "SYS-003",
+            "event_type": "DEVICE_POWER_OFF",
+            "timestamp": "2024-04-05T14:31:55+05:30",
+            "notes": "Device powered off after evidence cleanup"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "recovery_rate_percent": 77
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "inside_contact_confirmed": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "details": "S-002 employed as van guard – shared route, timing, dashcam sabotage instructions via WhatsApp"
+        }
+      }
+    },

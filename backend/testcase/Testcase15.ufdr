@@ -1,0 +1,206 @@
+{
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00395",
+        "crime_type": "Bank Branch Robbery – Daylight Armed",
+        "status": "Suspects Arrested – Trial Pending",
+        "city": "Jaipur",
+        "state": "Rajasthan",
+        "incident_date": "2024-05-14",
+        "investigation_start": "2024-05-14",
+        "reporting_agency": "Rajasthan Police – Jaipur West Division",
+        "fir_number": "FIR-JPR-2024-1022"
+      },
+      "target_info": {
+        "bank_type": "Rural Cooperative Bank",
+        "bank_name": "Rajputana Gramin Sahakari Bank (Fictional)",
+        "branch_name": "Vaishali Nagar Branch",
+        "branch_address": "B-14, Vaishali Nagar, Jaipur – 302021",
+        "branch_ifsc": "RGSB0000044",
+        "incident_time": "2024-05-14T11:30:00+05:30",
+        "incident_duration_minutes": 14,
+        "estimated_loss_inr": 2850000,
+        "vault_accessed": false,
+        "weapons_reported": "Two country-made pistols (katta)",
+        "hostages_reported": 5,
+        "casualties": "None",
+        "cctv_status": "One of two cameras non-functional since previous week – suspected prior tampering"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Ajay Singh Shekhawat",
+          "age": 28,
+          "alias": [
+            "Ajju",
+            "AS"
+          ],
+          "role_in_crime": "Armed robber – counter control",
+          "phone_number": "+91-97993-28741",
+          "address": "Kho Nagorian Village, Jaipur Rural – 302027",
+          "occupation": "Farmer / Daily labourer",
+          "prior_record": "2022 – vehicle theft – FIR, no conviction",
+          "seized_device": "Yes – primary"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Bhupendra Prasad Meena",
+          "age": 32,
+          "alias": [
+            "Bhupi",
+            "BP"
+          ],
+          "role_in_crime": "Armed robber – cash collection",
+          "phone_number": "+91-82091-54307",
+          "address": "Near Durgapura Railway Station, Jaipur – 302018",
+          "occupation": "Mechanic",
+          "prior_record": "2021 – petty theft – warned",
+          "seized_device": "Yes – secondary"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "Redmi Note 12",
+        "os_version": "Android 13 (MIUI 14)",
+        "imei_1": "863740051928304",
+        "phone_number_on_device": "+91-97993-28741",
+        "seizure_time": "2024-05-15T03:10:00+05:30",
+        "seized_by": "SI Hemraj D., Jaipur West PS",
+        "extraction_type": "Logical",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "e6a0c7d3b28175820e5a0d4c3b7f1e68"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "Bhupi",
+            "phone_number": "+91-82091-54307",
+            "timestamp": "2024-05-12T22:19:44+05:30",
+            "duration_seconds": 328,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "Night planning call – 2 days before robbery"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "OUTGOING",
+            "contact_name": "Bhupi",
+            "phone_number": "+91-82091-54307",
+            "timestamp": "2024-05-14T11:14:07+05:30",
+            "duration_seconds": 18,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "18-second call 16 minutes before robbery – confirmed go-ahead"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "INCOMING",
+            "contact_name": "UNKNOWN",
+            "phone_number": "+91-79030-18844",
+            "timestamp": "2024-05-14T12:04:21+05:30",
+            "duration_seconds": 143,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "Post-robbery unknown caller – proceeds handoff arrangement suspected"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "SMS",
+            "direction": "OUTGOING",
+            "contact_name": "Bhupi",
+            "phone_number": "+91-82091-54307",
+            "timestamp": "2024-05-12T21:44:09+05:30",
+            "content": "Vaishali Nagar wali bank mein vault nahi hai. Counter cash hi lena hai. Guard ek hi hai aur woh bhi tedi side mein hota hai.",
+            "translation_en": "The Vaishali Nagar bank has no vault. We only take counter cash. Only one guard and he stays on the bent side.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Bhupi",
+            "phone_number": "+91-82091-54307",
+            "timestamp": "2024-05-14T12:21:44+05:30",
+            "content": "28.5 lakh mila. Aadha tera. Raat ko Sikar ki taraf nikal.",
+            "translation_en": "Got 28.5 lakh. Half is yours. Head toward Sikar at night.",
+            "deleted": true,
+            "deleted_timestamp": "2024-05-14T16:07:22+05:30",
+            "recovery_method": "WhatsApp msgstore.db WAL recovery"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "PhonePe",
+            "direction": "OUTGOING",
+            "amount_inr": 2200,
+            "recipient_name": "Bhupendra P. Meena",
+            "timestamp": "2024-05-13T09:14:07+05:30",
+            "remarks": "diesel",
+            "flagged": true,
+            "flag_reason": "Payment to co-suspect day before robbery"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-05-13T10:41:09+05:30",
+            "latitude": 26.9124,
+            "longitude": 75.7373,
+            "resolved_address": "Vaishali Nagar, Jaipur – 302021",
+            "notes": "Reconnaissance visit to target branch"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-05-14T11:27:11+05:30",
+            "latitude": 26.9127,
+            "longitude": 75.7371,
+            "resolved_address": "RGSB Vaishali Nagar Branch – AT CRIME SCENE",
+            "notes": "Device at branch 3 minutes before robbery"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-05-14T11:51:04+05:30",
+            "latitude": 26.9484,
+            "longitude": 75.7714,
+            "resolved_address": "Vidhyadhar Nagar, Jaipur",
+            "notes": "Rapid northward flight post-robbery"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-05-14T16:04:19+05:30",
+            "app_name": "WhatsApp",
+            "notes": "WhatsApp uninstalled after deleting payout message – reinstalled next day"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "DEVICE_POWER_OFF",
+            "timestamp": "2024-05-14T20:11:44+05:30",
+            "notes": "Phone off for 9+ hours after robbery"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "HIGH",
+          "recovery_rate_percent": 71
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "MEDIUM"
+        }
+      }
+    },

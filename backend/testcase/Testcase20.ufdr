@@ -1,0 +1,241 @@
+ {
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00400",
+        "crime_type": "Bank Robbery – Night Breach via Roof Access",
+        "status": "Active Investigation",
+        "city": "Bhubaneswar",
+        "state": "Odisha",
+        "incident_date": "2024-10-20",
+        "investigation_start": "2024-10-21",
+        "reporting_agency": "Odisha Crime Branch – Bhubaneswar Unit",
+        "fir_number": "FIR-BBS-2024-1504"
+      },
+      "target_info": {
+        "bank_type": "Regional Rural Bank",
+        "bank_name": "Kalinga Gramya Vikas Bank (Fictional)",
+        "branch_name": "Saheed Nagar Branch",
+        "branch_address": "Plot 44, Saheed Nagar, Bhubaneswar – 751007",
+        "branch_ifsc": "KGVB0000147",
+        "incident_time": "2024-10-20T01:15:00+05:30",
+        "incident_duration_minutes": 130,
+        "estimated_loss_inr": 4100000,
+        "vault_accessed": true,
+        "weapons_reported": "None – stealth operation",
+        "hostages_reported": 0,
+        "casualties": "None",
+        "cctv_status": "External camera disabled via stone thrown at lens; interior blind spot exploited"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Bikram Chandra Behera",
+          "age": 33,
+          "alias": [
+            "BCB",
+            "Biki"
+          ],
+          "role_in_crime": "Mastermind and roof access specialist",
+          "phone_number": "+91-94381-20741",
+          "address": "Lingaraj Nagar, Bhubaneswar – 751002",
+          "occupation": "Plumber (self-employed)",
+          "prior_record": "2020 – theft case – charges withdrawn",
+          "seized_device": "Yes – primary"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Subhash Ranjan Panda",
+          "age": 30,
+          "alias": [
+            "Subha",
+            "SRP"
+          ],
+          "role_in_crime": "Accomplice – cash loading and external lookout",
+          "phone_number": "+91-70774-51204",
+          "address": "Nayapalli, Bhubaneswar – 751015",
+          "occupation": "Newspaper delivery agent",
+          "prior_record": "None",
+          "seized_device": "Memory card recovered from site"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "Itel P55+",
+        "os_version": "Android 13 (itelOS 4.0)",
+        "imei_1": "356041029481703",
+        "phone_number_on_device": "+91-94381-20741",
+        "seizure_time": "2024-10-21T08:30:00+05:30",
+        "seized_by": "SI Pradeep M., Odisha Crime Branch",
+        "extraction_type": "Logical",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "d3a8f5c1b09472065d2a8f4c0b7e3d51"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "Subha",
+            "phone_number": "+91-70774-51204",
+            "timestamp": "2024-10-18T23:11:07+05:30",
+            "duration_seconds": 487,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "Midnight planning call – 2 days before night robbery"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "OUTGOING",
+            "contact_name": "Subha",
+            "phone_number": "+91-70774-51204",
+            "timestamp": "2024-10-20T00:58:44+05:30",
+            "duration_seconds": 36,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "Confirmation call 17 minutes before roof breach – late-night entry"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "OUTGOING",
+            "contact_name": "UNKNOWN",
+            "phone_number": "+91-62379-44007",
+            "timestamp": "2024-10-20T04:11:09+05:30",
+            "duration_seconds": 174,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "Post-robbery call to unknown – suspected cash handler"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Subha",
+            "phone_number": "+91-70774-51204",
+            "timestamp": "2024-10-17T22:44:04+05:30",
+            "content": "Bank ki chhat ka AC duct dhila hai. Ussi se andar ghusna hai. Neechey vault ke paas mujhe 90 minute chahiye.",
+            "translation_en": "The bank roof's AC duct is loose. We enter through that. I need 90 minutes near the vault below.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "WhatsApp",
+            "direction": "INCOMING",
+            "contact_name": "Subha",
+            "phone_number": "+91-70774-51204",
+            "timestamp": "2024-10-17T23:01:04+05:30",
+            "content": "Bahar ka camera right angle mein hai. Ek pathar kafi hai usse disable karne ke liye. Main baahar rhunga bag lekar.",
+            "translation_en": "Outside camera is at right angle. One stone is enough to disable it. I'll stay outside with the bag.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-003",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Subha",
+            "phone_number": "+91-70774-51204",
+            "timestamp": "2024-10-20T03:51:04+05:30",
+            "content": "41 lakh nikla. Sab bags mein hai. Subah 5 baje Puri highway par mile. Ye wala number band karta hoon.",
+            "translation_en": "Got 41 lakh. All in bags. Meet at 5 AM on Puri highway. Switching off this number.",
+            "deleted": true,
+            "deleted_timestamp": "2024-10-20T03:52:44+05:30",
+            "recovery_method": "WhatsApp msgstore.db WAL + NAND residue"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "PhonePe",
+            "direction": "OUTGOING",
+            "amount_inr": 4500,
+            "recipient_name": "Subhash R. Panda",
+            "timestamp": "2024-10-18T16:44:09+05:30",
+            "remarks": "help",
+            "flagged": true,
+            "flag_reason": "Advance to accomplice 2 days before robbery"
+          },
+          {
+            "transaction_id": "FT-002",
+            "app": "Google Pay",
+            "direction": "OUTGOING",
+            "amount_inr": 1800,
+            "recipient_name": "Ravi Hardware – Saheed Nagar",
+            "timestamp": "2024-10-18T11:11:04+05:30",
+            "remarks": "tools",
+            "flagged": true,
+            "flag_reason": "Hardware purchase near target bank 2 days before robbery – roof entry tools suspected"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-10-18T14:22:07+05:30",
+            "latitude": 20.2717,
+            "longitude": 85.8454,
+            "resolved_address": "Saheed Nagar, Bhubaneswar – 751007",
+            "notes": "Reconnaissance of bank roof access – hardware store also in same area"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-10-20T01:11:44+05:30",
+            "latitude": 20.2719,
+            "longitude": 85.8451,
+            "resolved_address": "KGVB Bank, Saheed Nagar – AT CRIME SCENE",
+            "notes": "Device at bank 4 minutes before breach – late-night stealth operation"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-10-20T04:41:09+05:30",
+            "latitude": 20.2234,
+            "longitude": 85.9081,
+            "resolved_address": "NH-316 Puri Highway, Bhubaneswar – Exit Point",
+            "notes": "Post-robbery movement toward Puri highway – matches MSG-003 meet point"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "DEVICE_POWER_OFF",
+            "timestamp": "2024-10-20T03:54:22+05:30",
+            "notes": "Device powered off immediately after deleting proceeds message – 'switching off this number' confirmed in MSG-003"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "DEVICE_POWER_ON",
+            "timestamp": "2024-10-21T07:14:04+05:30",
+            "notes": "Device powered on – suspect apprehended shortly after at Lingaraj Nagar residence"
+          },
+          {
+            "event_id": "SYS-003",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-10-21T07:17:44+05:30",
+            "app_name": "WhatsApp",
+            "notes": "WhatsApp uninstalled 3 minutes after device power-on – last-ditch evidence deletion before arrest"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "recovery_rate_percent": 76
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "roof_breach_indicators": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "details": "AC duct looseness scouted, camera angle calculated for stone disable, hardware tools purchased near scene, 90-minute vault access window pre-planned in messages"
+        }
+      }
+    }
+  ]
+}

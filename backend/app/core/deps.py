@@ -15,6 +15,7 @@ from app.repositories.insights import InsightRepository
 from app.repositories.user_repository import UserRepository
 from app.services.auth_service import AuthService
 from app.services.background_worker import BackgroundWorkerService
+from app.services.case_behavior_service import CaseBehaviorService
 from app.services.case_service import CaseService
 from app.services.evidence_service import EvidenceService
 from app.services.insight_service import InsightService
@@ -132,10 +133,30 @@ def get_insight_service(
     return InsightService(event_repo, insight_repo, llm_service)
 
 
-def get_similar_case_service(
+def get_case_behavior_service(
+    case_repo: CaseRepository = Depends(get_case_repository),
+    event_repo: EventRepository = Depends(get_event_repository),
+    embedding_service: EmbeddingService = Depends(get_embedding_service),
     vector_store: ChromaCloudStore = Depends(get_vector_store),
+    redis_service: RedisService = Depends(get_redis_service),
+    llm_service: LLMService = Depends(get_llm_service),
+    settings: Settings = Depends(get_app_settings),
+) -> CaseBehaviorService:
+    return CaseBehaviorService(
+        case_repo=case_repo,
+        event_repo=event_repo,
+        embedding_service=embedding_service,
+        vector_store=vector_store,
+        redis_service=redis_service,
+        llm_service=llm_service,
+        settings=settings,
+    )
+
+
+def get_similar_case_service(
+    case_behavior_service: CaseBehaviorService = Depends(get_case_behavior_service),
 ) -> SimilarCaseService:
-    return SimilarCaseService(vector_store)
+    return SimilarCaseService(case_behavior_service)
 
 
 def get_background_worker(
@@ -143,5 +164,12 @@ def get_background_worker(
     event_repo: EventRepository = Depends(get_event_repository),
     embedding_service: EmbeddingService = Depends(get_embedding_service),
     vector_store: ChromaCloudStore = Depends(get_vector_store),
+    case_behavior_service: CaseBehaviorService = Depends(get_case_behavior_service),
 ) -> BackgroundWorkerService:
-    return BackgroundWorkerService(case_repo, event_repo, embedding_service, vector_store)
+    return BackgroundWorkerService(
+        case_repo=case_repo,
+        event_repo=event_repo,
+        embedding_service=embedding_service,
+        vector_store=vector_store,
+        case_behavior_service=case_behavior_service,
+    )

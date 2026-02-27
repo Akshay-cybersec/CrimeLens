@@ -149,6 +149,94 @@ class ChromaCloudStore:
                 details={"case_id": case_id, "error": str(exc)},
             ) from exc
 
+    async def get_case_embedding_record(self, case_id: str) -> dict[str, Any]:
+        collection = self._cases()
+        try:
+            result = await asyncio.to_thread(
+                collection.get,
+                ids=[case_id],
+                include=["documents", "metadatas", "embeddings"],
+            )
+            ids = result.get("ids", [])
+            if not ids:
+                return {}
+            documents = result.get("documents", [])
+            metadatas = result.get("metadatas", [])
+            embeddings = result.get("embeddings", [])
+            return {
+                "id": ids[0] if ids else case_id,
+                "document": documents[0] if documents else "",
+                "metadata": metadatas[0] if metadatas else {},
+                "embedding": embeddings[0] if embeddings else [],
+            }
+        except Exception as exc:
+            raise APIException(
+                message="Failed to load case embedding record from Chroma Cloud.",
+                status_code=503,
+                code="CHROMA_CASE_GET_FAILED",
+                details={"case_id": case_id, "error": str(exc)},
+            ) from exc
+
+    async def add_case_behavior_embedding(
+        self,
+        case_id: str,
+        vector: list[float],
+        summary: str,
+        metadata: dict[str, Any],
+    ) -> None:
+        collection = self._cases()
+        try:
+            await asyncio.to_thread(collection.delete, ids=[case_id])
+            await asyncio.to_thread(
+                collection.add,
+                ids=[case_id],
+                embeddings=[vector],
+                metadatas=[metadata],
+                documents=[summary],
+            )
+        except Exception as exc:
+            raise APIException(
+                message="Failed to store behavioral case embedding in Chroma Cloud.",
+                status_code=503,
+                code="CHROMA_BEHAVIOR_ADD_FAILED",
+                details={"case_id": case_id, "error": str(exc)},
+            ) from exc
+
+    async def query_case_embeddings(
+        self,
+        query_vector: list[float],
+        n_results: int,
+    ) -> list[dict[str, Any]]:
+        collection = self._cases()
+        try:
+            result = await asyncio.to_thread(
+                collection.query,
+                query_embeddings=[query_vector],
+                n_results=n_results,
+            )
+        except Exception as exc:
+            raise APIException(
+                message="Failed to query case embeddings from Chroma Cloud.",
+                status_code=503,
+                code="CHROMA_CASE_QUERY_FAILED",
+                details={"error": str(exc)},
+            ) from exc
+        ids = result.get("ids", [[]])[0]
+        distances = result.get("distances", [[]])[0]
+        metadatas = result.get("metadatas", [[]])[0]
+        documents = result.get("documents", [[]])[0]
+        rows: list[dict[str, Any]] = []
+        for idx, item_id in enumerate(ids):
+            rows.append(
+                {
+                    "case_id": item_id,
+                    "distance": float(distances[idx]) if idx < len(distances) else 1.0,
+                    "metadata": metadatas[idx] if idx < len(metadatas) else {},
+                    "document": documents[idx] if idx < len(documents) else "",
+                }
+            )
+        return rows
+
     async def similar_cases(self, case_id: str, top_k: int) -> list[tuple[str, float]]:
         collection = self._cases()
         try:

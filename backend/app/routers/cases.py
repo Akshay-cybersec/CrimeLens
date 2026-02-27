@@ -6,6 +6,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, Query, Uplo
 
 from app.core.deps import (
     get_background_worker,
+    get_case_behavior_service,
     get_case_service,
     get_evidence_service,
     get_insight_service,
@@ -15,6 +16,7 @@ from app.core.deps import (
 )
 from app.core.security import AuthUser, get_current_user, require_roles
 from app.schemas.analysis import (
+    BehavioralIndexResponse,
     EvidenceAnalysisResponse,
     InsightResponse,
     SearchRequest,
@@ -23,6 +25,7 @@ from app.schemas.analysis import (
 )
 from app.schemas.case import CaseCreateResponse, TimelineResponse
 from app.services.background_worker import BackgroundWorkerService
+from app.services.case_behavior_service import CaseBehaviorService
 from app.services.case_service import CaseService
 from app.services.evidence_service import EvidenceService
 from app.services.insight_service import InsightService
@@ -46,6 +49,17 @@ async def upload_case(
     created = await case_service.upload_case(file=file, title=title, description=description, user=user)
     background_tasks.add_task(background_worker.process_case, created.case_id)
     return created
+
+
+@router.post("/{case_id}/behavioral-index", response_model=BehavioralIndexResponse)
+async def behavioral_index(
+    case_id: str,
+    user: AuthUser = Depends(get_current_user),
+    case_service: CaseService = Depends(get_case_service),
+    behavior_service: CaseBehaviorService = Depends(get_case_behavior_service),
+) -> BehavioralIndexResponse:
+    await case_service.authorize_case_access(case_id, user)
+    return await behavior_service.index_case_behavior(case_id)
 
 
 @router.get("/{case_id}/timeline", response_model=TimelineResponse)

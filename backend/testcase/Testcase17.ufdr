@@ -1,0 +1,211 @@
+ {
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00397",
+        "crime_type": "Bank Robbery – Hostage Situation",
+        "status": "Closed – Convicted",
+        "city": "Ahmedabad",
+        "state": "Gujarat",
+        "incident_date": "2024-01-17",
+        "investigation_start": "2024-01-17",
+        "reporting_agency": "Ahmedabad Crime Branch – Zone III",
+        "fir_number": "FIR-AMD-2024-0148"
+      },
+      "target_info": {
+        "bank_type": "Public Sector (Nationalised)",
+        "bank_name": "Saurashtra Jan Seva Bank (Fictional)",
+        "branch_name": "Navrangpura Branch",
+        "branch_address": "C.G. Road, Navrangpura, Ahmedabad – 380009",
+        "branch_ifsc": "SJSB0000092",
+        "incident_time": "2024-01-17T10:15:00+05:30",
+        "incident_duration_minutes": 48,
+        "estimated_loss_inr": 3400000,
+        "vault_accessed": true,
+        "weapons_reported": "Two revolvers, one knife",
+        "hostages_reported": 11,
+        "casualties": "None – two hostages treated for shock",
+        "cctv_status": "Fully operational – suspects identified from footage"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Haresh Ramanlal Patel",
+          "age": 42,
+          "alias": [
+            "HR",
+            "Hareshbhai"
+          ],
+          "role_in_crime": "Lead – hostage control and vault negotiator",
+          "phone_number": "+91-98252-40719",
+          "address": "Nikol Road, Near Khokhara Circle, Ahmedabad – 380008",
+          "occupation": "Previously – bank loan recovery agent (terminated)",
+          "prior_record": "2019 – coercion case – settled out of court",
+          "seized_device": "Yes – primary"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Jignesh Kantibhai Solanki",
+          "age": 29,
+          "alias": [
+            "Jigs",
+            "JKS"
+          ],
+          "role_in_crime": "Armed support and door control",
+          "phone_number": "+91-70694-51308",
+          "address": "Odhav GIDC, Ahmedabad – 382415",
+          "occupation": "Factory worker",
+          "prior_record": "None",
+          "seized_device": "Yes – secondary"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "Samsung Galaxy M34",
+        "os_version": "Android 13 (One UI 5.1)",
+        "imei_1": "358920046173904",
+        "phone_number_on_device": "+91-98252-40719",
+        "seizure_time": "2024-01-17T19:30:00+05:30",
+        "seized_by": "PI Suresh A., Crime Branch Zone III",
+        "extraction_type": "Logical",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "a8c3f1e7d04286941a7c2f0e8d5b3a91"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "Jigs",
+            "phone_number": "+91-70694-51308",
+            "timestamp": "2024-01-15T22:31:11+05:30",
+            "duration_seconds": 402,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "Night briefing – 2 days before robbery"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "OUTGOING",
+            "contact_name": "Jigs",
+            "phone_number": "+91-70694-51308",
+            "timestamp": "2024-01-17T10:01:44+05:30",
+            "duration_seconds": 27,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "Confirmation call 14 minutes before robbery"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "OUTGOING",
+            "contact_name": "UNKNOWN",
+            "phone_number": "+91-87990-33077",
+            "timestamp": "2024-01-17T11:21:04+05:30",
+            "duration_seconds": 111,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "During hostage situation – call to unknown number – suspected to be fence/handler"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Jigs",
+            "phone_number": "+91-70694-51308",
+            "timestamp": "2024-01-15T22:14:07+05:30",
+            "content": "Maine bank mein account khulwaya tha 2 saal pehle. Vault ka area mujhe pata hai. Side door hamesha half-open rehta hai 10 baje.",
+            "translation_en": "I had opened a bank account there 2 years ago. I know the vault area. The side door remains half-open at 10 AM.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Jigs",
+            "phone_number": "+91-70694-51308",
+            "timestamp": "2024-01-17T11:44:14+05:30",
+            "content": "34 lakh mila. Side door se nikal. Gaadi Navrangpura underbridge ke paas khadi hai.",
+            "translation_en": "Got 34 lakh. Exit from side door. Vehicle is parked near Navrangpura underbridge.",
+            "deleted": true,
+            "deleted_timestamp": "2024-01-17T13:02:11+05:30",
+            "recovery_method": "WhatsApp msgstore.db WAL recovery"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "Google Pay",
+            "direction": "OUTGOING",
+            "amount_inr": 5500,
+            "recipient_name": "Jignesh K. Solanki",
+            "timestamp": "2024-01-16T14:11:04+05:30",
+            "remarks": "",
+            "flagged": true,
+            "flag_reason": "Day-before advance to co-suspect"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-01-16T11:04:22+05:30",
+            "latitude": 23.0268,
+            "longitude": 72.5717,
+            "resolved_address": "C.G. Road, Navrangpura, Ahmedabad",
+            "notes": "Reconnaissance visit to target branch day before robbery"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-01-17T10:12:09+05:30",
+            "latitude": 23.0271,
+            "longitude": 72.5719,
+            "resolved_address": "SJSB Bank, Navrangpura – AT CRIME SCENE",
+            "notes": "Device at crime scene 3 minutes before robbery – hostage situation lasted 48 min"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-01-17T11:21:44+05:30",
+            "latitude": 23.0244,
+            "longitude": 72.5611,
+            "resolved_address": "Navrangpura Underbridge, Ahmedabad",
+            "notes": "Post-robbery location matches getaway vehicle described in MSG-002"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-01-17T13:00:04+05:30",
+            "app_name": "WhatsApp",
+            "notes": "Removed after deleting payout message"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "DEVICE_POWER_OFF",
+            "timestamp": "2024-01-17T17:22:09+05:30",
+            "notes": "Device powered off before police arrived – seized at residence"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "HIGH",
+          "recovery_rate_percent": 74
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "MEDIUM"
+        },
+        "prior_bank_knowledge": {
+          "flag": true,
+          "severity": "HIGH",
+          "details": "S-001 had prior account at target bank – used floor knowledge from previous visits – confirms insider geographic familiarity"
+        }
+      }
+    },

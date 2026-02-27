@@ -1,0 +1,183 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2024-002",
+    "crime_type": "ATM Cash Van Robbery",
+    "status": "Active Investigation",
+    "location": "Ghaziabad, Uttar Pradesh, India",
+    "incident_date": "2024-07-03",
+    "investigation_start": "2024-07-04"
+  },
+  "victim_info": {
+    "company_name": "SecureCash Logistics Pvt. Ltd.",
+    "vehicle_id": "DL-1RT-7782",
+    "cash_being_transported_inr": 32000000,
+    "route": "Noida Sector 62 to Indirapuram ATM clusters"
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Vikram Tyagi",
+      "age": 33,
+      "role": "Former Cash Van Driver",
+      "phone_number": "+91-9811123344",
+      "address": "Loni Border, Ghaziabad",
+      "prior_record": "Armed robbery – 2020 (on bail)"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Deepak Chauhan",
+      "age": 28,
+      "role": "Field Executor",
+      "phone_number": "+91-9899988877",
+      "address": "Vasundhara, Ghaziabad",
+      "prior_record": "Illegal arms possession – 2022"
+    }
+  ],
+  "device_info": {
+    "device_model": "Redmi Note 12 Pro",
+    "os_version": "Android 13",
+    "imei": "867530901112345",
+    "phone_number": "+91-9811123344",
+    "seizure_time": "2024-07-04T09:18:00+05:30",
+    "seized_by": "Ghaziabad Crime Branch",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Deepak",
+      "phone_number": "+91-9899988877",
+      "timestamp": "2024-07-02T22:41:11+05:30",
+      "duration_seconds": 521,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Long call night before robbery – route confirmation"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Unknown (Prepaid)",
+      "phone_number": "+91-9001122334",
+      "timestamp": "2024-07-03T08:09:34+05:30",
+      "duration_seconds": 26,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Call received 12 minutes before attack"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "WhatsApp",
+      "direction": "OUTGOING",
+      "contact_name": "Deepak",
+      "timestamp": "2024-07-02T23:05:18+05:30",
+      "content": "Van stops at petrol pump for 4 mins around 8:20 AM. That’s the window.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "WhatsApp",
+      "direction": "INCOMING",
+      "contact_name": "Deepak",
+      "timestamp": "2024-07-02T23:09:44+05:30",
+      "content": "Engine cut. We block from front and rear. Phones off after 8:25.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2024-07-03T10:41:12+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "OUTGOING",
+      "amount_inr": 450000,
+      "recipient_name": "D. Chauhan",
+      "timestamp": "2024-07-03T15:02:21+05:30",
+      "memo": "Loan repayment",
+      "flagged": true,
+      "flag_reason": "Transfer hours after robbery incident"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2024-07-03T08:17:12+05:30",
+      "latitude": 28.6692,
+      "longitude": 77.4538,
+      "accuracy_meters": 6,
+      "source": "GPS",
+      "resolved_address": "NH-9 Petrol Pump, Ghaziabad",
+      "notes": "Device present at ambush location during robbery window"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2024-07-03T08:29:58+05:30",
+      "latitude": 28.7054,
+      "longitude": 77.4266,
+      "accuracy_meters": 18,
+      "source": "Cell Tower",
+      "resolved_address": "Meerut Road Exit",
+      "notes": "Rapid departure northbound post-incident"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2024-07-02T21:44:33+05:30",
+        "action": "SEARCH",
+        "query": "petrol pumps on NH-9 Ghaziabad",
+        "notes": "Pre-incident reconnaissance"
+      },
+      {
+        "activity_id": "GM-002",
+        "timestamp": "2024-07-02T21:49:05+05:30",
+        "action": "NAVIGATION_STARTED",
+        "destination": "NH-9 Petrol Pump Ghaziabad",
+        "mode": "DRIVING",
+        "notes": "Route rehearsal night before robbery"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2024-07-01T17:14:55+05:30",
+        "action": "VIDEO_CAPTURED",
+        "file_name": "VID_20240701_171455.mp4",
+        "duration_seconds": 32,
+        "gps_embedded": true,
+        "location": "Petrol Pump Forecourt",
+        "status": "DELETED",
+        "deleted_timestamp": "2024-07-03T10:38:14+05:30",
+        "recovery_status": "Partially recovered"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "SIM_CHANGE",
+      "timestamp": "2024-07-01T09:11:27+05:30",
+      "notes": "Prepaid SIM activated 48 hours before robbery"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2024-07-03T08:26:44+05:30",
+      "notes": "Device powered off during escape phase"
+    },
+    {
+      "event_id": "SYS-003",
+      "event_type": "APP_UNINSTALL",
+      "timestamp": "2024-07-03T10:35:22+05:30",
+      "app_name": "WhatsApp",
+      "notes": "Messaging app uninstalled post-incident"
+    }
+  ]
+}

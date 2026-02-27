@@ -1,18 +1,10 @@
 from app.schemas.analysis import SimilarCaseResponse
-from app.vector.chroma_client import ChromaCloudStore
+from app.services.case_behavior_service import CaseBehaviorService
 
 
 class SimilarCaseService:
-    def __init__(self, vector_store: ChromaCloudStore) -> None:
-        self.vector_store = vector_store
+    def __init__(self, case_behavior_service: CaseBehaviorService) -> None:
+        self.case_behavior_service = case_behavior_service
 
     async def find_similar(self, case_id: str, top_k: int = 5) -> list[SimilarCaseResponse]:
-        matches = await self.vector_store.similar_cases(case_id, top_k=top_k)
-        return [
-            SimilarCaseResponse(
-                similar_case_id=other_id,
-                similarity_score=round(score, 4),
-                explanation="Case-level semantic embedding similarity.",
-            )
-            for other_id, score in matches
-        ]
+        return await self.case_behavior_service.find_similar_cases(case_id, top_k=top_k)
