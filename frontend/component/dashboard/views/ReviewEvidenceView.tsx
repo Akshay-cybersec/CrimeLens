@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import type { EvidenceResponse } from '@/types/api';
 
@@ -12,6 +12,10 @@ export default function ReviewEvidenceView({ evidence }: Props) {
   const clusters = evidence?.clusters ?? [];
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selectedCluster = useMemo(() => clusters[selectedIndex] || clusters[0], [clusters, selectedIndex]);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [evidence?.case_id, clusters.length]);
   const riskLabel = (score: number) => {
     if (score >= 0.8) return 'High Priority';
     if (score >= 0.6) return 'Medium Priority';
