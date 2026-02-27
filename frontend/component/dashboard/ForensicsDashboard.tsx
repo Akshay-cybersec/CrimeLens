@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   FolderPlus, 
   Upload, 
@@ -9,15 +10,14 @@ import {
   LayoutDashboard, 
   Search, 
   FileText, 
-  Archive,
   Bell,
   Settings,
   User,
-  ChevronRight
+  ChevronRight,
+  ArrowLeft
 } from 'lucide-react';
 
 // --- Import separated view components ---
-// Ensure these files exist in the './views/' directory relative to this file
 import IntelligenceDashboardView from '../dashboard/views/IntelligenceDashboardView';
 import CreateCaseView from './views/CreateCaseView';
 import UploadDataView from './views/UploadDataView';
@@ -42,11 +42,16 @@ const FLOW_STEPS: FlowStep[] = [
   { id: 'analyze', label: 'Run AI Analysis', icon: Cpu },
   { id: 'evidence', label: 'Review Evidence', icon: Search },
   { id: 'export', label: 'Export Report', icon: FileText },
-  
 ];
 
 export default function ForensicsDashboard() {
   const [activeStep, setActiveStep] = useState<string>('dashboard');
+  const router = useRouter();
+
+  // Route back to the absolute homepage of your application
+  const handleBackToHome = () => {
+    router.push('/'); // Update this path if your homepage sits at a different route
+  };
 
   // Dynamic content renderer based on active sidebar tab
   const renderActiveView = () => {
@@ -58,7 +63,6 @@ export default function ForensicsDashboard() {
       case 'analyze': return <AIAnalysisView />;
       case 'evidence': return <ReviewEvidenceView />;
       case 'export': return <ExportReportView />;
-  
       default: return <IntelligenceDashboardView />;
     }
   };
@@ -88,7 +92,7 @@ export default function ForensicsDashboard() {
               <button
                 key={step.id}
                 onClick={() => setActiveStep(step.id)}
-                className={`w-full flex items-center justify-between px-3 py-3 rounded-md transition-all duration-200 ${
+                className={`w-full flex items-center justify-between px-3 py-3 rounded-md transition-all duration-200 relative ${
                   isActive 
                     ? 'bg-blue-600/10 text-blue-400 border-l-4 border-blue-500' 
                     : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border-l-4 border-transparent'
@@ -98,10 +102,6 @@ export default function ForensicsDashboard() {
                   <Icon className={`w-5 h-5 ${isActive ? 'text-blue-500' : 'text-slate-500'}`} />
                   <span className="font-medium text-sm">{step.label}</span>
                 </div>
-                {/* Connecting line indicator for flow (Skipped for last item) */}
-                {index < FLOW_STEPS.length - 1 && (
-                   <div className="w-1 h-4 border-r border-slate-700 absolute left-8 mt-10 hidden lg:block" />
-                )}
               </button>
             );
           })}
@@ -120,12 +120,14 @@ export default function ForensicsDashboard() {
         
         {/* Top Header */}
         <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <span>Active Module</span>
-            <ChevronRight className="w-4 h-4" />
-            <span className="font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
-              {FLOW_STEPS.find(s => s.id === activeStep)?.label}
-            </span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm text-slate-500">
+              <span>Active Module</span>
+              <ChevronRight className="w-4 h-4" />
+              <span className="font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                {FLOW_STEPS.find(s => s.id === activeStep)?.label}
+              </span>
+            </div>
           </div>
           
           <div className="flex items-center gap-4">
@@ -134,6 +136,16 @@ export default function ForensicsDashboard() {
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
             </button>
             <div className="w-px h-6 bg-slate-200"></div>
+            
+            {/* Back Button - Routes directly to homepage */}
+            <button 
+              onClick={handleBackToHome}
+              className="flex items-center gap-2 px-3 py-1.5 text-slate-600 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all text-sm font-medium group mr-2"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              Back
+            </button>
+
             <div className="flex items-center gap-3 cursor-pointer">
               <div className="text-right hidden md:block">
                 <p className="text-sm font-semibold text-slate-700">Lead Investigator</p>
