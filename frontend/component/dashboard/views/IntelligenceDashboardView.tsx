@@ -30,7 +30,7 @@ export default function IntelligenceDashboardView(_props: Props) {
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Intelligence Dashboard</h2>
+          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Command Center</h2>
           <p className="text-slate-500 text-sm mt-1">Investigative case overview and AI-parsed artifact analytics.</p>
         </div>
         <div className="flex items-center gap-3">

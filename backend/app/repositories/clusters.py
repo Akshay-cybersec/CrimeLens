@@ -22,3 +22,7 @@ class ClusterRepository(BaseRepository):
     async def list_by_case(self, case_id: str) -> list[ClusterDocument]:
         cursor = self.collection.find({"case_id": ObjectId(case_id)}).sort("risk_score", -1)
         return [ClusterDocument(**row) async for row in cursor]
+
+    async def replace_for_case(self, case_id: str, clusters: list[ClusterDocument]) -> list[ClusterDocument]:
+        await self.collection.delete_many({"case_id": ObjectId(case_id)})
+        return await self.insert_many(clusters)

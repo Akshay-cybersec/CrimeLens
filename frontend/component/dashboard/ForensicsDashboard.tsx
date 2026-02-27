@@ -10,6 +10,7 @@ import {
   LayoutDashboard, 
   Search, 
   FileText, 
+  ShieldAlert,
   Bell,
   Settings,
   User,
@@ -26,6 +27,7 @@ import CreateCaseView from './views/CreateCaseView';
 import UploadDataView from './views/UploadDataView';
 import ParsedDataView from './views/ParsedDataView';
 import AIAnalysisView from './views/AIAnalysisView';
+import InsightsEngineView from './views/InsightsEngineView';
 import ReviewEvidenceView from './views/ReviewEvidenceView';
 import ExportReportView from './views/ExportReportView';
 
@@ -38,12 +40,13 @@ type FlowStep = {
 
 // --- Configuration ---
 const FLOW_STEPS: FlowStep[] = [
-  { id: 'dashboard', label: 'Intelligence Dashboard', icon: LayoutDashboard },
-  { id: 'create', label: 'Create Case', icon: FolderPlus },
-  { id: 'upload', label: 'Upload UFDR Data', icon: Upload },
-  { id: 'parse', label: 'View Parsed Data', icon: Database },
-  { id: 'analyze', label: 'Run AI Analysis', icon: Cpu },
-  { id: 'evidence', label: 'Review Evidence', icon: Search },
+  { id: 'dashboard', label: 'Command Center', icon: LayoutDashboard },
+  { id: 'create', label: 'Initialize Investigation', icon: FolderPlus },
+  { id: 'upload', label: 'Inject Extraction', icon: Upload },
+  { id: 'parse', label: 'Data Matrix', icon: Database },
+  { id: 'analyze', label: 'AI Deep Scan', icon: Cpu },
+  { id: 'insights', label: 'Insights Engine', icon: ShieldAlert },
+  { id: 'evidence', label: 'Flag Anamolies', icon: Search },
   { id: 'export', label: 'Export Report', icon: FileText },
 ];
 
@@ -119,6 +122,7 @@ export default function ForensicsDashboard() {
       case 'upload': return <UploadDataView onUploadComplete={handleUploadComplete} />;
       case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
       case 'analyze': return <AIAnalysisView similarCases={similarCases} timeline={timeline} />;
+      case 'insights': return <InsightsEngineView caseId={caseId} insights={insights} />;
       case 'evidence': return <ReviewEvidenceView evidence={evidence} />;
       case 'export': return <ExportReportView />;
       default: return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} />;

@@ -71,6 +71,7 @@ export type EvidenceCluster = {
   id: string;
   risk_score: number;
   related_event_ids: string[];
+  related_events: TimelineEvent[];
   anomaly_type: string;
   reasoning: string;
 };

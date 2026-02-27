@@ -40,8 +40,8 @@ export const caseService = {
     return data;
   },
 
-  async semanticSearch(caseId: string, query: string): Promise<SearchResponse> {
-    const { data } = await api.post<SearchResponse>(`/cases/${caseId}/search`, { query });
+  async semanticSearch(caseId: string, query: string, topK = 25): Promise<SearchResponse> {
+    const { data } = await api.post<SearchResponse>(`/cases/${caseId}/search`, { query, top_k: topK });
     return data;
   },
 };
