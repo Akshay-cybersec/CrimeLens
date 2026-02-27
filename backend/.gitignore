@@ -1,0 +1,21 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Byte-code files
+__pycache__/
+*.pyc
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Environment files
+.env
+
+# Testing and build artifacts
+.pytest_cache/
+.coverage*
+dist/
+build/
