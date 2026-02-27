@@ -74,6 +74,14 @@ class MongoManager:
             ]
         )
 
+        await self._db["users"].create_indexes(
+            [
+                IndexModel([("email", ASCENDING)], unique=True),
+                IndexModel([("status", ASCENDING)]),
+                IndexModel([("created_at", ASCENDING)]),
+            ]
+        )
+
 
 mongo_manager = MongoManager()
 

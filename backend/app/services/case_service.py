@@ -70,7 +70,7 @@ class CaseService:
         if case_doc is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Case not found")
 
-        if user.role == "Admin":
+        if user.role in {"SUPER_ADMIN", "ADMIN"}:
             return case_doc
 
         allowed = user.id == case_doc.owner_id or user.id in case_doc.assigned_user_ids

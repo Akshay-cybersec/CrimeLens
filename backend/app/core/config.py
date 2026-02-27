@@ -39,12 +39,9 @@ class Settings(BaseSettings):
     max_upload_size_mb: int = 50
     rate_limit_per_minute: int = 120
 
-    admin_username: str = "admin"
-    admin_password: str = "admin123!"
-    investigator_username: str = "investigator"
-    investigator_password: str = "investigator123!"
-    analyst_username: str = "analyst"
-    analyst_password: str = "analyst123!"
+    super_admin_email: str = "superadmin@crimelens.local"
+    super_admin_password: str = "change-super-admin-password"
+    super_admin_full_name: str = "Super Admin"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

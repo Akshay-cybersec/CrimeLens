@@ -12,7 +12,7 @@ from app.repositories.cases import CaseRepository
 from app.repositories.clusters import ClusterRepository
 from app.repositories.events import EventRepository
 from app.repositories.insights import InsightRepository
-from app.repositories.users import UserRepository
+from app.repositories.user_repository import UserRepository
 from app.services.auth_service import AuthService
 from app.services.background_worker import BackgroundWorkerService
 from app.services.case_service import CaseService
@@ -38,12 +38,15 @@ def get_vector_store(request: Request) -> ChromaCloudStore:
     return request.app.state.vector_store
 
 
-def get_user_repository(request: Request) -> UserRepository:
-    return request.app.state.user_repository
+def get_user_repository(db: AsyncIOMotorDatabase[Any] = Depends(get_db)) -> UserRepository:
+    return UserRepository(db)
 
 
-def get_auth_service(users_repo: UserRepository = Depends(get_user_repository)) -> AuthService:
-    return AuthService(users_repo)
+def get_auth_service(
+    users_repo: UserRepository = Depends(get_user_repository),
+    settings: Settings = Depends(get_app_settings),
+) -> AuthService:
+    return AuthService(users_repo, settings)
 
 
 def get_case_repository(db: AsyncIOMotorDatabase[Any] = Depends(get_db)) -> CaseRepository:
