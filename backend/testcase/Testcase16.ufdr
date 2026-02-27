@@ -1,0 +1,241 @@
+{
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00396",
+        "crime_type": "Bank Robbery – Cyber-Assisted Social Engineering + Physical Breach",
+        "status": "Active Investigation",
+        "city": "Kolkata",
+        "state": "West Bengal",
+        "incident_date": "2024-06-03",
+        "investigation_start": "2024-06-03",
+        "reporting_agency": "Kolkata Police – Cyber Crime PS",
+        "fir_number": "FIR-KOL-2024-0934"
+      },
+      "target_info": {
+        "bank_type": "Public Sector (Nationalised)",
+        "bank_name": "Sundarbans Rashtriya Bank (Fictional)",
+        "branch_name": "Salt Lake Sector V Branch",
+        "branch_address": "DD-24, Sector V, Salt Lake, Kolkata – 700091",
+        "branch_ifsc": "SRNB0000571",
+        "incident_time": "2024-06-03T13:55:00+05:30",
+        "incident_duration_minutes": 19,
+        "estimated_loss_inr": 5500000,
+        "vault_accessed": true,
+        "weapons_reported": "One taser device, one knife",
+        "hostages_reported": 7,
+        "casualties": "None – minor taser shock to teller",
+        "cctv_status": "Functional – suspects wore face masks and caps"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Debashis Mondal Chatterjee",
+          "age": 36,
+          "alias": [
+            "Debu",
+            "DMC"
+          ],
+          "role_in_crime": "Mastermind – social engineer who phished bank manager credentials",
+          "phone_number": "+91-98307-64412",
+          "address": "3B, Rabindrapally, Barasat, Kolkata – 700124",
+          "occupation": "Former IT support technician",
+          "prior_record": "2020 – cyber fraud case – charges dropped on lack of evidence",
+          "seized_device": "Yes – primary"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Prakash Biswas Halder",
+          "age": 30,
+          "alias": [
+            "Pakku",
+            "PBH"
+          ],
+          "role_in_crime": "Physical entry and cash extraction",
+          "phone_number": "+91-79807-31940",
+          "address": "Nimta, North 24 Parganas, Kolkata – 700049",
+          "occupation": "Electrician",
+          "prior_record": "None",
+          "seized_device": "Partial – SIM card only"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "OnePlus Nord CE 3",
+        "os_version": "Android 14 (OxygenOS 14)",
+        "imei_1": "350471092748301",
+        "phone_number_on_device": "+91-98307-64412",
+        "seizure_time": "2024-06-04T06:40:00+05:30",
+        "seized_by": "SI Arnab D., Kolkata Cyber Crime PS",
+        "extraction_type": "Full File System",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "f7b1d8e4c39265831f6b1e5d4c8a2f74"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "Pakku",
+            "phone_number": "+91-79807-31940",
+            "timestamp": "2024-06-01T00:14:11+05:30",
+            "duration_seconds": 612,
+            "sim_used": "SIM2 – Jio Prepaid",
+            "notes": "Midnight call – 10 min 12 sec – final operational plan discussed"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "OUTGOING",
+            "contact_name": "BANK MANAGER (SPOOFED)",
+            "phone_number": "+91-33-27140000",
+            "timestamp": "2024-06-02T14:22:04+05:30",
+            "duration_seconds": 187,
+            "sim_used": "SIM1 – Airtel",
+            "notes": "Outgoing call to branch landline – suspect impersonated RBI officer to extract vault code"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "OUTGOING",
+            "contact_name": "Pakku",
+            "phone_number": "+91-79807-31940",
+            "timestamp": "2024-06-03T13:41:07+05:30",
+            "duration_seconds": 34,
+            "sim_used": "SIM2 – Jio Prepaid",
+            "notes": "Short call 14 minutes before robbery – entry confirmation"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "Telegram",
+            "direction": "OUTGOING",
+            "contact_name": "Pakku",
+            "phone_number": "+91-79807-31940",
+            "timestamp": "2024-06-01T23:55:33+05:30",
+            "content": "Manager ka naam Ganguly hai. Maine usse RBI officer bana ke call kiya. Usne vault ka secondary code bata diya.",
+            "translation_en": "Manager's name is Ganguly. I called him posing as RBI officer. He told me the vault secondary code.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "WhatsApp",
+            "direction": "INCOMING",
+            "contact_name": "Pakku",
+            "phone_number": "+91-79807-31940",
+            "timestamp": "2024-06-02T00:14:04+05:30",
+            "content": "Kal dress code – suit and ID badge ready hai. Audit team bane jaate hain.",
+            "translation_en": "Tomorrow dress code – suit and ID badge is ready. We'll pose as audit team.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-003",
+            "platform": "Telegram",
+            "direction": "OUTGOING",
+            "contact_name": "Pakku",
+            "phone_number": "+91-79807-31940",
+            "timestamp": "2024-06-03T15:11:04+05:30",
+            "content": "55 lakh mila. RBI wala drama kaam aaya! Aaj raat ko Howrah side move kar. Sab delete kar.",
+            "translation_en": "Got 55 lakh. The RBI drama worked! Move to Howrah side tonight. Delete everything.",
+            "deleted": true,
+            "deleted_timestamp": "2024-06-03T18:44:22+05:30",
+            "recovery_method": "Telegram SQLite WAL + cache recovery"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "PhonePe",
+            "direction": "OUTGOING",
+            "amount_inr": 9000,
+            "recipient_name": "Prakash B. Halder",
+            "timestamp": "2024-06-01T19:11:04+05:30",
+            "remarks": "work",
+            "flagged": true,
+            "flag_reason": "Pre-robbery advance to physical entry suspect"
+          },
+          {
+            "transaction_id": "FT-002",
+            "app": "Amazon Pay",
+            "direction": "OUTGOING",
+            "amount_inr": 3200,
+            "recipient_name": "Print & ID Solutions",
+            "timestamp": "2024-05-30T12:44:21+05:30",
+            "remarks": "printing",
+            "flagged": true,
+            "flag_reason": "Fake audit ID badge printing payment 4 days before robbery"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-06-02T11:22:07+05:30",
+            "latitude": 22.5762,
+            "longitude": 88.4317,
+            "resolved_address": "Salt Lake Sector V, Kolkata – 700091",
+            "notes": "Reconnaissance visit to target bank"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-06-03T13:52:41+05:30",
+            "latitude": 22.5764,
+            "longitude": 88.4314,
+            "resolved_address": "SRB Bank, Salt Lake Sector V – AT CRIME SCENE",
+            "notes": "Device at scene 3 minutes before robbery"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-06-03T14:44:09+05:30",
+            "latitude": 22.5851,
+            "longitude": 88.3468,
+            "resolved_address": "VIP Road, near Ultadanga, Kolkata",
+            "notes": "Westward movement post-robbery toward Howrah"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "APP_INSTALL",
+            "timestamp": "2024-05-28T20:11:04+05:30",
+            "app_name": "VoIP Spoof Caller – SpoofCard Clone",
+            "notes": "Spoofing app installed 6 days before robbery – used to fake RBI caller ID"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-06-03T18:41:07+05:30",
+            "app_name": "VoIP Spoof Caller",
+            "notes": "Removed post-robbery during cleanup"
+          },
+          {
+            "event_id": "SYS-003",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-06-03T18:43:55+05:30",
+            "app_name": "Telegram",
+            "notes": "Removed same session"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "recovery_rate_percent": 82
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "cyber_social_engineering": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "details": "VoIP spoofing app used to impersonate RBI officer – vault code extracted via phone – fake ID badges printed – digitally-assisted physical robbery"
+        }
+      }
+    },

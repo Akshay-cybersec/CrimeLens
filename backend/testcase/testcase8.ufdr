@@ -1,0 +1,197 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2025-008",
+    "crime_type": "Cash Collection Agency Office Robbery",
+    "status": "Active Investigation",
+    "location": "Hinjewadi Phase 1, Pune, Maharashtra, India",
+    "incident_date": "2025-01-14",
+    "investigation_start": "2025-01-15"
+  },
+  "victim_info": {
+    "company_name": "MetroSecure Cash Services Pvt. Ltd.",
+    "office_type": "Cash Aggregation & ATM Refill Processing Center",
+    "cash_present_inr": 27500000,
+    "incident_window": "08:42 PM – 09:06 PM",
+    "security_features": [
+      "Biometric Access",
+      "RFID Entry Card",
+      "Internal CCTV Network",
+      "Two Armed Guards"
+    ]
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Suresh Patil",
+      "age": 37,
+      "role": "Shift Supervisor",
+      "phone_number": "+91-9822334455",
+      "address": "Wakad, Pune",
+      "prior_record": "None"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Nikhil Jadhav",
+      "age": 31,
+      "role": "Primary Executor",
+      "phone_number": "+91-9730112244",
+      "address": "Chinchwad, Pune",
+      "prior_record": "ATM theft attempt – 2021"
+    }
+  ],
+  "device_info": {
+    "device_model": "Motorola Edge 40",
+    "os_version": "Android 14",
+    "imei": "359882214567899",
+    "phone_number": "+91-9822334455",
+    "seizure_time": "2025-01-15T09:08:00+05:30",
+    "seized_by": "Pune City Crime Branch",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Nikhil",
+      "phone_number": "+91-9730112244",
+      "timestamp": "2025-01-13T23:48:41+05:30",
+      "duration_seconds": 511,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Pre-incident planning call"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Unknown Prepaid",
+      "phone_number": "+91-9123456678",
+      "timestamp": "2025-01-14T20:37:12+05:30",
+      "duration_seconds": 29,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Call received 5 minutes before security override"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "WhatsApp",
+      "direction": "OUTGOING",
+      "contact_name": "Nikhil",
+      "timestamp": "2025-01-13T23:59:21+05:30",
+      "content": "Cash highest on Tuesdays. Guard rotation at 8:40 PM. Back door sensor delay 12 sec.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "WhatsApp",
+      "direction": "INCOMING",
+      "contact_name": "Nikhil",
+      "timestamp": "2025-01-14T20:32:18+05:30",
+      "content": "Use duplicate RFID. Power DVR after entry. Phones off once inside.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2025-01-14T22:14:44+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 450000,
+      "sender": "N. Jadhav",
+      "timestamp": "2025-01-15T03:14:55+05:30",
+      "memo": "Consulting",
+      "flagged": true,
+      "flag_reason": "Transfer within hours of robbery"
+    },
+    {
+      "transaction_id": "FT-002",
+      "app": "Cash Deposit",
+      "direction": "INCOMING",
+      "amount_inr": 1250000,
+      "timestamp": "2025-01-16T10:08:22+05:30",
+      "flagged": true,
+      "flag_reason": "Structured deposits across 4 branches"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2025-01-14T20:41:55+05:30",
+      "latitude": 18.5912,
+      "longitude": 73.7389,
+      "accuracy_meters": 6,
+      "source": "GPS",
+      "resolved_address": "MetroSecure Cash Services – Hinjewadi",
+      "notes": "Device inside office perimeter during robbery window"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2025-01-14T21:12:33+05:30",
+      "latitude": 18.6279,
+      "longitude": 73.8036,
+      "accuracy_meters": 14,
+      "source": "Cell Tower",
+      "resolved_address": "Mumbai–Pune Highway",
+      "notes": "Rapid departure westbound post-incident"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2025-01-12T18:42:11+05:30",
+        "action": "SEARCH",
+        "query": "Hinjewadi Phase 1 CCTV blind spots",
+        "notes": "Recon search"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2025-01-10T15:14:22+05:30",
+        "action": "PHOTO_CAPTURED",
+        "file_name": "IMG_20250110_151422.jpg",
+        "gps_embedded": true,
+        "location": "Office Rear Entry Door",
+        "status": "DELETED",
+        "deleted_timestamp": "2025-01-14T22:11:18+05:30",
+        "recovery_status": "Recovered – full image"
+      }
+    ],
+    "rfid_activity": [
+      {
+        "activity_id": "RF-001",
+        "timestamp": "2025-01-14T20:43:02+05:30",
+        "action": "DUPLICATE_RFID_ACCESS",
+        "notes": "Unauthorized secondary card used for rear door access"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "SIM_CHANGE",
+      "timestamp": "2025-01-11T09:12:18+05:30",
+      "notes": "Prepaid SIM activated 3 days before robbery"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2025-01-14T21:07:44+05:30",
+      "notes": "Device powered off during escape"
+    },
+    {
+      "event_id": "SYS-003",
+      "event_type": "APP_UNINSTALL",
+      "timestamp": "2025-01-14T22:08:33+05:30",
+      "app_name": "WhatsApp",
+      "notes": "Messaging app removed post-incident"
+    }
+  ]
+}

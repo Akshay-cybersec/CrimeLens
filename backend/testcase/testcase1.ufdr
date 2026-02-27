@@ -1,0 +1,172 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2024-001",
+    "crime_type": "Armed Robbery with Insider Facilitation",
+    "status": "Active Investigation",
+    "location": "Mumbai, Maharashtra, India",
+    "incident_date": "2024-06-14",
+    "investigation_start": "2024-06-15"
+  },
+  "victim_info": {
+    "victim_name": "Rajiv Mehra",
+    "age": 46,
+    "profession": "Jewelry Store Owner",
+    "business_name": "Mehra Gold & Diamonds",
+    "loss_estimate_inr": 18500000
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Imran Shaikh",
+      "age": 29,
+      "known_aliases": ["Immy"],
+      "role": "Former Store Employee",
+      "relation_to_victim": "Terminated staff – March 2024",
+      "phone_number": "+91-9820456712",
+      "address": "Kurla West, Mumbai",
+      "prior_record": "Petty theft – 2021"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Rohit Kale",
+      "age": 31,
+      "known_aliases": ["RK"],
+      "role": "Primary Robbery Executor",
+      "phone_number": "+91-9876123450",
+      "address": "Thane, Maharashtra",
+      "prior_record": "Robbery case pending – 2022"
+    }
+  ],
+  "device_info": {
+    "device_model": "OnePlus 11R",
+    "os_version": "Android 14",
+    "imei": "863245091122334",
+    "phone_number": "+91-9820456712",
+    "seizure_time": "2024-06-15T08:12:00+05:30",
+    "seized_by": "Crime Branch, Mumbai Police",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "RK",
+      "phone_number": "+91-9876123450",
+      "timestamp": "2024-06-13T22:11:44+05:30",
+      "duration_seconds": 402,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Late-night coordination call – 1 day before robbery"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Unknown Prepaid",
+      "phone_number": "+91-9012345678",
+      "timestamp": "2024-06-14T09:08:13+05:30",
+      "duration_seconds": 38,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Call received 20 minutes before store opening"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "WhatsApp",
+      "direction": "OUTGOING",
+      "contact_name": "RK",
+      "timestamp": "2024-06-13T23:14:22+05:30",
+      "content": "Security guard leaves for chai at 1:15 PM. CCTV blind spot near locker room.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "WhatsApp",
+      "direction": "INCOMING",
+      "contact_name": "RK",
+      "timestamp": "2024-06-13T23:19:10+05:30",
+      "content": "Perfect. We enter at 1:18. Keep phone off after 2 PM.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2024-06-14T15:04:31+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 250000,
+      "sender": "R. Kale",
+      "timestamp": "2024-06-14T18:41:22+05:30",
+      "memo": "Old dues",
+      "flagged": true,
+      "flag_reason": "Large payment received hours after robbery"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2024-06-14T13:16:08+05:30",
+      "latitude": 19.0760,
+      "longitude": 72.8777,
+      "accuracy_meters": 7,
+      "source": "Google Maps",
+      "resolved_address": "Zaveri Bazaar, Mumbai",
+      "notes": "Device present at store location during robbery window"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2024-06-14T14:02:19+05:30",
+      "latitude": 19.2183,
+      "longitude": 72.9781,
+      "accuracy_meters": 15,
+      "source": "Cell Tower",
+      "resolved_address": "Eastern Express Highway",
+      "notes": "Rapid movement away from crime scene"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2024-06-13T20:22:11+05:30",
+        "action": "SEARCH",
+        "query": "escape routes from Zaveri Bazaar",
+        "notes": "Pre-planning movement strategy"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2024-06-10T11:02:14+05:30",
+        "action": "PHOTO_CAPTURED",
+        "file_name": "IMG_20240610_110214.jpg",
+        "gps_embedded": true,
+        "location": "Inside Mehra Gold & Diamonds",
+        "status": "DELETED",
+        "deleted_timestamp": "2024-06-14T15:02:12+05:30",
+        "recovery_status": "Recovered via unallocated space carving"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2024-06-14T14:01:58+05:30",
+      "notes": "Device powered off immediately after robbery"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "FACTORY_RESET_ATTEMPTED",
+      "timestamp": "2024-06-14T19:12:41+05:30",
+      "result": "FAILED",
+      "notes": "Reset attempt after large UPI transfer"
+    }
+  ]
+}

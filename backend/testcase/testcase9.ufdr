@@ -1,0 +1,198 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2025-009",
+    "crime_type": "Gold Loan NBFC Branch Robbery",
+    "status": "Active Investigation",
+    "location": "Vaishali Nagar, Jaipur, Rajasthan, India",
+    "incident_date": "2025-02-11",
+    "investigation_start": "2025-02-12"
+  },
+  "victim_info": {
+    "company_name": "Shakti Gold Finance Ltd.",
+    "branch": "Vaishali Nagar Branch",
+    "gold_stored_kg": 9.5,
+    "estimated_loss_inr": 48500000,
+    "incident_window": "03:18 PM – 03:29 PM",
+    "security_features": [
+      "Vault Time-Lock",
+      "Armed Guard",
+      "CCTV Surveillance",
+      "Biometric Safe Access"
+    ]
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Lokesh Meena",
+      "age": 34,
+      "role": "Field Executor (Disguised as Customer)",
+      "phone_number": "+91-9414022331",
+      "address": "Sodala, Jaipur",
+      "prior_record": "Jewelry shop theft – 2020"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Ankit Sharma",
+      "age": 29,
+      "role": "Internal Information Leak (Former Loan Officer)",
+      "phone_number": "+91-9829056678",
+      "address": "Mansarovar, Jaipur",
+      "prior_record": "None"
+    }
+  ],
+  "device_info": {
+    "device_model": "OnePlus Nord 3",
+    "os_version": "Android 14",
+    "imei": "864221109998877",
+    "phone_number": "+91-9414022331",
+    "seizure_time": "2025-02-12T09:11:00+05:30",
+    "seized_by": "Jaipur Commissionerate Crime Branch",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Ankit",
+      "phone_number": "+91-9829056678",
+      "timestamp": "2025-02-10T21:44:12+05:30",
+      "duration_seconds": 468,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Vault timing and staff count confirmation"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Unknown Prepaid",
+      "phone_number": "+91-8790044556",
+      "timestamp": "2025-02-11T15:11:19+05:30",
+      "duration_seconds": 22,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Diversion coordination minutes before entry"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "WhatsApp",
+      "direction": "OUTGOING",
+      "contact_name": "Ankit",
+      "timestamp": "2025-02-10T22:08:31+05:30",
+      "content": "Peak customers between 2–3 PM. Guard distracted with valuation queue.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "WhatsApp",
+      "direction": "INCOMING",
+      "contact_name": "Ankit",
+      "timestamp": "2025-02-10T22:15:09+05:30",
+      "content": "Vault auto-lock resets at 3:35 PM. You have 10 mins window.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2025-02-11T18:44:55+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 600000,
+      "sender": "A. Sharma",
+      "timestamp": "2025-02-12T01:08:14+05:30",
+      "memo": "Consulting Fee",
+      "flagged": true,
+      "flag_reason": "Transfer within 10 hours of robbery"
+    },
+    {
+      "transaction_id": "FT-002",
+      "app": "Gold Dealer Settlement",
+      "direction": "INCOMING",
+      "amount_inr": 8500000,
+      "timestamp": "2025-02-13T12:22:44+05:30",
+      "flagged": true,
+      "flag_reason": "Suspicious bulk gold resale settlement"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2025-02-11T15:19:03+05:30",
+      "latitude": 26.9124,
+      "longitude": 75.7873,
+      "accuracy_meters": 5,
+      "source": "GPS",
+      "resolved_address": "Shakti Gold Finance – Vaishali Nagar",
+      "notes": "Device present inside branch during robbery"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2025-02-11T15:38:27+05:30",
+      "latitude": 26.9358,
+      "longitude": 75.7550,
+      "accuracy_meters": 14,
+      "source": "Cell Tower",
+      "resolved_address": "Ajmer Road Exit",
+      "notes": "Rapid westbound departure post-incident"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2025-02-09T18:12:44+05:30",
+        "action": "SEARCH",
+        "query": "Vaishali Nagar gold loan branch layout",
+        "notes": "Recon search"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2025-02-08T14:22:19+05:30",
+        "action": "PHOTO_CAPTURED",
+        "file_name": "IMG_20250208_142219.jpg",
+        "gps_embedded": true,
+        "location": "NBFC Vault Door",
+        "status": "DELETED",
+        "deleted_timestamp": "2025-02-11T18:40:11+05:30",
+        "recovery_status": "Recovered – partial"
+      }
+    ],
+    "document_activity": [
+      {
+        "activity_id": "DOC-001",
+        "timestamp": "2025-02-10T17:11:32+05:30",
+        "action": "LOAN_LEDGER_SCREENSHOT",
+        "notes": "Premium locker list accessed and screenshot saved"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "SIM_CHANGE",
+      "timestamp": "2025-02-08T09:14:22+05:30",
+      "notes": "Prepaid SIM inserted 3 days before robbery"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2025-02-11T15:36:09+05:30",
+      "notes": "Device powered off immediately after exit"
+    },
+    {
+      "event_id": "SYS-003",
+      "event_type": "APP_UNINSTALL",
+      "timestamp": "2025-02-11T18:39:44+05:30",
+      "app_name": "WhatsApp",
+      "notes": "Messaging app removed post-incident"
+    }
+  ]
+}

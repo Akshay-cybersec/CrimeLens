@@ -1,0 +1,241 @@
+{
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00393",
+        "crime_type": "Bank Robbery – Tunneling / After-Hours Breach",
+        "status": "Chargesheet Filed",
+        "city": "Hyderabad",
+        "state": "Telangana",
+        "incident_date": "2024-03-22",
+        "investigation_start": "2024-03-23",
+        "reporting_agency": "Hyderabad Commissioner's Task Force – South Zone",
+        "fir_number": "FIR-HYD-2024-0741"
+      },
+      "target_info": {
+        "bank_type": "Cooperative Bank",
+        "bank_name": "Telangana Sahakara Vitta Bank (Fictional)",
+        "branch_name": "Abids Main Branch",
+        "branch_address": "12-2-831, Abids Circle, Hyderabad – 500001",
+        "branch_ifsc": "TSVB0000118",
+        "incident_time": "2024-03-22T02:30:00+05:30",
+        "incident_duration_minutes": 190,
+        "estimated_loss_inr": 11800000,
+        "vault_accessed": true,
+        "weapons_reported": "None – stealth operation",
+        "hostages_reported": 0,
+        "casualties": "None",
+        "cctv_status": "DVR hard drive physically removed; cameras operational but footage stolen"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Venkatesh Naidu Pallapati",
+          "age": 44,
+          "alias": [
+            "VNP",
+            "Venky Bhai"
+          ],
+          "role_in_crime": "Tunnel Mastermind and Drilling Operator",
+          "phone_number": "+91-99490-67821",
+          "address": "Flat 3A, Shyamlal Nagar, Mehdipatnam, Hyderabad – 500028",
+          "occupation": "Civil contractor (registered)",
+          "prior_record": "2017 – trespass and theft – fined",
+          "seized_device": "Yes – primary"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Bhaskar Rao Inturi",
+          "age": 36,
+          "alias": [
+            "Bhasya",
+            "BR"
+          ],
+          "role_in_crime": "Drill Equipment Operator and Lookout",
+          "phone_number": "+91-85559-34107",
+          "address": "Room 11, Bansilal Pet, Hyderabad – 500012",
+          "occupation": "Construction labourer",
+          "prior_record": "None",
+          "seized_device": "Partial – memory card recovered"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "Samsung Galaxy A54",
+        "os_version": "Android 14 (One UI 6.1)",
+        "imei_1": "352041094738201",
+        "phone_number_on_device": "+91-99490-67821",
+        "seizure_time": "2024-03-23T07:45:00+05:30",
+        "seized_by": "SI Ramakrishna G., Task Force South",
+        "extraction_type": "Full File System",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "c3f9e2a8b07164710d4e8c3b1a5f9e42"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "Bhasya",
+            "phone_number": "+91-85559-34107",
+            "timestamp": "2024-03-19T23:44:02+05:30",
+            "duration_seconds": 511,
+            "sim_used": "SIM2 – Vi Prepaid",
+            "notes": "51-minute night call – drilling logistics discussion suspected"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "OUTGOING",
+            "contact_name": "UNKNOWN",
+            "phone_number": "+91-70123-44019",
+            "timestamp": "2024-03-21T01:09:17+05:30",
+            "duration_seconds": 283,
+            "sim_used": "SIM2 – Vi Prepaid",
+            "notes": "Unregistered number – night before robbery"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "INCOMING",
+            "contact_name": "Bhasya",
+            "phone_number": "+91-85559-34107",
+            "timestamp": "2024-03-22T02:17:44+05:30",
+            "duration_seconds": 29,
+            "sim_used": "SIM2 – Vi Prepaid",
+            "notes": "Call at 2:17 AM – 13 minutes before breach – final check-in"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "WhatsApp",
+            "direction": "OUTGOING",
+            "contact_name": "Bhasya",
+            "phone_number": "+91-85559-34107",
+            "timestamp": "2024-03-18T22:31:09+05:30",
+            "content": "Adjacent shop ka rent liya hai. Tunnel distance sirf 9 feet hai. 2 raat mein ho jaayega.",
+            "translation_en": "Taken rent of adjacent shop. Tunnel distance is only 9 feet. It will be done in 2 nights.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "WhatsApp",
+            "direction": "INCOMING",
+            "contact_name": "Bhasya",
+            "phone_number": "+91-85559-34107",
+            "timestamp": "2024-03-18T22:51:44+05:30",
+            "content": "Drilling machine ka sound reducer laga diya. Raat ko 12 ke baad koi nahi hoga wahan.",
+            "translation_en": "Attached the sound reducer to the drilling machine. No one will be there after midnight.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-003",
+            "platform": "Telegram",
+            "direction": "OUTGOING",
+            "contact_name": "Bhasya",
+            "phone_number": "+91-85559-34107",
+            "timestamp": "2024-03-22T06:44:21+05:30",
+            "content": "1.18 crore nikla. Seedha Chennai nikal. 2 hafte silent reh. Paise hawala se ayenge.",
+            "translation_en": "Got 1.18 crore. Head straight to Chennai. Stay silent for 2 weeks. Money will come via hawala.",
+            "deleted": true,
+            "deleted_timestamp": "2024-03-22T09:11:07+05:30",
+            "recovery_method": "Telegram SQLite WAL recovery"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "Google Pay",
+            "direction": "OUTGOING",
+            "amount_inr": 28000,
+            "recipient_name": "Ravi Tools & Drilling Equipment",
+            "timestamp": "2024-03-15T14:22:09+05:30",
+            "remarks": "equipment hire",
+            "flagged": true,
+            "flag_reason": "Drilling equipment rental 7 days before tunnel robbery"
+          },
+          {
+            "transaction_id": "FT-002",
+            "app": "PhonePe",
+            "direction": "OUTGOING",
+            "amount_inr": 9000,
+            "recipient_name": "Bhaskar R. Inturi",
+            "timestamp": "2024-03-20T17:04:41+05:30",
+            "remarks": "work advance",
+            "flagged": true,
+            "flag_reason": "Advance payment to co-suspect 2 days before robbery"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-03-18T11:44:09+05:30",
+            "latitude": 17.3934,
+            "longitude": 78.4741,
+            "resolved_address": "Abids Circle, Hyderabad – 500001",
+            "notes": "Reconnaissance visit to target bank"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-03-22T02:28:11+05:30",
+            "latitude": 17.3936,
+            "longitude": 78.4739,
+            "resolved_address": "Adjacent shop to TSVB Abids Branch – confirmed tunnel origin point",
+            "notes": "Device at crime scene during overnight breach"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-03-22T07:01:55+05:30",
+            "latitude": 17.3651,
+            "longitude": 78.5271,
+            "resolved_address": "LB Nagar, Hyderabad – 500074",
+            "notes": "Post-robbery movement southward – toward highway exit"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "SIM_INSERTED",
+            "timestamp": "2024-03-14T09:31:07+05:30",
+            "sim_network": "Vi Prepaid – unregistered",
+            "notes": "Anonymous SIM inserted 8 days before robbery"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-03-22T09:08:12+05:30",
+            "app_name": "Telegram",
+            "notes": "Removed same morning as robbery"
+          },
+          {
+            "event_id": "SYS-003",
+            "event_type": "FACTORY_RESET_ATTEMPTED",
+            "timestamp": "2024-03-22T09:14:44+05:30",
+            "result": "INTERRUPTED",
+            "notes": "Reset aborted – incoming call interrupted process; significant data preserved"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "recovery_rate_percent": 81
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "tunneling_operation_indicators": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "details": "Drilling equipment rental, adjacent shop tenancy, tunnel distance messaging, and sound reducer reference confirm pre-planned tunneling operation"
+        }
+      }
+    },

@@ -1,0 +1,192 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2024-007",
+    "crime_type": "Temple Donation Vault Robbery",
+    "status": "Active Investigation",
+    "location": "Secunderabad, Hyderabad, Telangana, India",
+    "incident_date": "2024-12-03",
+    "investigation_start": "2024-12-04"
+  },
+  "victim_info": {
+    "temple_name": "Sri Lakshmi Narayana Temple",
+    "festival_event": "Karthika Masam Special Pooja",
+    "donation_collection_window": "06:00 PM – 10:30 PM",
+    "vault_access_time": "11:45 PM",
+    "estimated_loss_inr": 12500000
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Ramesh Yadav",
+      "age": 39,
+      "role": "Temple Maintenance Staff",
+      "phone_number": "+91-9848021144",
+      "address": "Malkajgiri, Hyderabad",
+      "prior_record": "None"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Kiran Reddy",
+      "age": 33,
+      "role": "Primary Executor",
+      "phone_number": "+91-9701156677",
+      "address": "Uppal, Hyderabad",
+      "prior_record": "House-breaking – 2021"
+    }
+  ],
+  "device_info": {
+    "device_model": "Samsung Galaxy M34",
+    "os_version": "Android 14",
+    "imei": "356701234567890",
+    "phone_number": "+91-9848021144",
+    "seizure_time": "2024-12-04T08:32:00+05:30",
+    "seized_by": "Hyderabad City Police – North Zone",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Kiran",
+      "phone_number": "+91-9701156677",
+      "timestamp": "2024-12-02T22:14:11+05:30",
+      "duration_seconds": 318,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Coordination call night before robbery"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Unknown Prepaid",
+      "phone_number": "+91-9011223344",
+      "timestamp": "2024-12-03T23:38:21+05:30",
+      "duration_seconds": 27,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Call received minutes before power outage"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "WhatsApp",
+      "direction": "OUTGOING",
+      "contact_name": "Kiran",
+      "timestamp": "2024-12-02T23:05:44+05:30",
+      "content": "Crowd heavy after 9 PM. Guard shifts at 11:30. Main power switch behind storage room.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "WhatsApp",
+      "direction": "INCOMING",
+      "contact_name": "Kiran",
+      "timestamp": "2024-12-02T23:11:19+05:30",
+      "content": "Cut lights first. Use side corridor near donation counter. Phones off after exit.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2024-12-04T00:41:12+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 300000,
+      "sender": "K. Reddy",
+      "timestamp": "2024-12-04T05:18:14+05:30",
+      "memo": "Festival payment",
+      "flagged": true,
+      "flag_reason": "Large transfer hours after robbery"
+    },
+    {
+      "transaction_id": "FT-002",
+      "app": "Cash Deposit",
+      "direction": "INCOMING",
+      "amount_inr": 750000,
+      "timestamp": "2024-12-05T11:02:08+05:30",
+      "flagged": true,
+      "flag_reason": "Structured deposits across two banks"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2024-12-03T23:44:02+05:30",
+      "latitude": 17.4399,
+      "longitude": 78.4983,
+      "accuracy_meters": 6,
+      "source": "GPS",
+      "resolved_address": "Sri Lakshmi Narayana Temple, Secunderabad",
+      "notes": "Device present during vault breach window"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2024-12-04T00:12:55+05:30",
+      "latitude": 17.4569,
+      "longitude": 78.5108,
+      "accuracy_meters": 18,
+      "source": "Cell Tower",
+      "resolved_address": "ECIL Cross Roads",
+      "notes": "Rapid movement northbound after robbery"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2024-12-01T19:41:21+05:30",
+        "action": "SEARCH",
+        "query": "temple power supply main switch location",
+        "notes": "Pre-planning reconnaissance"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2024-11-30T14:22:11+05:30",
+        "action": "PHOTO_CAPTURED",
+        "file_name": "IMG_20241130_142211.jpg",
+        "gps_embedded": true,
+        "location": "Temple Donation Vault Corridor",
+        "status": "DELETED",
+        "deleted_timestamp": "2024-12-04T00:38:09+05:30",
+        "recovery_status": "Recovered – partial resolution"
+      }
+    ],
+    "flashlight_activity": [
+      {
+        "activity_id": "FL-001",
+        "timestamp": "2024-12-03T23:46:14+05:30",
+        "action": "FLASHLIGHT_ON",
+        "duration_seconds": 812,
+        "notes": "Extended flashlight usage during blackout"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "SIM_CHANGE",
+      "timestamp": "2024-11-30T09:12:55+05:30",
+      "notes": "New prepaid SIM activated 3 days before robbery"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2024-12-04T00:15:12+05:30",
+      "notes": "Device powered off after leaving temple vicinity"
+    },
+    {
+      "event_id": "SYS-003",
+      "event_type": "APP_CACHE_CLEARED",
+      "timestamp": "2024-12-04T00:36:42+05:30",
+      "notes": "WhatsApp cache manually cleared post-incident"
+    }
+  ]
+}

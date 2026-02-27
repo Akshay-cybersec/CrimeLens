@@ -1,0 +1,798 @@
+{
+  "case_info": {
+    "case_id": "CBI-DF-2024-BNK-00391",
+    "crime_type": "Armed Bank Robbery with Digital Conspiracy",
+    "status": "Active Investigation",
+    "city": "Nagpur",
+    "state": "Maharashtra",
+    "incident_date": "2024-07-18",
+    "investigation_start": "2024-07-18",
+    "reporting_agency": "Nagpur City Police – Economic Offences Wing",
+    "assigned_unit": "Maharashtra Cyber & Digital Forensics Division",
+    "fir_number": "FIR-NCP-2024-1847"
+  },
+
+  "target_info": {
+    "bank_type": "Public Sector (Nationalised)",
+    "bank_name": "Rashtriya Gramin Vikas Bank (Fictional)",
+    "branch_name": "Sitabuldi Main Branch",
+    "branch_address": "Plot 14, Sitabuldi Square, Nagpur, Maharashtra – 440012",
+    "branch_ifsc": "RGVB0002214",
+    "branch_manager": "Arvind Suresh Pathak (Victim – Not Suspect)",
+    "incident_time": "2024-07-18T14:22:00+05:30",
+    "incident_duration_minutes": 17,
+    "estimated_loss_inr": 4750000,
+    "vault_accessed": true,
+    "weapons_reported": "Two country-made pistols, one iron rod",
+    "hostages_reported": 6,
+    "casualties": "None – minor injuries to one security guard",
+    "cctv_status": "Partially disabled – DVR tampered prior to entry"
+  },
+
+  "suspect_profiles": [
+    {
+      "suspect_id": "S-001",
+      "fictional_full_name": "Raunak Devendra Mhatre",
+      "age": 34,
+      "alias": ["RD", "Rocket"],
+      "role_in_crime": "Primary Orchestrator and Inside Contact Handler",
+      "phone_number": "+91-98231-74609",
+      "address": "Flat 7B, Shivaji Nagar Chawl, Kamptee Road, Nagpur – 440026",
+      "occupation": "Formerly employed as security vendor – terminated 2023",
+      "prior_record": "Arrested 2021 for vehicle theft – acquitted; named in 2022 extortion case – charges dropped",
+      "known_associates": ["S-002", "S-003"],
+      "seized_device": "Yes – primary device under analysis"
+    },
+    {
+      "suspect_id": "S-002",
+      "fictional_full_name": "Tariq Saleem Qureshi",
+      "age": 29,
+      "alias": ["TQ", "Baaz"],
+      "role_in_crime": "Getaway Driver and Logistics Coordinator",
+      "phone_number": "+91-70449-88312",
+      "address": "Room 4, Azad Nagar Chawl, Itwari, Nagpur – 440002",
+      "occupation": "Auto-rickshaw driver (freelance)",
+      "prior_record": "Arrested 2020 – illegal arms possession – bail granted, trial pending",
+      "known_associates": ["S-001"],
+      "seized_device": "Partial – SIM card recovered, handset not yet seized at time of dataset"
+    },
+    {
+      "suspect_id": "S-003",
+      "fictional_full_name": "Laxman Gopal Bhosale",
+      "age": 41,
+      "alias": ["Laxya", "Kaka"],
+      "role_in_crime": "Inside Informant – Former Bank Peon (dismissed 2023), provided floor layout and schedule",
+      "phone_number": "+91-94052-30817",
+      "address": "Plot 22, Nandanvan Colony, Nagpur – 440009",
+      "occupation": "Unemployed – previously worked at RGVB Sitabuldi branch for 9 years",
+      "prior_record": "Dismissed from service for cash handling irregularities – internal inquiry 2023",
+      "known_associates": ["S-001"],
+      "seized_device": "Feature phone seized – limited extraction possible"
+    }
+  ],
+
+  "seized_device_info": {
+    "device_id": "DEV-001",
+    "suspect_id": "S-001",
+    "device_model": "Realme Narzo 60 Pro",
+    "manufacturer": "Realme (India)",
+    "os_version": "Android 14 (Realme UI 5.0)",
+    "build_number": "RMX3771_14.0.0.312",
+    "imei_1": "867321048294710",
+    "imei_2": "867321048294728",
+    "serial_number": "RMNA60P2024071103",
+    "phone_number_on_device": "+91-98231-74609",
+    "seizure_time": "2024-07-19T06:15:00+05:30",
+    "seized_by": "Sub-Inspector Prakash D. Wankhede, EOW Nagpur",
+    "seizure_location": "Suspect's residence – Kamptee Road, Nagpur",
+    "device_condition": "Screen cracked – functional; found wrapped in cloth under mattress",
+    "extraction_type": "Full File System + Logical",
+    "extraction_tool": "IndForensic UFED-X Pro v4.2 (India-certified extraction platform)",
+    "extraction_time": "2024-07-19T11:40:00+05:30",
+    "extraction_analyst": "Forensic Analyst Neha R. Kulkarni, MCDF Division",
+    "hash_md5": "a3f7c2d9e1b084560d3e7f2c8a1b9e45",
+    "hash_sha256": "9e3bc7f21a04d85670c2e4f8a13b9d670c2e4f8a13b9d670c2e4f8a13b9d670c",
+    "storage_capacity_gb": 128,
+    "storage_used_gb": 74.3,
+    "sim_slot_1_iccid": "8991402024517308841",
+    "sim_slot_1_network": "Airtel India",
+    "sim_slot_2_iccid": "8991550024731990224",
+    "sim_slot_2_network": "Jio (secondary – prepaid, no KYC linked)"
+  },
+
+  "digital_evidence": {
+
+    "call_logs": [
+      {
+        "log_id": "CL-001",
+        "direction": "OUTGOING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-16T22:47:11+05:30",
+        "duration_seconds": 412,
+        "sim_used": "SIM2 – Jio Prepaid",
+        "call_type": "VOICE",
+        "network_type": "4G",
+        "tower_location": "Kamptee Road BTS-NP-4471, Nagpur",
+        "notes": "Late-night call – 6 minutes 52 seconds – two days before robbery"
+      },
+      {
+        "log_id": "CL-002",
+        "direction": "OUTGOING",
+        "contact_name": "Kaka",
+        "phone_number": "+91-94052-30817",
+        "timestamp": "2024-07-17T01:14:38+05:30",
+        "duration_seconds": 284,
+        "sim_used": "SIM2 – Jio Prepaid",
+        "call_type": "VOICE",
+        "network_type": "4G",
+        "tower_location": "Kamptee Road BTS-NP-4471, Nagpur",
+        "notes": "Post-midnight coordination call to inside informant – night before robbery"
+      },
+      {
+        "log_id": "CL-003",
+        "direction": "INCOMING",
+        "contact_name": "UNKNOWN",
+        "phone_number": "+91-88029-55103",
+        "timestamp": "2024-07-17T23:58:05+05:30",
+        "duration_seconds": 179,
+        "sim_used": "SIM2 – Jio Prepaid",
+        "call_type": "VOICE",
+        "network_type": "4G",
+        "tower_location": "Itwari BTS-NP-2219, Nagpur",
+        "notes": "Unregistered prepaid number – no subscriber name; called from Itwari area matching S-002 known location"
+      },
+      {
+        "log_id": "CL-004",
+        "direction": "OUTGOING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-18T08:33:22+05:30",
+        "duration_seconds": 63,
+        "sim_used": "SIM2 – Jio Prepaid",
+        "call_type": "VOICE",
+        "network_type": "4G",
+        "tower_location": "Sitabuldi BTS-NP-0891, Nagpur",
+        "notes": "Morning of robbery – short confirmation call – device now in Sitabuldi area near target branch"
+      },
+      {
+        "log_id": "CL-005",
+        "direction": "OUTGOING",
+        "contact_name": "Kaka",
+        "phone_number": "+91-94052-30817",
+        "timestamp": "2024-07-18T13:41:09+05:30",
+        "duration_seconds": 38,
+        "sim_used": "SIM2 – Jio Prepaid",
+        "call_type": "VOICE",
+        "network_type": "4G",
+        "tower_location": "Sitabuldi BTS-NP-0891, Nagpur",
+        "notes": "38-second call to informant 41 minutes before robbery – final go-ahead signal suspected"
+      },
+      {
+        "log_id": "CL-006",
+        "direction": "OUTGOING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-18T15:04:47+05:30",
+        "duration_seconds": 0,
+        "sim_used": "SIM2 – Jio Prepaid",
+        "call_type": "MISSED",
+        "network_type": "4G",
+        "tower_location": "Itwari BTS-NP-2219, Nagpur",
+        "notes": "Missed call immediately post-incident – device moved to Itwari; S-001 fleeing the area"
+      }
+    ],
+
+    "messages": [
+      {
+        "message_id": "MSG-001",
+        "platform": "SMS",
+        "sim_used": "SIM2 – Jio Prepaid",
+        "direction": "OUTGOING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-14T21:09:55+05:30",
+        "content": "Kaka ne poora floor ka naksha diya. Vault left side mein hai. Guard 1 hi hota hai 2 baje ke baad.",
+        "translation_en": "Kaka gave the complete floor map. The vault is on the left side. Only 1 guard is present after 2 PM.",
+        "language": "Hindi (Roman script)",
+        "status": "SENT",
+        "deleted": false,
+        "forensic_note": "Floor layout intelligence passed to S-002 – confirms S-003 acted as informant"
+      },
+      {
+        "message_id": "MSG-002",
+        "platform": "SMS",
+        "sim_used": "SIM2 – Jio Prepaid",
+        "direction": "INCOMING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-14T21:34:42+05:30",
+        "content": "Theek hai. Gaadi bhi ready hai. Bypass road se niklenge. Koi CCTV nahi wahan.",
+        "translation_en": "Okay. Vehicle is also ready. We will exit via bypass road. No CCTV there.",
+        "language": "Hindi (Roman script)",
+        "status": "READ",
+        "deleted": false,
+        "forensic_note": "Escape route pre-planned – bypass road matches later GPS movement"
+      },
+      {
+        "message_id": "MSG-003",
+        "platform": "WhatsApp",
+        "direction": "OUTGOING",
+        "contact_name": "Kaka",
+        "phone_number": "+91-94052-30817",
+        "timestamp": "2024-07-15T23:44:18+05:30",
+        "content": "Manager ka naam Pathak hai. Woh 2 baje lunch ke liye bahar jaata hai. Tab bank thoda slow hota hai. Perfect time.",
+        "translation_en": "Manager's name is Pathak. He goes out for lunch at 2 PM. The bank is a bit slow then. Perfect time.",
+        "language": "Hindi (Roman script)",
+        "status": "SENT",
+        "deleted": false,
+        "forensic_note": "Victim's schedule shared – confirms S-003 provided insider timing intelligence"
+      },
+      {
+        "message_id": "MSG-004",
+        "platform": "WhatsApp",
+        "direction": "INCOMING",
+        "contact_name": "Kaka",
+        "phone_number": "+91-94052-30817",
+        "timestamp": "2024-07-16T00:12:03+05:30",
+        "content": "DVR ka switch main server room mein hai. Room ka lock single pin wala hai. Aasaani se tutega.",
+        "translation_en": "The DVR switch is in the main server room. The room has a single-pin lock. It will break easily.",
+        "language": "Hindi (Roman script)",
+        "status": "READ",
+        "deleted": false,
+        "forensic_note": "CCTV/DVR tampering pre-planned – corroborates forensic finding of disabled DVR at scene"
+      },
+      {
+        "message_id": "MSG-005",
+        "platform": "WhatsApp",
+        "direction": "OUTGOING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-17T22:31:49+05:30",
+        "content": "Kal 2:15 PM pe andar jaana hai. Tum bahar gaadi ke saath ready rehna. Koi gdbr hui toh seedha Wardha road.",
+        "translation_en": "Tomorrow we enter at 2:15 PM. You stay ready outside with the vehicle. If any trouble, directly take Wardha Road.",
+        "language": "Hindi (Roman script)",
+        "status": "SENT",
+        "deleted": false,
+        "forensic_note": "Final operational briefing night before robbery – exact entry time matches incident record"
+      },
+      {
+        "message_id": "MSG-006",
+        "platform": "WhatsApp",
+        "direction": "INCOMING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-17T22:47:55+05:30",
+        "content": "Samajh gaya. Petrol full hai. Ek aur banda bhi saath aayega.",
+        "translation_en": "Understood. Fuel is full. One more person will also come along.",
+        "language": "Hindi (Roman script)",
+        "status": "READ",
+        "deleted": false,
+        "forensic_note": "Reference to an unidentified fourth participant – ongoing inquiry"
+      },
+      {
+        "message_id": "MSG-007",
+        "platform": "Telegram",
+        "direction": "OUTGOING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-18T15:19:33+05:30",
+        "content": "Kaam ho gaya. RD ke paas 28 lakh hai. Tera hissa kal milega. Abhi kuch mat bol kisi ko.",
+        "translation_en": "Job is done. RD has 28 lakh. Your share will come tomorrow. Don't say anything to anyone now.",
+        "language": "Hindi (Roman script)",
+        "status": "SENT",
+        "deleted": true,
+        "deleted_timestamp": "2024-07-18T19:44:11+05:30",
+        "recovery_method": "Telegram SQLite cache – com.telegram.messenger/databases/cache4.db – WAL recovery",
+        "forensic_note": "Post-robbery proceeds division message – 'RD' matches S-001 initials; deleted same evening"
+      },
+      {
+        "message_id": "MSG-008",
+        "platform": "Telegram",
+        "direction": "OUTGOING",
+        "contact_name": "Kaka",
+        "phone_number": "+91-94052-30817",
+        "timestamp": "2024-07-18T15:27:44+05:30",
+        "content": "Tera 5 lakh kal subah tak pahunch jaayega. Hawala se bhejunga. Number mat uthana aaj raat.",
+        "translation_en": "Your 5 lakh will arrive by tomorrow morning. I'll send via hawala. Don't pick up calls tonight.",
+        "language": "Hindi (Roman script)",
+        "status": "SENT",
+        "deleted": true,
+        "deleted_timestamp": "2024-07-18T19:44:28+05:30",
+        "recovery_method": "Telegram SQLite cache – WAL recovery",
+        "forensic_note": "Hawala payment channel to informant S-003 – 5 lakh share consistent with inside informant cut"
+      },
+      {
+        "message_id": "MSG-009",
+        "platform": "SMS",
+        "sim_used": "SIM2 – Jio Prepaid",
+        "direction": "OUTGOING",
+        "contact_name": "UNKNOWN – saved as 'Bhai Sahab'",
+        "phone_number": "+91-77021-43900",
+        "timestamp": "2024-07-18T16:55:02+05:30",
+        "content": "Parcel ready hai. 28. Kal subah milte hain same jagah.",
+        "translation_en": "Parcel is ready. 28. We meet tomorrow morning at the same place.",
+        "language": "Hindi (Roman script)",
+        "status": "SENT",
+        "deleted": true,
+        "deleted_timestamp": "2024-07-18T19:45:10+05:30",
+        "recovery_method": "SIM2 SMS store – raw NAND flash recovery",
+        "forensic_note": "'28' likely refers to Rs. 28 lakh cash – 'Bhai Sahab' is unidentified – handoff meeting planned"
+      },
+      {
+        "message_id": "MSG-010",
+        "platform": "WhatsApp",
+        "direction": "OUTGOING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-18T19:51:37+05:30",
+        "content": "Sab chat delete karo. Phone format karo raat ko. Police ko kuch nahi milna chahiye.",
+        "translation_en": "Delete all chats. Format the phone at night. Police should not find anything.",
+        "language": "Hindi (Roman script)",
+        "status": "SENT",
+        "deleted": true,
+        "deleted_timestamp": "2024-07-18T19:52:04+05:30",
+        "recovery_method": "WhatsApp msgstore.db – SQLite WAL journal recovery",
+        "forensic_note": "Explicit instruction to destroy evidence – deleted 27 seconds after sending – anti-forensic coordination confirmed"
+      },
+      {
+        "message_id": "MSG-011",
+        "platform": "WhatsApp",
+        "direction": "INCOMING",
+        "contact_name": "Baaz",
+        "phone_number": "+91-70449-88312",
+        "timestamp": "2024-07-18T19:58:14+05:30",
+        "content": "Haan done. Abhi Wardha side ja raha hoon. 2 din silent rahunga.",
+        "translation_en": "Yes done. Going Wardha side now. Will stay silent for 2 days.",
+        "language": "Hindi (Roman script)",
+        "status": "READ",
+        "deleted": true,
+        "deleted_timestamp": "2024-07-18T20:01:33+05:30",
+        "recovery_method": "WhatsApp msgstore.db – SQLite WAL journal recovery",
+        "forensic_note": "S-002 confirms device wipe and indicates movement toward Wardha – flee pattern confirmed"
+      }
+    ],
+
+    "financial_transactions": [
+      {
+        "transaction_id": "FT-001",
+        "app": "PhonePe",
+        "direction": "OUTGOING",
+        "amount_inr": 15000,
+        "recipient_upi_id": "tariq.qureshi88@ybl",
+        "recipient_name": "Tariq S. Qureshi",
+        "timestamp": "2024-07-16T18:24:09+05:30",
+        "reference_number": "PPE20240716182409812",
+        "remarks": "kiraya",
+        "flagged": true,
+        "flag_reason": "Pre-robbery advance payment to S-002 – 'kiraya' (rent) is implausible given no tenancy link; likely operational advance"
+      },
+      {
+        "transaction_id": "FT-002",
+        "app": "Google Pay",
+        "direction": "OUTGOING",
+        "amount_inr": 8500,
+        "recipient_upi_id": "laxman.bhosale41@okicici",
+        "recipient_name": "Laxman G. Bhosale",
+        "timestamp": "2024-07-17T09:11:54+05:30",
+        "reference_number": "GPY20240717091154309",
+        "remarks": "udhaar wapas",
+        "flagged": true,
+        "flag_reason": "Payment to inside informant S-003 day before robbery – 'udhaar wapas' (returning loan) is inconsistent with no prior financial relationship on record"
+      },
+      {
+        "transaction_id": "FT-003",
+        "app": "BHIM UPI",
+        "direction": "OUTGOING",
+        "amount_inr": 4200,
+        "recipient_upi_id": "petrolstation.nagpur01@upi",
+        "recipient_name": "Shree Sai Petrol Pump – Wardha Road",
+        "timestamp": "2024-07-17T21:44:37+05:30",
+        "reference_number": "BHM20240717214437011",
+        "remarks": "",
+        "flagged": true,
+        "flag_reason": "Large fuel purchase night before robbery – corroborates MSG-006 'petrol full hai' – operational logistics confirmed"
+      },
+      {
+        "transaction_id": "FT-004",
+        "app": "Paytm Wallet",
+        "direction": "OUTGOING",
+        "amount_inr": 750,
+        "recipient_name": "Mohan Tools & Hardware – Itwari",
+        "recipient_upi_id": "mohanhardware.itwari@paytm",
+        "timestamp": "2024-07-17T14:33:20+05:30",
+        "reference_number": "PTM20240717143320774",
+        "remarks": "saman",
+        "flagged": true,
+        "flag_reason": "Hardware store purchase day before incident – possible procurement of tools for DVR room forced entry or weapon-related materials"
+      }
+    ],
+
+    "location_history": [
+      {
+        "point_id": "LOC-001",
+        "timestamp": "2024-07-16T22:51:09+05:30",
+        "latitude": 21.1458,
+        "longitude": 79.0882,
+        "accuracy_meters": 14,
+        "altitude_meters": 310,
+        "source": "Google Maps / GPS",
+        "resolved_address": "Kamptee Road, Nandanvan, Nagpur, Maharashtra – 440026",
+        "notes": "Device at S-003 informant's residential area – late-night rendezvous with Laxman Bhosale suspected"
+      },
+      {
+        "point_id": "LOC-002",
+        "timestamp": "2024-07-17T14:28:44+05:30",
+        "latitude": 21.1497,
+        "longitude": 79.0831,
+        "accuracy_meters": 9,
+        "altitude_meters": 308,
+        "source": "Google Maps Navigation",
+        "resolved_address": "Sitabuldi Square vicinity, Nagpur – 440012",
+        "notes": "Device in Sitabuldi area – reconnaissance trip to target bank branch day before robbery; navigation to 'RGVB Bank Sitabuldi' found in Google Maps search history"
+      },
+      {
+        "point_id": "LOC-003",
+        "timestamp": "2024-07-18T08:31:17+05:30",
+        "latitude": 21.1501,
+        "longitude": 79.0836,
+        "accuracy_meters": 7,
+        "altitude_meters": 309,
+        "source": "Google Maps / Cell Tower",
+        "resolved_address": "Sitabuldi Main Road, Nagpur – 440012",
+        "notes": "Device at target location morning of robbery – matches CL-004 call from Sitabuldi tower at 08:33"
+      },
+      {
+        "point_id": "LOC-004",
+        "timestamp": "2024-07-18T14:19:05+05:30",
+        "latitude": 21.1499,
+        "longitude": 79.0829,
+        "accuracy_meters": 6,
+        "altitude_meters": 309,
+        "source": "Google Maps",
+        "resolved_address": "Plot 14, Sitabuldi Square, Nagpur – 440012",
+        "notes": "Device confirmed at RGVB Bank Sitabuldi Branch – 3 minutes before robbery commenced at 14:22"
+      },
+      {
+        "point_id": "LOC-005",
+        "timestamp": "2024-07-18T14:55:33+05:30",
+        "latitude": 21.1389,
+        "longitude": 79.1012,
+        "accuracy_meters": 18,
+        "altitude_meters": 305,
+        "source": "Cell Tower Triangulation",
+        "resolved_address": "Wardha Road, Near Zingabai Takli, Nagpur – 440025",
+        "notes": "Device fleeing southeast on Wardha Road immediately after robbery – matches escape route described in MSG-005"
+      },
+      {
+        "point_id": "LOC-006",
+        "timestamp": "2024-07-18T16:44:22+05:30",
+        "latitude": 21.1204,
+        "longitude": 79.1388,
+        "accuracy_meters": 22,
+        "altitude_meters": 301,
+        "source": "Cell Tower",
+        "resolved_address": "Khapri Village Outskirts, Nagpur Rural – 441108",
+        "notes": "Device 14 km southeast of city in rural fringe area – possible cash concealment location; last GPS fix before device powered off"
+      }
+    ],
+
+    "app_activity": {
+
+      "google_maps": [
+        {
+          "activity_id": "GM-001",
+          "timestamp": "2024-07-14T10:17:33+05:30",
+          "action": "SEARCH",
+          "query": "RGVB Bank Sitabuldi Branch Nagpur",
+          "notes": "Initial reconnaissance search – 4 days before robbery"
+        },
+        {
+          "activity_id": "GM-002",
+          "timestamp": "2024-07-14T10:24:08+05:30",
+          "action": "ROUTE_VIEWED",
+          "origin": "Kamptee Road, Nagpur",
+          "destination": "Sitabuldi Square, Nagpur",
+          "mode": "DRIVING",
+          "distance_km": 6.3,
+          "estimated_time_minutes": 18,
+          "notes": "Route from S-001 home to target bank – planning stage"
+        },
+        {
+          "activity_id": "GM-003",
+          "timestamp": "2024-07-17T14:22:55+05:30",
+          "action": "NAVIGATION_STARTED",
+          "destination": "Sitabuldi Square, Nagpur",
+          "mode": "DRIVING",
+          "notes": "Reconnaissance navigation day before robbery"
+        },
+        {
+          "activity_id": "GM-004",
+          "timestamp": "2024-07-17T14:31:10+05:30",
+          "action": "SEARCH",
+          "query": "CCTV camera locations Sitabuldi market",
+          "notes": "Surveillance evasion research – highly incriminating"
+        },
+        {
+          "activity_id": "GM-005",
+          "timestamp": "2024-07-18T14:39:07+05:30",
+          "action": "NAVIGATION_STARTED",
+          "destination": "Wardha Road, Nagpur",
+          "mode": "DRIVING",
+          "notes": "Escape route navigation initiated 17 minutes after robbery commenced – active flight"
+        },
+        {
+          "activity_id": "GM-006",
+          "timestamp": "2024-07-18T16:30:41+05:30",
+          "action": "SEARCH",
+          "query": "Khapri abandoned warehouse",
+          "notes": "Search for concealment location in rural outskirts – cash/suspect hideout suspected"
+        }
+      ],
+
+      "camera_activity": [
+        {
+          "activity_id": "CAM-001",
+          "timestamp": "2024-07-17T14:33:48+05:30",
+          "action": "PHOTO_CAPTURED",
+          "file_name": "IMG_20240717_143348.jpg",
+          "file_size_kb": 3940,
+          "gps_embedded": true,
+          "gps_location": "Sitabuldi Square, Nagpur",
+          "status": "DELETED",
+          "deleted_timestamp": "2024-07-18T19:47:22+05:30",
+          "recovery_status": "RECOVERED – full image via DCIM/.thumbnails cache and unallocated space",
+          "forensic_note": "Photo of RGVB Bank Sitabuldi branch exterior taken during reconnaissance visit"
+        },
+        {
+          "activity_id": "CAM-002",
+          "timestamp": "2024-07-17T14:35:14+05:30",
+          "action": "PHOTO_CAPTURED",
+          "file_name": "IMG_20240717_143514.jpg",
+          "file_size_kb": 4110,
+          "gps_embedded": true,
+          "gps_location": "Sitabuldi Square, Nagpur",
+          "status": "DELETED",
+          "deleted_timestamp": "2024-07-18T19:47:22+05:30",
+          "recovery_status": "RECOVERED – partial via thumbnail cache",
+          "forensic_note": "Second reconnaissance photo – appears to show bank entrance and adjacent parking"
+        },
+        {
+          "activity_id": "CAM-003",
+          "timestamp": "2024-07-17T14:38:02+05:30",
+          "action": "PHOTO_CAPTURED",
+          "file_name": "IMG_20240717_143802.jpg",
+          "file_size_kb": 3750,
+          "gps_embedded": true,
+          "gps_location": "Sitabuldi Square, Nagpur",
+          "status": "DELETED",
+          "deleted_timestamp": "2024-07-18T19:47:22+05:30",
+          "recovery_status": "RECOVERED – full image via unallocated space carving",
+          "forensic_note": "Photo angle consistent with side entrance and server room ventilation grid – DVR access point"
+        },
+        {
+          "activity_id": "CAM-004",
+          "timestamp": "2024-07-18T16:41:55+05:30",
+          "action": "PHOTO_CAPTURED",
+          "file_name": "IMG_20240718_164155.jpg",
+          "file_size_kb": 5210,
+          "gps_embedded": true,
+          "gps_location": "Khapri Village Outskirts, Nagpur Rural",
+          "status": "DELETED",
+          "deleted_timestamp": "2024-07-18T19:48:40+05:30",
+          "recovery_status": "RECOVERED – full image via NAND flash carving",
+          "forensic_note": "Photo taken at rural location post-robbery – appears to show bundles consistent with cash being counted/wrapped"
+        }
+      ],
+
+      "social_media_activity": [
+        {
+          "activity_id": "SM-001",
+          "platform": "Instagram",
+          "timestamp": "2024-07-13T20:44:11+05:30",
+          "action": "PROFILE_SEARCHED",
+          "search_query": "Arvind Pathak Bank Manager Nagpur",
+          "notes": "Victim's social profile searched – identity and routine research"
+        },
+        {
+          "activity_id": "SM-002",
+          "platform": "Telegram",
+          "timestamp": "2024-07-15T02:11:07+05:30",
+          "action": "FILE_RECEIVED",
+          "channel": "Private chat – contact 'Kaka' (S-003)",
+          "file_type": "application/pdf",
+          "file_name": "bank_floor_layout.pdf",
+          "file_size_kb": 287,
+          "status": "DELETED",
+          "deleted_timestamp": "2024-07-18T19:46:03+05:30",
+          "recovery_status": "FILENAME recovered from Telegram cache – file content partially recovered via NAND carving",
+          "notes": "Bank floor layout PDF received from informant at 2 AM – highly incriminating insider document"
+        },
+        {
+          "activity_id": "SM-003",
+          "platform": "Telegram",
+          "timestamp": "2024-07-18T20:03:44+05:30",
+          "action": "ACCOUNT_SESSION_TERMINATED",
+          "notes": "Telegram logged out manually – anti-forensic session clearing before attempted device wipe"
+        },
+        {
+          "activity_id": "SM-004",
+          "platform": "WhatsApp",
+          "timestamp": "2024-07-18T19:52:37+05:30",
+          "action": "CHAT_HISTORY_DELETED",
+          "chats_deleted": ["Baaz (+91-70449-88312)", "Kaka (+91-94052-30817)"],
+          "recovery_status": "Both chat histories partially recovered via msgstore.db WAL journal",
+          "notes": "Bulk chat deletion immediately after sending evidence destruction instruction (MSG-010)"
+        }
+      ],
+
+      "deleted_media_summary": {
+        "total_items_recovered": 19,
+        "photos_recovered": 9,
+        "videos_recovered": 2,
+        "documents_recovered": 4,
+        "audio_files_recovered": 1,
+        "database_artifacts_recovered": 3,
+        "primary_recovery_tool": "IndForensic UFED-X Pro v4.2 + AXIOM Examine 8.1",
+        "recovery_methods_used": ["SQLite WAL Journal Recovery", "NAND Flash Unallocated Space Carving", "Thumbnail Cache Recovery", "Application Database Artifact Analysis"],
+        "bulk_deletion_event_timestamp": "2024-07-18T19:44:00+05:30",
+        "bulk_deletion_duration_seconds": 280,
+        "notes": "Coordinated bulk deletion event spanning ~4.6 minutes commencing at 19:44 IST – consistent with instruction in MSG-010"
+      }
+    },
+
+    "system_events": [
+      {
+        "event_id": "SYS-001",
+        "event_type": "SIM_INSERTED",
+        "timestamp": "2024-07-13T11:02:47+05:30",
+        "sim_iccid": "8991550024731990224",
+        "sim_network": "Jio Prepaid",
+        "sim_slot": "SIM Slot 2",
+        "notes": "Prepaid Jio SIM inserted 5 days before robbery – no KYC link found; all coordination calls made on this SIM thereafter"
+      },
+      {
+        "event_id": "SYS-002",
+        "event_type": "DEVICE_POWER_OFF",
+        "timestamp": "2024-07-14T01:55:33+05:30",
+        "notes": "Device powered off after late-night planning activity – unusual given prior usage pattern"
+      },
+      {
+        "event_id": "SYS-003",
+        "event_type": "DEVICE_POWER_ON",
+        "timestamp": "2024-07-14T07:14:09+05:30",
+        "notes": "Device powered back on next morning"
+      },
+      {
+        "event_id": "SYS-004",
+        "event_type": "APP_INSTALL",
+        "timestamp": "2024-07-13T11:44:22+05:30",
+        "app_name": "Signal Private Messenger",
+        "package_name": "org.thoughtcrime.securesms",
+        "notes": "End-to-end encrypted messenger installed same day as prepaid SIM insertion – anti-surveillance preparation"
+      },
+      {
+        "event_id": "SYS-005",
+        "event_type": "APP_UNINSTALL",
+        "timestamp": "2024-07-18T19:50:14+05:30",
+        "app_name": "Signal Private Messenger",
+        "package_name": "org.thoughtcrime.securesms",
+        "notes": "Signal uninstalled during bulk evidence destruction window – 6 minutes after robbery concluded"
+      },
+      {
+        "event_id": "SYS-006",
+        "event_type": "APP_UNINSTALL",
+        "timestamp": "2024-07-18T19:53:08+05:30",
+        "app_name": "Telegram",
+        "package_name": "org.telegram.messenger",
+        "notes": "Telegram uninstalled 2 minutes 54 seconds after Signal – coordinated cleanup confirmed"
+      },
+      {
+        "event_id": "SYS-007",
+        "event_type": "FACTORY_RESET_ATTEMPTED",
+        "timestamp": "2024-07-18T20:04:52+05:30",
+        "result": "INTERRUPTED – INCOMPLETE",
+        "interruption_cause": "Incoming call received during reset process – reset aborted by user",
+        "notes": "Factory reset process initiated but interrupted – significant forensic data preserved as result; reset attempted approximately 2 hours after robbery"
+      },
+      {
+        "event_id": "SYS-008",
+        "event_type": "DEVICE_POWER_OFF",
+        "timestamp": "2024-07-18T20:09:17+05:30",
+        "notes": "Device powered off after interrupted factory reset – remained off until seizure by police at 06:15 IST on 2024-07-19"
+      },
+      {
+        "event_id": "SYS-009",
+        "event_type": "SIM_REMOVED",
+        "timestamp": "2024-07-18T20:07:44+05:30",
+        "sim_iccid": "8991550024731990224",
+        "sim_slot": "SIM Slot 2",
+        "notes": "Prepaid Jio SIM physically removed 1 minute 27 seconds before device power-off – SIM not recovered at time of arrest; likely discarded"
+      },
+      {
+        "event_id": "SYS-010",
+        "event_type": "USB_DEBUG_ENABLED",
+        "timestamp": "2024-07-18T20:03:11+05:30",
+        "notes": "USB Debugging mode briefly enabled – suggests possible attempt to use ADB-based wipe tool; disabled 94 seconds later"
+      }
+    ]
+  },
+
+  "anomaly_flags": {
+    "suspicious_deletions": {
+      "flag": true,
+      "severity": "CRITICAL",
+      "details": "Coordinated bulk deletion of 19 items across WhatsApp, Telegram, SMS, Camera, and Signal within a 280-second window at 19:44–19:49 IST on 2024-07-18 – immediately following robbery and proceeds distribution messages. Explicit instruction to destroy evidence found in MSG-010.",
+      "recovery_success": true,
+      "recovery_rate_percent": 84
+    },
+    "location_match_to_crime_scene": {
+      "flag": true,
+      "severity": "CRITICAL",
+      "details": "Device GPS confirmed at RGVB Bank Sitabuldi branch (LOC-004) at 14:19 IST on 2024-07-18 – 3 minutes before robbery commenced at 14:22. Subsequent movement along Wardha Road (LOC-005) matches pre-planned escape route described in MSG-005. Reconnaissance visit confirmed at same location on 2024-07-17 (LOC-002, LOC-003).",
+      "crime_scene_coordinates": { "latitude": 21.1499, "longitude": 79.0829 },
+      "device_match": true
+    },
+    "late_night_coordination_calls": {
+      "flag": true,
+      "severity": "HIGH",
+      "details": "Outgoing calls to both co-suspects made between 22:47 and 01:14 IST across July 16–17 using anonymous prepaid SIM (Jio SIM2). Call to inside informant S-003 at 01:14 IST – 37 hours before robbery. Pattern consistent with operational planning under cover of night to avoid detection.",
+      "calls_flagged": ["CL-001", "CL-002"],
+      "time_window": "22:00–02:00 IST",
+      "frequency": "Multiple instances across 3-day window"
+    },
+    "financial_preparation_indicators": {
+      "flag": true,
+      "severity": "HIGH",
+      "details": "Four pre-robbery digital payments identified: Rs.15,000 to S-002 (advance), Rs.8,500 to S-003 (informant payment), Rs.4,200 fuel purchase, Rs.750 hardware purchase – totalling Rs.28,450 in traceable preparatory outflows. Post-robbery, Rs.28 lakh and Rs.5 lakh proceeds allocations confirmed via recovered deleted messages (MSG-007, MSG-008). Hawala channel mentioned for informant payment.",
+      "transactions_flagged": ["FT-001", "FT-002", "FT-003", "FT-004"],
+      "total_prep_expenditure_inr": 28450,
+      "post_robbery_proceeds_inr": 4750000
+    },
+    "insider_threat_indicators": {
+      "flag": true,
+      "severity": "CRITICAL",
+      "details": "S-003 (Laxman Bhosale) – former bank peon at target branch – provided: (1) detailed floor layout including vault location, (2) CCTV DVR location and access method, (3) victim manager's daily schedule, (4) guard staffing levels. Floor layout PDF transferred via Telegram at 02:11 IST on 2024-07-15 (SM-002). All intelligence corroborated by physical evidence at crime scene.",
+      "insider_suspect_id": "S-003"
+    },
+    "anti_forensic_behavior": {
+      "flag": true,
+      "severity": "HIGH",
+      "details": "Comprehensive anti-forensic effort detected: (1) Encrypted app installation day of SIM swap, (2) app uninstalls post-robbery, (3) WhatsApp/Telegram/SMS bulk deletion, (4) attempted factory reset, (5) USB debugging briefly enabled, (6) prepaid SIM physically removed before shutdown, (7) Telegram session manually terminated. Despite these measures, 84% of deleted evidence was forensically recovered.",
+      "methods_detected": [
+        "Encrypted messaging apps (Signal, Telegram)",
+        "Prepaid unregistered SIM for all suspect communications",
+        "Post-incident bulk application and message deletion",
+        "Attempted factory reset (interrupted)",
+        "Physical SIM removal",
+        "USB debug-based wipe attempt (incomplete)"
+      ]
+    },
+    "unidentified_associate": {
+      "flag": true,
+      "severity": "MEDIUM",
+      "details": "MSG-006 references 'ek aur banda' (one more person) accompanying S-002 on day of robbery. MSG-009 references 'Bhai Sahab' – unidentified contact on number +91-77021-43900 – to whom cash handoff was planned. Fourth participant not yet identified – investigation ongoing.",
+      "unknown_number": "+91-77021-43900"
+    }
+  },
+
+  "forensic_metadata": {
+    "dataset_classification": "FICTIONAL – ACADEMIC AND TRAINING USE ONLY",
+    "generated_for": "Hackathon / Forensic AI Research / Digital Evidence Training",
+    "all_names_fictional": true,
+    "all_numbers_fictional": true,
+    "all_bank_details_fictional": true,
+    "no_real_persons_represented": true,
+    "jurisdiction_simulated": "Maharashtra, India",
+    "applicable_laws_referenced_for_realism": [
+      "IPC Section 395 – Dacoity",
+      "IPC Section 397 – Robbery with attempt to cause grievous hurt",
+      "IT Act 2000 Section 66 – Computer-related offence",
+      "IT Act 2000 Section 43 – Damage to computer/data",
+      "PMLA 2002 – Money laundering via hawala"
+    ],
+    "timestamp_format": "ISO 8601 with IST offset (+05:30)",
+    "dataset_version": "1.0",
+    "created_date": "2024-07-19"
+  }
+}

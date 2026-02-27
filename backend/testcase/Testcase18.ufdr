@@ -1,0 +1,241 @@
+{
+      "case_info": {
+        "case_id": "CBI-DF-2024-BNK-00398",
+        "crime_type": "Bank Robbery – Fraudulent Impersonation of Officials",
+        "status": "Active Investigation",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "incident_date": "2024-08-29",
+        "investigation_start": "2024-08-29",
+        "reporting_agency": "Bengaluru City Police – CCB Unit",
+        "fir_number": "FIR-BLR-2024-2241"
+      },
+      "target_info": {
+        "bank_type": "Small Finance Bank",
+        "bank_name": "Karnataka Janakalyan Bank (Fictional)",
+        "branch_name": "Indiranagar 100 Feet Road Branch",
+        "branch_address": "712, 100 Feet Road, Indiranagar, Bengaluru – 560038",
+        "branch_ifsc": "KJBL0000088",
+        "incident_time": "2024-08-29T10:00:00+05:30",
+        "incident_duration_minutes": 31,
+        "estimated_loss_inr": 7100000,
+        "vault_accessed": true,
+        "weapons_reported": "Fake police uniforms, batons, one concealed pistol",
+        "hostages_reported": 9,
+        "casualties": "None",
+        "cctv_status": "Suspects wore official-looking helmets and face shields – partial identification only"
+      },
+      "suspect_profiles": [
+        {
+          "suspect_id": "S-001",
+          "fictional_full_name": "Aravind Gowda Nanjundaiah",
+          "age": 40,
+          "alias": [
+            "ANG",
+            "SI Aravind (disguise name)"
+          ],
+          "role_in_crime": "Leader – posed as Sub-Inspector leading fake 'audit raid'",
+          "phone_number": "+91-99644-38102",
+          "address": "Domlur Layout, Bengaluru – 560071",
+          "occupation": "Private security consultant",
+          "prior_record": "2016 – impersonation case – acquitted",
+          "seized_device": "Yes – primary"
+        },
+        {
+          "suspect_id": "S-002",
+          "fictional_full_name": "Kiran Basappa Huliyar",
+          "age": 35,
+          "alias": [
+            "KBH",
+            "Constable Kiran (disguise)"
+          ],
+          "role_in_crime": "Fake constable – staff control and cash loading",
+          "phone_number": "+91-80199-67044",
+          "address": "Basaveshwara Nagar, Bengaluru – 560079",
+          "occupation": "Delivery executive",
+          "prior_record": "None",
+          "seized_device": "Partial – broken phone, SIM recovered"
+        }
+      ],
+      "seized_device_info": {
+        "device_id": "DEV-001",
+        "suspect_id": "S-001",
+        "device_model": "Motorola Edge 40",
+        "os_version": "Android 13",
+        "imei_1": "359270041827390",
+        "phone_number_on_device": "+91-99644-38102",
+        "seizure_time": "2024-08-30T07:10:00+05:30",
+        "seized_by": "SI Pavan R., CCB Bengaluru",
+        "extraction_type": "Full File System",
+        "extraction_tool": "IndForensic UFED-X Pro v4.2",
+        "hash_md5": "b9d4f2a1c07368053b8d5e0a2c4f7b29"
+      },
+      "digital_evidence": {
+        "call_logs": [
+          {
+            "log_id": "CL-001",
+            "direction": "OUTGOING",
+            "contact_name": "KBH",
+            "phone_number": "+91-80199-67044",
+            "timestamp": "2024-08-27T23:04:09+05:30",
+            "duration_seconds": 548,
+            "sim_used": "SIM2 – Vi Prepaid",
+            "notes": "Late-night briefing – 2 days before robbery – uniform and entry script rehearsed"
+          },
+          {
+            "log_id": "CL-002",
+            "direction": "OUTGOING",
+            "contact_name": "KBH",
+            "phone_number": "+91-80199-67044",
+            "timestamp": "2024-08-29T09:44:11+05:30",
+            "duration_seconds": 31,
+            "sim_used": "SIM2 – Vi Prepaid",
+            "notes": "Pre-entry confirmation call 16 minutes before robbery"
+          },
+          {
+            "log_id": "CL-003",
+            "direction": "INCOMING",
+            "contact_name": "UNKNOWN",
+            "phone_number": "+91-76249-10033",
+            "timestamp": "2024-08-29T10:51:22+05:30",
+            "duration_seconds": 204,
+            "sim_used": "SIM2 – Vi Prepaid",
+            "notes": "Post-robbery call from unknown number – suspected fence"
+          }
+        ],
+        "messages": [
+          {
+            "message_id": "MSG-001",
+            "platform": "Telegram",
+            "direction": "OUTGOING",
+            "contact_name": "KBH",
+            "phone_number": "+91-80199-67044",
+            "timestamp": "2024-08-27T22:44:04+05:30",
+            "content": "Uniform stitching ho gayi. Mera badge bhi ready hai. Script yaad kar – 'RBI surprise audit' bolna hai. Manager se seedha baat karo.",
+            "translation_en": "Uniform stitching done. My badge is also ready. Memorize the script – say 'RBI surprise audit'. Talk directly to the manager.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-002",
+            "platform": "Telegram",
+            "direction": "INCOMING",
+            "contact_name": "KBH",
+            "phone_number": "+91-80199-67044",
+            "timestamp": "2024-08-27T23:01:14+05:30",
+            "content": "Branch mein 3 staff hai aur ek guard. CCTV main entrance pe hai – head down rakhna. Side exit pehle se check kiya hua hai.",
+            "translation_en": "Branch has 3 staff and one guard. CCTV is at main entrance – keep head down. Side exit already checked.",
+            "deleted": false
+          },
+          {
+            "message_id": "MSG-003",
+            "platform": "Telegram",
+            "direction": "OUTGOING",
+            "contact_name": "KBH",
+            "phone_number": "+91-80199-67044",
+            "timestamp": "2024-08-29T11:19:04+05:30",
+            "content": "71 lakh mila. Actor se better kaam kiya aaj. Tera hissa 22 lakh. Raat ko Mysuru road se nikal. Sab delete karo.",
+            "translation_en": "Got 71 lakh. Did better than an actor today. Your share is 22 lakh. Exit via Mysuru road at night. Delete everything.",
+            "deleted": true,
+            "deleted_timestamp": "2024-08-29T15:04:11+05:30",
+            "recovery_method": "Telegram SQLite WAL recovery"
+          }
+        ],
+        "financial_transactions": [
+          {
+            "transaction_id": "FT-001",
+            "app": "PhonePe",
+            "direction": "OUTGOING",
+            "amount_inr": 14000,
+            "recipient_name": "Kiran B. Huliyar",
+            "timestamp": "2024-08-27T18:31:04+05:30",
+            "remarks": "advance",
+            "flagged": true,
+            "flag_reason": "Pre-robbery advance to co-suspect same day as uniform preparation message"
+          },
+          {
+            "transaction_id": "FT-002",
+            "app": "Google Pay",
+            "direction": "OUTGOING",
+            "amount_inr": 6800,
+            "recipient_name": "Quick Stitch Tailors – Domlur",
+            "timestamp": "2024-08-25T12:04:09+05:30",
+            "remarks": "uniform",
+            "flagged": true,
+            "flag_reason": "Police uniform stitching payment 4 days before robbery"
+          }
+        ],
+        "location_history": [
+          {
+            "point_id": "LOC-001",
+            "timestamp": "2024-08-28T10:14:07+05:30",
+            "latitude": 12.9784,
+            "longitude": 77.6408,
+            "resolved_address": "100 Feet Road, Indiranagar, Bengaluru – 560038",
+            "notes": "Reconnaissance visit day before robbery"
+          },
+          {
+            "point_id": "LOC-002",
+            "timestamp": "2024-08-29T09:57:44+05:30",
+            "latitude": 12.9787,
+            "longitude": 77.6411,
+            "resolved_address": "KJB Bank, Indiranagar – AT CRIME SCENE",
+            "notes": "Device at bank 3 minutes before robbery"
+          },
+          {
+            "point_id": "LOC-003",
+            "timestamp": "2024-08-29T11:04:44+05:30",
+            "latitude": 12.9634,
+            "longitude": 77.6071,
+            "resolved_address": "Intermediate Ring Road, Domlur, Bengaluru",
+            "notes": "Retreat toward suspect residential area post-robbery"
+          }
+        ],
+        "system_events": [
+          {
+            "event_id": "SYS-001",
+            "event_type": "SIM_INSERTED",
+            "timestamp": "2024-08-24T09:04:22+05:30",
+            "sim_network": "Vi Prepaid – no KYC",
+            "notes": "Anonymous SIM 5 days before robbery"
+          },
+          {
+            "event_id": "SYS-002",
+            "event_type": "APP_UNINSTALL",
+            "timestamp": "2024-08-29T15:01:04+05:30",
+            "app_name": "Telegram",
+            "notes": "Removed during evidence destruction"
+          },
+          {
+            "event_id": "SYS-003",
+            "event_type": "FACTORY_RESET_ATTEMPTED",
+            "timestamp": "2024-08-29T15:09:44+05:30",
+            "result": "COMPLETED – PARTIAL DATA RESIDUE",
+            "notes": "Reset completed but forensic tool recovered data from residual NAND sectors"
+          }
+        ]
+      },
+      "anomaly_flags": {
+        "suspicious_deletions": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "recovery_rate_percent": 68
+        },
+        "location_match_to_crime_scene": {
+          "flag": true,
+          "severity": "CRITICAL"
+        },
+        "late_night_coordination_calls": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "financial_preparation_indicators": {
+          "flag": true,
+          "severity": "HIGH"
+        },
+        "impersonation_indicators": {
+          "flag": true,
+          "severity": "CRITICAL",
+          "details": "Police uniform stitched, fake RBI badges prepared, rehearsed script in messages, tailor payment recovered"
+        }
+      }
+    },

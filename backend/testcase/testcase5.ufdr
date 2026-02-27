@@ -1,0 +1,194 @@
+{
+  "case_info": {
+    "case_id": "IND-ROB-2024-005",
+    "crime_type": "Railway Parcel Compartment Robbery",
+    "status": "Active Investigation",
+    "location": "Howrah–Asansol Route, West Bengal, India",
+    "incident_date": "2024-10-05",
+    "investigation_start": "2024-10-06"
+  },
+  "victim_info": {
+    "consignment_owner": "Eastern Electronics Distributors",
+    "train_name": "12303 Poorva Express",
+    "parcel_description": "High-end mobile phones (sealed cartons)",
+    "parcel_value_inr": 4200000,
+    "loading_station": "Howrah Junction",
+    "destination_station": "Dhanbad"
+  },
+  "suspect_info": [
+    {
+      "suspect_id": "S-001",
+      "name": "Arup Das",
+      "age": 36,
+      "role": "Railway Parcel Handler (Contract Worker)",
+      "phone_number": "+91-9831022334",
+      "address": "Liluah, Howrah",
+      "prior_record": "Minor theft – 2020"
+    },
+    {
+      "suspect_id": "S-002",
+      "name": "Bikash Mondal",
+      "age": 29,
+      "role": "External Accomplice",
+      "phone_number": "+91-9007458899",
+      "address": "Burdwan, West Bengal",
+      "prior_record": "Chain snatching – 2022"
+    }
+  ],
+  "device_info": {
+    "device_model": "Samsung Galaxy A34",
+    "os_version": "Android 14",
+    "imei": "351998765432110",
+    "phone_number": "+91-9831022334",
+    "seizure_time": "2024-10-06T08:21:00+05:30",
+    "seized_by": "Government Railway Police (GRP), Howrah",
+    "extraction_tool": "Cellebrite UFED 4PC v7.70",
+    "extraction_type": "Full File System + Logical"
+  },
+  "call_logs": [
+    {
+      "log_id": "CL-001",
+      "direction": "OUTGOING",
+      "contact_name": "Bikash",
+      "phone_number": "+91-9007458899",
+      "timestamp": "2024-10-04T23:41:11+05:30",
+      "duration_seconds": 244,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Late-night coordination call before train departure"
+    },
+    {
+      "log_id": "CL-002",
+      "direction": "INCOMING",
+      "contact_name": "Unknown Prepaid",
+      "phone_number": "+91-8799945566",
+      "timestamp": "2024-10-05T02:12:33+05:30",
+      "duration_seconds": 31,
+      "call_type": "VOICE",
+      "network": "LTE",
+      "notes": "Call received during train halt at Bardhaman"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "MSG-001",
+      "platform": "WhatsApp",
+      "direction": "OUTGOING",
+      "contact_name": "Bikash",
+      "timestamp": "2024-10-04T23:58:02+05:30",
+      "content": "Coach SLR-2. Parcel compartment near guard cabin. Stop is 8 mins at Bardhaman.",
+      "status": "SENT",
+      "deleted": false
+    },
+    {
+      "message_id": "MSG-002",
+      "platform": "WhatsApp",
+      "direction": "INCOMING",
+      "contact_name": "Bikash",
+      "timestamp": "2024-10-05T00:04:44+05:30",
+      "content": "Unload 4 cartons only. Use side door. Phones off before Asansol.",
+      "status": "READ",
+      "deleted": true,
+      "deleted_timestamp": "2024-10-05T04:11:22+05:30",
+      "recovery_method": "SQLite WAL recovery"
+    }
+  ],
+  "financial_transactions": [
+    {
+      "transaction_id": "FT-001",
+      "app": "UPI",
+      "direction": "INCOMING",
+      "amount_inr": 220000,
+      "sender": "B. Mondal",
+      "timestamp": "2024-10-05T14:42:18+05:30",
+      "memo": "Commission",
+      "flagged": true,
+      "flag_reason": "Payment hours after robbery event"
+    },
+    {
+      "transaction_id": "FT-002",
+      "app": "Cash Deposit",
+      "direction": "INCOMING",
+      "amount_inr": 800000,
+      "timestamp": "2024-10-06T10:33:55+05:30",
+      "flagged": true,
+      "flag_reason": "Structured deposits in two railway-adjacent branches"
+    }
+  ],
+  "location_history": [
+    {
+      "point_id": "LOC-001",
+      "timestamp": "2024-10-05T02:08:44+05:30",
+      "latitude": 23.2324,
+      "longitude": 87.8615,
+      "accuracy_meters": 9,
+      "source": "Cell Tower",
+      "resolved_address": "Bardhaman Railway Station",
+      "notes": "Device present during train halt window"
+    },
+    {
+      "point_id": "LOC-002",
+      "timestamp": "2024-10-05T03:11:18+05:30",
+      "latitude": 23.6739,
+      "longitude": 86.9524,
+      "accuracy_meters": 18,
+      "source": "Cell Tower",
+      "resolved_address": "Near Asansol Junction",
+      "notes": "Device powered off shortly after this ping"
+    }
+  ],
+  "app_activity": {
+    "google_maps": [
+      {
+        "activity_id": "GM-001",
+        "timestamp": "2024-10-04T21:22:55+05:30",
+        "action": "SEARCH",
+        "query": "Bardhaman station platform map parcel side entry",
+        "notes": "Pre-incident reconnaissance"
+      }
+    ],
+    "camera_activity": [
+      {
+        "activity_id": "CAM-001",
+        "timestamp": "2024-10-03T16:14:12+05:30",
+        "action": "PHOTO_CAPTURED",
+        "file_name": "IMG_20241003_161412.jpg",
+        "gps_embedded": true,
+        "location": "Howrah Parcel Loading Area",
+        "status": "DELETED",
+        "deleted_timestamp": "2024-10-05T04:08:12+05:30",
+        "recovery_status": "Recovered – partial resolution"
+      }
+    ],
+    "railway_app_activity": [
+      {
+        "activity_id": "RA-001",
+        "timestamp": "2024-10-04T22:10:41+05:30",
+        "action": "TRAIN_STATUS_CHECK",
+        "train_number": "12303",
+        "notes": "Monitoring delay timing before robbery"
+      }
+    ]
+  },
+  "system_events": [
+    {
+      "event_id": "SYS-001",
+      "event_type": "SIM_CHANGE",
+      "timestamp": "2024-10-03T09:14:22+05:30",
+      "notes": "Prepaid SIM inserted 48 hours prior"
+    },
+    {
+      "event_id": "SYS-002",
+      "event_type": "DEVICE_POWER_OFF",
+      "timestamp": "2024-10-05T03:14:44+05:30",
+      "notes": "Device powered off after passing Bardhaman"
+    },
+    {
+      "event_id": "SYS-003",
+      "event_type": "APP_UNINSTALL",
+      "timestamp": "2024-10-05T04:06:55+05:30",
+      "app_name": "WhatsApp",
+      "notes": "Messaging app removed after robbery"
+    }
+  ]
+}

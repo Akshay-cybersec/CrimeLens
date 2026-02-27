@@ -1,4 +1,5 @@
 from .analysis import (
+    BehavioralIndexResponse,
     EvidenceAnalysisResponse,
     EvidenceClusterResponse,
     InsightResponse,
@@ -19,6 +20,7 @@ __all__ = [
     "EventResponse",
     "EvidenceClusterResponse",
     "EvidenceAnalysisResponse",
+    "BehavioralIndexResponse",
     "SearchRequest",
     "SearchResponse",
     "InsightResponse",
