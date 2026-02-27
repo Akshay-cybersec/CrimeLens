@@ -398,6 +398,10 @@ class InsightService:
         last_generated = await self.insight_repo.last_generated_at(case_id)
         if last_generated is None:
             return
+        if last_generated.tzinfo is None or last_generated.tzinfo.utcoffset(last_generated) is None:
+            last_generated = last_generated.replace(tzinfo=timezone.utc)
+        else:
+            last_generated = last_generated.astimezone(timezone.utc)
         if datetime.now(timezone.utc) - last_generated < timedelta(seconds=cooldown):
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
