@@ -11,6 +11,7 @@ import {
   Search, 
   FileText, 
   ShieldAlert,
+  GitBranch,
   Bell,
   Settings,
   User,
@@ -19,7 +20,7 @@ import {
 } from 'lucide-react';
 import { caseService } from '@/services/caseService';
 import { insightService } from '@/services/insightService';
-import type { CaseListItem, CaseOverview, DashboardMetrics, EvidenceResponse, InsightResponse, SimilarCaseResponse, TimelineResponse } from '@/types/api';
+import type { CaseListItem, CaseOverview, ConnectionGraphResponse, DashboardMetrics, EvidenceResponse, InsightResponse, SimilarCaseResponse, TimelineResponse } from '@/types/api';
 
 // --- Import separated view components ---
 import IntelligenceDashboardView from '../dashboard/views/IntelligenceDashboardView';
@@ -28,6 +29,7 @@ import UploadDataView from './views/UploadDataView';
 import ParsedDataView from './views/ParsedDataView';
 import AIAnalysisView from './views/AIAnalysisView';
 import InsightsEngineView from './views/InsightsEngineView';
+import GraphLinkingView from './views/GraphLinkingView';
 import ReviewEvidenceView from './views/ReviewEvidenceView';
 import ExportReportView from './views/ExportReportView';
 
@@ -45,6 +47,7 @@ const FLOW_STEPS: FlowStep[] = [
   { id: 'upload', label: 'Inject Extraction', icon: Upload },
   { id: 'parse', label: 'Data Matrix', icon: Database },
   { id: 'analyze', label: 'AI Deep Scan', icon: Cpu },
+  { id: 'graph', label: 'Graph Linking', icon: GitBranch },
   { id: 'insights', label: 'Insights Engine', icon: ShieldAlert },
   { id: 'evidence', label: 'Flag Anamolies', icon: Search },
   { id: 'export', label: 'Export Report', icon: FileText },
@@ -60,6 +63,7 @@ export default function ForensicsDashboard() {
   const [cases, setCases] = useState<CaseListItem[]>([]);
   const [caseOverview, setCaseOverview] = useState<CaseOverview | null>(null);
   const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics | null>(null);
+  const [connectionGraph, setConnectionGraph] = useState<ConnectionGraphResponse | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -111,24 +115,27 @@ export default function ForensicsDashboard() {
 
     const loadData = async () => {
       try {
-        const [insightData, timelineData, similarData, evidenceData, overviewData] = await Promise.all([
+        const [insightData, timelineData, similarData, evidenceData, overviewData, graphData] = await Promise.all([
           insightService.getCaseInsights(caseId),
           caseService.getTimeline(caseId),
           caseService.getSimilarCases(caseId),
           caseService.getEvidence(caseId),
           caseService.getCaseOverview(caseId),
+          caseService.getConnectionGraph(caseId),
         ]);
         setInsights(insightData);
         setTimeline(timelineData);
         setSimilarCases(similarData);
         setEvidence(evidenceData);
         setCaseOverview(overviewData);
+        setConnectionGraph(graphData);
       } catch {
         setInsights([]);
         setTimeline(null);
         setSimilarCases([]);
         setEvidence(null);
         setCaseOverview(null);
+        setConnectionGraph(null);
       }
     };
 
@@ -165,6 +172,7 @@ export default function ForensicsDashboard() {
       case 'upload': return <UploadDataView onUploadComplete={handleUploadComplete} />;
       case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
       case 'analyze': return <AIAnalysisView similarCases={similarCases} timeline={timeline} />;
+      case 'graph': return <GraphLinkingView graph={connectionGraph} />;
       case 'insights': return <InsightsEngineView caseId={caseId} insights={insights} />;
       case 'evidence': return <ReviewEvidenceView evidence={evidence} />;
       case 'export': return <ExportReportView />;

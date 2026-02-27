@@ -19,6 +19,7 @@ from app.services.background_worker import BackgroundWorkerService
 from app.services.case_behavior_service import CaseBehaviorService
 from app.services.case_service import CaseService
 from app.services.evidence_service import EvidenceService
+from app.services.graph_link_service import GraphLinkService
 from app.services.insight_service import InsightService
 from app.services.redis_service import RedisService
 from app.services.search_service import SearchService
@@ -116,6 +117,13 @@ def get_evidence_service(
     cluster_repo: ClusterRepository = Depends(get_cluster_repository),
 ) -> EvidenceService:
     return EvidenceService(event_repo, cluster_repo)
+
+
+def get_graph_link_service(
+    event_repo: EventRepository = Depends(get_event_repository),
+    llm_service: LLMService = Depends(get_llm_service),
+) -> GraphLinkService:
+    return GraphLinkService(event_repo, llm_service)
 
 
 def get_search_service(

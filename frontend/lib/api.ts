@@ -1,4 +1,6 @@
 import axios from 'axios';
+import type { InternalAxiosRequestConfig } from 'axios';
+import { loaderBus } from '@/lib/loader';
 import { toastError, toastInfo } from '@/lib/toast';
 
 const api = axios.create({
@@ -6,8 +8,10 @@ const api = axios.create({
   timeout: 30000,
 });
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   if (typeof window !== 'undefined') {
+    loaderBus.start();
+    (config as InternalAxiosRequestConfig & { _loaderTracked?: boolean })._loaderTracked = true;
     const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -17,8 +21,20 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const cfg = response.config as InternalAxiosRequestConfig & { _loaderTracked?: boolean };
+    if (typeof window !== 'undefined' && cfg?._loaderTracked) {
+      loaderBus.stop();
+      cfg._loaderTracked = false;
+    }
+    return response;
+  },
   (error) => {
+    const cfg = error?.config as (InternalAxiosRequestConfig & { _loaderTracked?: boolean }) | undefined;
+    if (typeof window !== 'undefined' && cfg?._loaderTracked) {
+      loaderBus.stop();
+      cfg._loaderTracked = false;
+    }
     const status = error?.response?.status;
     const detail = error?.response?.data?.detail;
     const message = typeof detail === 'string' && detail.trim() ? detail : '';
