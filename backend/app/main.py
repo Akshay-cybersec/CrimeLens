@@ -10,7 +10,7 @@ from app.middleware.audit import AuditMiddleware
 from app.middleware.error_handler import generic_exception_handler
 from app.middleware.rate_limit import RateLimitMiddleware
 from app.repositories.user_repository import UserRepository
-from app.routers import auth, cases, health
+from app.routers import auth, cases, health, insight_router
 from app.services.redis_service import RedisService
 from app.vector.chroma_client import ChromaCloudStore
 
@@ -49,9 +49,9 @@ def create_app() -> FastAPI:
         title=settings.app_name,
         debug=settings.debug,
         version="1.0.0",
-        docs_url=None,
-        redoc_url=None,
-        openapi_url=None,
+        docs_url="/docs",
+        redoc_url="/redoc",
+        openapi_url="/openapi.json",
         lifespan=lifespan,
     )
 
@@ -70,6 +70,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(auth.router, prefix=settings.api_prefix)
     app.include_router(cases.router, prefix=settings.api_prefix)
+    app.include_router(insight_router.router, prefix=settings.api_prefix)
 
     return app
 

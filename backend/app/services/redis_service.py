@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import Optional
 
 from redis.asyncio import Redis
@@ -29,3 +30,31 @@ class RedisService:
         if self._client is None:
             return
         await self._client.lpush("forensic:jobs:case_process", case_id)
+
+    async def get_json(self, key: str) -> Optional[dict]:
+        if self._client is None:
+            return None
+        raw = await self._client.get(key)
+        if not raw:
+            return None
+        try:
+            data = json.loads(raw)
+            return data if isinstance(data, dict) else None
+        except json.JSONDecodeError:
+            return None
+
+    async def set_json(self, key: str, value: dict, ttl_seconds: int) -> None:
+        if self._client is None:
+            return
+        await self._client.set(key, json.dumps(value), ex=ttl_seconds)
+
+    async def set_if_absent(self, key: str, value: str, ttl_seconds: int) -> bool:
+        if self._client is None:
+            return True
+        result = await self._client.set(key, value, ex=ttl_seconds, nx=True)
+        return bool(result)
+
+    async def delete_key(self, key: str) -> None:
+        if self._client is None:
+            return
+        await self._client.delete(key)

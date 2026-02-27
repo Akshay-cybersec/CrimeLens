@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 
 from app.schemas.event import EventResponse
+from app.schemas.insight_schema import InsightResponse
 
 
 class EvidenceClusterResponse(BaseModel):
@@ -25,14 +26,6 @@ class SearchResponse(BaseModel):
     interpreted_query: str
     matching_events: list[EventResponse]
     explanation: str
-
-
-class InsightResponse(BaseModel):
-    id: str
-    summary: str
-    supporting_event_ids: list[str]
-    confidence_score: float
-    reasoning: str
 
 
 class SimilarCaseResponse(BaseModel):

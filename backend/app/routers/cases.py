@@ -8,7 +8,6 @@ from app.core.deps import (
     get_background_worker,
     get_case_service,
     get_evidence_service,
-    get_insight_service,
     get_search_service,
     get_similar_case_service,
     get_timeline_service,
@@ -16,7 +15,6 @@ from app.core.deps import (
 from app.core.security import AuthUser, get_current_user, require_roles
 from app.schemas.analysis import (
     EvidenceAnalysisResponse,
-    InsightResponse,
     SearchRequest,
     SearchResponse,
     SimilarCaseResponse,
@@ -25,7 +23,6 @@ from app.schemas.case import CaseCreateResponse, TimelineResponse
 from app.services.background_worker import BackgroundWorkerService
 from app.services.case_service import CaseService
 from app.services.evidence_service import EvidenceService
-from app.services.insight_service import InsightService
 from app.services.search_service import SearchService
 from app.services.similar_case_service import SimilarCaseService
 from app.services.timeline_service import TimelineService
@@ -82,17 +79,6 @@ async def semantic_search(
 ) -> SearchResponse:
     await case_service.authorize_case_access(case_id, user)
     return await search_service.semantic_search(case_id, payload)
-
-
-@router.get("/{case_id}/insights", response_model=list[InsightResponse])
-async def investigative_insights(
-    case_id: str,
-    user: AuthUser = Depends(get_current_user),
-    case_service: CaseService = Depends(get_case_service),
-    insight_service: InsightService = Depends(get_insight_service),
-) -> list[InsightResponse]:
-    await case_service.authorize_case_access(case_id, user)
-    return await insight_service.generate(case_id)
 
 
 @router.get("/{case_id}/similar-cases", response_model=list[SimilarCaseResponse])

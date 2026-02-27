@@ -10,6 +10,7 @@ from .auth import LoginRequest, TokenResponse
 from .case import CaseCreateResponse, TimelineResponse, UploadCaseForm
 from .common import MessageResponse
 from .event import EventResponse
+from .insight_schema import DetectedPattern, InsightResponse as InsightDetailedResponse, RegenerateInsightResponse
 
 __all__ = [
     "CaseCreateResponse",
@@ -25,4 +26,7 @@ __all__ = [
     "LoginRequest",
     "TokenResponse",
     "MessageResponse",
+    "DetectedPattern",
+    "InsightDetailedResponse",
+    "RegenerateInsightResponse",
 ]
