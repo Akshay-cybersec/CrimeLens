@@ -8,7 +8,10 @@ from chromadb.api import ClientAPI
 from chromadb.api.models.Collection import Collection
 
 from app.core.config import Settings
+from app.core.logging import get_logger
 from app.utils.exceptions import APIException
+
+logger = get_logger(__name__)
 
 
 class ChromaCloudStore:
@@ -170,12 +173,11 @@ class ChromaCloudStore:
                 "embedding": embeddings[0] if embeddings else [],
             }
         except Exception as exc:
-            raise APIException(
-                message="Failed to load case embedding record from Chroma Cloud.",
-                status_code=503,
-                code="CHROMA_CASE_GET_FAILED",
-                details={"case_id": case_id, "error": str(exc)},
-            ) from exc
+            logger.warning(
+                "chroma_case_get_failed",
+                extra={"case_id": case_id, "error": str(exc)},
+            )
+            return {}
 
     async def add_case_behavior_embedding(
         self,
@@ -255,7 +257,7 @@ class ChromaCloudStore:
         ids = result.get("ids", [[]])[0]
         distances = result.get("distances", [[]])[0]
         pairs: list[tuple[str, float]] = []
-        for other_case_id, distance in zip(ids, distances, strict=False):
+        for other_case_id, distance in zip(ids, distances):
             if other_case_id == case_id:
                 continue
             score = max(0.0, 1.0 - float(distance))

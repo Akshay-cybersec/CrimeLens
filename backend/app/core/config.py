@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,6 +17,7 @@ class Settings(BaseSettings):
 
     redis_url: str = "redis://localhost:6379/0"
     redis_enabled: bool = True
+    memory_cache_max_items: int = 1000
 
     jwt_secret_key: str = Field(default="change-me", min_length=16)
     jwt_algorithm: str = "HS256"
@@ -38,8 +39,6 @@ class Settings(BaseSettings):
 
     max_upload_size_mb: int = 50
     rate_limit_per_minute: int = 120
-    insight_cache_ttl_seconds: int = 600
-    insight_regenerate_cooldown_seconds: int = 60
     behavior_cache_ttl_seconds: int = 600
     insight_cache_ttl_seconds: int = 600
     insight_regenerate_cooldown_seconds: int = 60
@@ -47,6 +46,19 @@ class Settings(BaseSettings):
     super_admin_email: str = "superadmin@crimelens.local"
     super_admin_password: str = "change-super-admin-password"
     super_admin_full_name: str = "Super Admin"
+
+    @field_validator("debug", mode="before")
+    @classmethod
+    def parse_debug(cls, value: object) -> bool:
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if normalized in {"1", "true", "yes", "on", "dev", "debug", "local"}:
+                return True
+            if normalized in {"0", "false", "no", "off", "prod", "production", "release", "staging"}:
+                return False
+        return bool(value)
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { 
   FolderPlus, 
   Upload, 
@@ -16,7 +16,6 @@ import {
   ChevronRight,
   ArrowLeft
 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
 import { caseService } from '@/services/caseService';
 import { insightService } from '@/services/insightService';
 import type { EvidenceResponse, InsightResponse, SimilarCaseResponse, TimelineResponse } from '@/types/api';
@@ -50,11 +49,66 @@ const FLOW_STEPS: FlowStep[] = [
 
 export default function ForensicsDashboard() {
   const [activeStep, setActiveStep] = useState<string>('dashboard');
+  const [caseId, setCaseId] = useState<string>('');
+  const [insights, setInsights] = useState<InsightResponse[]>([]);
+  const [timeline, setTimeline] = useState<TimelineResponse | null>(null);
+  const [similarCases, setSimilarCases] = useState<SimilarCaseResponse[]>([]);
+  const [evidence, setEvidence] = useState<EvidenceResponse | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const fromQuery = searchParams.get('case_id');
+    const fromStorage = typeof window !== 'undefined' ? localStorage.getItem('active_case_id') : null;
+    const nextCaseId = fromQuery || fromStorage || '';
+    if (nextCaseId) {
+      setCaseId(nextCaseId);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('active_case_id', nextCaseId);
+      }
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!caseId) {
+      return;
+    }
+
+    const loadData = async () => {
+      try {
+        const [insightData, timelineData, similarData, evidenceData] = await Promise.all([
+          insightService.getCaseInsights(caseId),
+          caseService.getTimeline(caseId),
+          caseService.getSimilarCases(caseId),
+          caseService.getEvidence(caseId),
+        ]);
+        setInsights(insightData);
+        setTimeline(timelineData);
+        setSimilarCases(similarData);
+        setEvidence(evidenceData);
+      } catch {
+        setInsights([]);
+        setTimeline(null);
+        setSimilarCases([]);
+        setEvidence(null);
+      }
+    };
+
+    void loadData();
+  }, [caseId]);
 
   // Route back to the absolute homepage of your application
   const handleBackToHome = () => {
     router.push('/'); // Update this path if your homepage sits at a different route
+  };
+
+  const handleUploadComplete = (nextCaseId: string) => {
+    setCaseId(nextCaseId);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('active_case_id', nextCaseId);
+    }
+    router.replace(`/dashboard?case_id=${nextCaseId}`);
+    setActiveStep('analyze');
   };
 
   // Dynamic content renderer based on active sidebar tab
@@ -62,12 +116,12 @@ export default function ForensicsDashboard() {
     switch (activeStep) {
       case 'dashboard': return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} />;
       case 'create': return <CreateCaseView />;
-      case 'upload': return <UploadDataView />;
+      case 'upload': return <UploadDataView onUploadComplete={handleUploadComplete} />;
       case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
-      case 'analyze': return <AIAnalysisView similarCases={similarCases} />;
+      case 'analyze': return <AIAnalysisView similarCases={similarCases} timeline={timeline} />;
       case 'evidence': return <ReviewEvidenceView evidence={evidence} />;
       case 'export': return <ExportReportView />;
-      default: return <IntelligenceDashboardView />;
+      default: return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} />;
     }
   };
 

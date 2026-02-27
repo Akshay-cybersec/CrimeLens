@@ -15,7 +15,7 @@ class ClusterRepository(BaseRepository):
             return []
         docs = [item.model_dump(by_alias=True, exclude_none=True) for item in clusters]
         result = await self.collection.insert_many(docs)
-        for cluster, cluster_id in zip(clusters, result.inserted_ids, strict=False):
+        for cluster, cluster_id in zip(clusters, result.inserted_ids):
             cluster.id = cluster_id
         return clusters
 

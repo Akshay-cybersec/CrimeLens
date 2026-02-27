@@ -53,7 +53,11 @@ class CaseService:
         )
         created_case = await self.case_repo.create(case_doc)
 
-        events = await self.parser_service.parse_pdf_events(created_case.id, file_bytes)
+        events = await self.parser_service.parse_events(
+            case_id=created_case.id,
+            file_bytes=file_bytes,
+            filename=file.filename,
+        )
         inserted = await self.event_repo.insert_many(events)
 
         await self.redis_service.enqueue_case_job(str(created_case.id))

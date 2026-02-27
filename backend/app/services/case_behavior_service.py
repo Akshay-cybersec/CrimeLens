@@ -221,7 +221,14 @@ class CaseBehaviorService:
         if not query_embedding:
             return []
 
-        rows = await self.vector_store.query_case_embeddings(query_vector=query_embedding, n_results=top_k + 1)
+        try:
+            rows = await self.vector_store.query_case_embeddings(query_vector=query_embedding, n_results=top_k + 1)
+        except Exception as exc:
+            logger.warning(
+                "similar_cases_query_failed",
+                extra={"case_id": case_id, "error": str(exc)},
+            )
+            return []
         target_summary = indexed.behavioral_summary
         results: list[SimilarCaseResponse] = []
         for row in rows:
@@ -302,20 +309,27 @@ class CaseBehaviorService:
         }
 
     async def _similarity_explanation(self, target_summary: str, similar_summary: str) -> tuple[str, list[str]]:
-        llm_result = await self.llm_service.structured_json(
-            task_prompt=(
-                "Compare the following two behavioral summaries and explain why they are similar.\n"
-                f"Target summary: {target_summary}\n"
-                f"Candidate summary: {similar_summary}\n"
-                "Return JSON with similarity_explanation and shared_behavioral_signals."
-            ),
-            schema_hint={
-                "similarity_explanation": "string",
-                "shared_behavioral_signals": "array of strings",
-            },
-            system_prompt=SIMILARITY_SYSTEM_PROMPT,
-            temperature=min(0.2, self.settings.deepinfra_temperature),
-        )
+        try:
+            llm_result = await self.llm_service.structured_json(
+                task_prompt=(
+                    "Compare the following two behavioral summaries and explain why they are similar.\n"
+                    f"Target summary: {target_summary}\n"
+                    f"Candidate summary: {similar_summary}\n"
+                    "Return JSON with similarity_explanation and shared_behavioral_signals."
+                ),
+                schema_hint={
+                    "similarity_explanation": "string",
+                    "shared_behavioral_signals": "array of strings",
+                },
+                system_prompt=SIMILARITY_SYSTEM_PROMPT,
+                temperature=min(0.2, self.settings.deepinfra_temperature),
+            )
+        except Exception as exc:
+            logger.warning("similarity_explanation_failed", extra={"error": str(exc)})
+            return (
+                "Similar due to overlapping communication, location, and device behavior patterns.",
+                [],
+            )
         explanation = str(
             llm_result.get(
                 "similarity_explanation",
