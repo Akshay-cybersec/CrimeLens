@@ -38,6 +38,41 @@ export type TimelineEvent = {
   is_deleted: boolean;
 };
 
+export type CaseListItem = {
+  case_id: string;
+  title: string;
+  description?: string | null;
+  source_filename: string;
+  owner_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type CaseOverview = {
+  case_id: string;
+  title: string;
+  description?: string | null;
+  source_filename: string;
+  owner_id: string;
+  assigned_user_ids: string[];
+  created_at: string;
+  updated_at: string;
+  total_events: number;
+  event_types: Record<string, number>;
+  latest_events: TimelineEvent[];
+};
+
+export type DashboardMetrics = {
+  total_cases: number;
+  cases_with_insights: number;
+  active_cases: number;
+  flagged_clusters: number;
+  total_artifacts: number;
+  flagged_messages: number;
+  media_files: number;
+  location_pins: number;
+};
+
 export type TimelineResponse = {
   case_id: string;
   time_range: {

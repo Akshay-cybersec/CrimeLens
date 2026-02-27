@@ -22,6 +22,7 @@ from app.schemas.analysis import (
     SimilarCaseResponse,
 )
 from app.schemas.case import CaseCreateResponse, TimelineResponse
+from app.schemas.case import CaseListItemResponse, CaseOverviewResponse, DashboardMetricsResponse
 from app.services.background_worker import BackgroundWorkerService
 from app.services.case_behavior_service import CaseBehaviorService
 from app.services.case_service import CaseService
@@ -57,6 +58,32 @@ async def behavioral_index(
 ) -> BehavioralIndexResponse:
     await case_service.authorize_case_access(case_id, user)
     return await behavior_service.index_case_behavior(case_id)
+
+
+@router.get("", response_model=list[CaseListItemResponse])
+async def list_cases(
+    limit: int = Query(default=100, ge=1, le=500),
+    user: AuthUser = Depends(get_current_user),
+    case_service: CaseService = Depends(get_case_service),
+) -> list[CaseListItemResponse]:
+    return await case_service.list_cases_for_user(user, limit=limit)
+
+
+@router.get("/{case_id}/overview", response_model=CaseOverviewResponse)
+async def case_overview(
+    case_id: str,
+    user: AuthUser = Depends(get_current_user),
+    case_service: CaseService = Depends(get_case_service),
+) -> CaseOverviewResponse:
+    return await case_service.get_case_overview(case_id, user)
+
+
+@router.get("/dashboard/metrics", response_model=DashboardMetricsResponse)
+async def dashboard_metrics(
+    user: AuthUser = Depends(get_current_user),
+    case_service: CaseService = Depends(get_case_service),
+) -> DashboardMetricsResponse:
+    return await case_service.get_dashboard_metrics()
 
 
 @router.get("/{case_id}/timeline", response_model=TimelineResponse)

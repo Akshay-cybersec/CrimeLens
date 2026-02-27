@@ -1,5 +1,8 @@
 import api from '@/lib/api';
 import type {
+  CaseListItem,
+  CaseOverview,
+  DashboardMetrics,
   EvidenceResponse,
   SearchResponse,
   SimilarCaseResponse,
@@ -27,6 +30,21 @@ export const caseService = {
 
   async getTimeline(caseId: string): Promise<TimelineResponse> {
     const { data } = await api.get<TimelineResponse>(`/cases/${caseId}/timeline`);
+    return data;
+  },
+
+  async listCases(limit = 100): Promise<CaseListItem[]> {
+    const { data } = await api.get<CaseListItem[]>(`/cases`, { params: { limit } });
+    return data;
+  },
+
+  async getCaseOverview(caseId: string): Promise<CaseOverview> {
+    const { data } = await api.get<CaseOverview>(`/cases/${caseId}/overview`);
+    return data;
+  },
+
+  async getDashboardMetrics(): Promise<DashboardMetrics> {
+    const { data } = await api.get<DashboardMetrics>(`/cases/dashboard/metrics`);
     return data;
   },
 
