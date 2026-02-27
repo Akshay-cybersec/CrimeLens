@@ -125,3 +125,34 @@ export type SearchResponse = {
   matching_events: TimelineEvent[];
   explanation: string;
 };
+
+export type GraphNode = {
+  id: string;
+  label: string;
+  node_type: string;
+  score: number;
+};
+
+export type GraphEdge = {
+  source: string;
+  target: string;
+  relation: string;
+  weight: number;
+  evidence_event_ids: string[];
+};
+
+export type HiddenCluster = {
+  persons: string[];
+  shared_points: string[];
+  interaction_count: number;
+  message: string;
+};
+
+export type ConnectionGraphResponse = {
+  case_id: string;
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  indirect_paths: string[][];
+  hidden_clusters: HiddenCluster[];
+  highlights: string[];
+};

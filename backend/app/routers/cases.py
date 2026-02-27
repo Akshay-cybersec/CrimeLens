@@ -9,6 +9,7 @@ from app.core.deps import (
     get_case_behavior_service,
     get_case_service,
     get_evidence_service,
+    get_graph_link_service,
     get_search_service,
     get_similar_case_service,
     get_timeline_service,
@@ -16,6 +17,7 @@ from app.core.deps import (
 from app.core.security import AuthUser, get_current_user, require_roles
 from app.schemas.analysis import (
     BehavioralIndexResponse,
+    ConnectionGraphResponse,
     EvidenceAnalysisResponse,
     SearchRequest,
     SearchResponse,
@@ -27,6 +29,7 @@ from app.services.background_worker import BackgroundWorkerService
 from app.services.case_behavior_service import CaseBehaviorService
 from app.services.case_service import CaseService
 from app.services.evidence_service import EvidenceService
+from app.services.graph_link_service import GraphLinkService
 from app.services.search_service import SearchService
 from app.services.similar_case_service import SimilarCaseService
 from app.services.timeline_service import TimelineService
@@ -108,6 +111,17 @@ async def evidence_analysis(
 ) -> EvidenceAnalysisResponse:
     await case_service.authorize_case_access(case_id, user)
     return await evidence_service.analyze(case_id)
+
+
+@router.get("/{case_id}/connection-graph", response_model=ConnectionGraphResponse)
+async def connection_graph(
+    case_id: str,
+    user: AuthUser = Depends(get_current_user),
+    case_service: CaseService = Depends(get_case_service),
+    graph_link_service: GraphLinkService = Depends(get_graph_link_service),
+) -> ConnectionGraphResponse:
+    await case_service.authorize_case_access(case_id, user)
+    return await graph_link_service.build_connection_graph(case_id)
 
 
 @router.post("/{case_id}/search", response_model=SearchResponse)

@@ -2,6 +2,7 @@ import api from '@/lib/api';
 import type {
   CaseListItem,
   CaseOverview,
+  ConnectionGraphResponse,
   DashboardMetrics,
   EvidenceResponse,
   SearchResponse,
@@ -50,6 +51,11 @@ export const caseService = {
 
   async getEvidence(caseId: string): Promise<EvidenceResponse> {
     const { data } = await api.get<EvidenceResponse>(`/cases/${caseId}/evidence-analysis`);
+    return data;
+  },
+
+  async getConnectionGraph(caseId: string): Promise<ConnectionGraphResponse> {
+    const { data } = await api.get<ConnectionGraphResponse>(`/cases/${caseId}/connection-graph`);
     return data;
   },
 
