@@ -354,9 +354,12 @@ export default function CrimeLensHome() {
               {/* --- UPDATED FORM ONSUBMIT --- */}
               <form className="space-y-5" onSubmit={(e) => {
                 e.preventDefault();
-                setIsLoggedIn(true);
                 setIsAuthModalOpen(false);
-                router.push('/dashboard'); // Route directly on successful login
+                if (authMode === 'login') {
+                  router.push('/login');
+                } else {
+                  router.push('/signup');
+                }
               }}>
                 <div>
                   <label className="block text-xs font-mono text-[#7B8794] mb-2 uppercase tracking-wider">Badge / Email ID</label>

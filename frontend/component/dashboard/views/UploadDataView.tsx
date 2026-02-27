@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, AlertTriangle, FileBox, X, CheckCircle2 } from 'lucide-react';
 import { caseService } from '@/services/caseService';
+import { toastError, toastSuccess } from '@/lib/toast';
 
 type Props = {
   onUploadComplete?: (caseId: string) => void;
@@ -91,7 +92,7 @@ export default function UploadDataView({ onUploadComplete }: Props) {
       }
 
       setTimeout(() => {
-        alert("File successfully ingested into Nexus DB.");
+        toastSuccess('File successfully ingested into Nexus DB.');
         setSelectedFile(null);
         setIsUploading(false);
         setUploadProgress(0);
@@ -100,7 +101,7 @@ export default function UploadDataView({ onUploadComplete }: Props) {
     } catch {
       setIsUploading(false);
       setUploadProgress(0);
-      alert('Upload failed. Please verify UFDR file and try again.');
+      toastError('Upload failed. Please verify UFDR file and try again.');
     }
   };
 

@@ -1,35 +1,34 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
 import Link from 'next/link';
+import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useAuth } from '@/context/AuthContext';
+import { authService } from '@/services/authService';
+import { toastError, toastSuccess } from '@/lib/toast';
 
-function LoginView() {
+export default function SignupPage() {
   const router = useRouter();
-  const { login } = useAuth();
-
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    setError(null);
     setLoading(true);
-
+    setMessage(null);
     try {
-      await login(email.trim(), password);
-      const role = typeof window !== 'undefined' ? localStorage.getItem('auth_role') : null;
-      if (role === 'SUPER_ADMIN') {
-        router.push('/admin/approvals');
-      } else {
-        router.push('/dashboard');
-      }
+      const res = await authService.signup(email.trim(), password, fullName.trim());
+      setMessage(res.message);
+      toastSuccess(res.message);
+      setTimeout(() => {
+        router.push('/login');
+      }, 1200);
     } catch {
-      setError('Invalid credentials or account not approved.');
+      toastError('Signup failed. Email may already be registered.');
+      setMessage('Signup failed. Email may already be registered.');
     } finally {
       setLoading(false);
     }
@@ -37,9 +36,20 @@ function LoginView() {
 
   return (
     <main className="mx-auto max-w-md px-6 py-12">
-      <h1 className="mb-6 text-2xl font-semibold">Login</h1>
+      <h1 className="mb-6 text-2xl font-semibold">Sign Up</h1>
       <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border p-4">
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {message && <p className="text-sm text-slate-700">{message}</p>}
+        <div>
+          <label className="mb-1 block text-sm">Full Name</label>
+          <input
+            className="w-full rounded border px-3 py-2"
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+            minLength={2}
+          />
+        </div>
         <div>
           <label className="mb-1 block text-sm">Email</label>
           <input
@@ -58,6 +68,7 @@ function LoginView() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={8}
           />
         </div>
         <button
@@ -65,19 +76,15 @@ function LoginView() {
           disabled={loading}
           className="rounded bg-slate-900 px-4 py-2 text-white disabled:opacity-60"
         >
-          {loading ? 'Logging in...' : 'Login'}
+          {loading ? 'Submitting...' : 'Submit for Approval'}
         </button>
         <p className="text-sm text-slate-600">
-          No account?{' '}
-          <Link href="/signup" className="text-blue-600 hover:underline">
-            Sign up for approval
+          Already registered?{' '}
+          <Link href="/login" className="text-blue-600 hover:underline">
+            Login
           </Link>
         </p>
       </form>
     </main>
   );
-}
-
-export default function LoginPage() {
-  return <LoginView />;
 }

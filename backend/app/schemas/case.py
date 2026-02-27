@@ -25,11 +25,6 @@ class TimelineResponse(BaseModel):
     timeline: list[EventResponse]
 
 
-class UploadCaseForm(BaseModel):
-    title: str = Field(min_length=3, max_length=200)
-    description: Optional[str] = None
-
-
 class CaseListItemResponse(BaseModel):
     case_id: str
     title: str
