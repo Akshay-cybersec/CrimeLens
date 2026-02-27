@@ -1,25 +1,49 @@
 'use client';
 
-import React, { useState } from 'react';
-import {
-  FolderPlus,
-  Upload,
-  Database,
-  Cpu,
-  LayoutDashboard,
-  Search,
-  FileText,
-  Archive,
-  Bell,
-  Settings,
-  User,
-  ChevronRight,
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Added Next.js router
 
-type FlowStep = {
-  id: string;
-  label: string;
-  icon: React.ElementType;
+// --- CUSTOM CSS FOR ANIMATIONS (Injected to keep it single-file) ---
+const CustomStyles = () => (
+  <style dangerouslySetInnerHTML={{__html: `
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    @keyframes gradientX {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-gradient-x { background-size: 200% 200%; animation: gradientX 5s ease infinite; }
+    .scanlines {
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+      background-size: 100% 4px;
+      position: absolute; inset: 0; pointer-events: none; z-index: 20; opacity: 0.3;
+    }
+    @keyframes progress {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+  `}} />
+);
+
+// --- ICON COMPONENTS ---
+const Icons = {
+  Shield: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>,
+  Clock: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>,
+  Network: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg>,
+  Activity: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>,
+  Devices: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>,
+  Target: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>,
+  X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 };
 
 const FLOW_STEPS: FlowStep[] = [
@@ -33,8 +57,44 @@ const FLOW_STEPS: FlowStep[] = [
   { id: 'close', label: 'Close Case', icon: Archive },
 ];
 
-export default function ForensicsDashboard() {
-  const [activeStep, setActiveStep] = useState<string>('dashboard');
+// --- MAIN PAGE COMPONENT ---
+export default function CrimeLensHome() {
+  const router = useRouter(); // Initialize Next.js router
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
+  // New state for timeline feature
+  const [activeFeature, setActiveFeature] = useState(0);
+
+  // Handle Dynamic Cursor Flow
+  useEffect(() => {
+    const updateMousePosition = (ev: MouseEvent) => {
+      setMousePosition({ x: ev.clientX, y: ev.clientY });
+    };
+    window.addEventListener('mousemove', updateMousePosition);
+    return () => window.removeEventListener('mousemove', updateMousePosition);
+  }, []);
+
+  // Auto-advance timeline (1 second interval)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveFeature((prev) => (prev + 1) % featuresData.length);
+    }, 1000); // 1000ms = 1 second
+    
+    return () => clearInterval(timer);
+  }, []);
+
+  // --- UPDATED NAVIGATION LOGIC ---
+  const handleDashboardClick = () => {
+    if (!isLoggedIn) {
+      setIsAuthModalOpen(true);
+    } else {
+      // Routes to the dashboard page
+      router.push('/dashboard'); 
+    }
+  };
 
   return (
     <div className="flex h-screen w-full bg-slate-50 text-slate-900 font-sans">
@@ -172,14 +232,50 @@ function IntelligenceDashboardView() {
                 <span className="text-sm font-semibold text-red-800">High Risk Keyword Match</span>
                 <span className="text-xs font-mono text-red-600 bg-red-100 px-2 py-1 rounded">Score: 98%</span>
               </div>
-              <p className="text-sm text-red-700 mt-2">
-                Suspicious communication patterns detected across WhatsApp and Telegram regarding external file transfers.
-              </p>
-            </div>
-            <div className="p-4 bg-amber-50 border border-amber-100 rounded-lg">
-              <div className="flex justify-between items-start">
-                <span className="text-sm font-semibold text-amber-800">Anomalous Location Data</span>
-                <span className="text-xs font-mono text-amber-600 bg-amber-100 px-2 py-1 rounded">Score: 82%</span>
+
+              {/* --- UPDATED FORM ONSUBMIT --- */}
+              <form className="space-y-5" onSubmit={(e) => {
+                e.preventDefault();
+                setIsLoggedIn(true);
+                setIsAuthModalOpen(false);
+                router.push('/dashboard'); // Route directly on successful login
+              }}>
+                <div>
+                  <label className="block text-xs font-mono text-[#7B8794] mb-2 uppercase tracking-wider">Badge / Email ID</label>
+                  <input 
+                    type="email" 
+                    required
+                    className="w-full bg-[#0B0F14] border border-[#1F2A36] rounded-lg px-4 py-3 text-[#E6EDF3] focus:outline-none focus:border-[#00C2FF] focus:ring-1 focus:ring-[#00C2FF] transition-all placeholder:text-[#4A5568]"
+                    placeholder="agent@agency.gov"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-mono text-[#7B8794] mb-2 uppercase tracking-wider">Clearance Password</label>
+                  <input 
+                    type="password" 
+                    required
+                    className="w-full bg-[#0B0F14] border border-[#1F2A36] rounded-lg px-4 py-3 text-[#E6EDF3] focus:outline-none focus:border-[#00C2FF] focus:ring-1 focus:ring-[#00C2FF] transition-all placeholder:text-[#4A5568]"
+                    placeholder="••••••••"
+                  />
+                </div>
+
+                <button 
+                  type="submit"
+                  className="w-full bg-[#00C2FF] text-[#0B0F14] font-bold py-3 rounded-lg hover:bg-[#00C2FF] hover:shadow-[0_0_20px_rgba(0,194,255,0.4)] hover:-translate-y-0.5 transition-all mt-4 duration-300"
+                >
+                  {authMode === 'login' ? 'Authenticate' : 'Request Access'}
+                </button>
+              </form>
+
+              {/* Toggle Mode */}
+              <div className="mt-8 text-center text-sm text-[#7B8794]">
+                {authMode === 'login' ? "Don't have clearance? " : "Already registered? "}
+                <button 
+                  onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
+                  className="text-[#00C2FF] hover:text-[#E6EDF3] font-medium transition-colors hover:underline underline-offset-4"
+                >
+                  {authMode === 'login' ? 'Submit request here' : 'Login here'}
+                </button>
               </div>
               <p className="text-sm text-amber-700 mt-2">
                 Device GPS coordinates contradict cellular tower logs between 02:00 and 04:00 AM.
