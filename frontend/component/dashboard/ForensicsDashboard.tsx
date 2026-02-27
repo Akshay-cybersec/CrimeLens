@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   FolderPlus, 
   Upload, 
@@ -15,6 +15,10 @@ import {
   User,
   ChevronRight
 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { caseService } from '@/services/caseService';
+import { insightService } from '@/services/insightService';
+import type { EvidenceResponse, InsightResponse, SimilarCaseResponse, TimelineResponse } from '@/types/api';
 
 // --- Import separated view components ---
 // Ensure these files exist in the './views/' directory relative to this file
@@ -47,19 +51,65 @@ const FLOW_STEPS: FlowStep[] = [
 
 export default function ForensicsDashboard() {
   const [activeStep, setActiveStep] = useState<string>('dashboard');
+  const [caseId, setCaseId] = useState<string>('');
+  const [insights, setInsights] = useState<InsightResponse[]>([]);
+  const [timeline, setTimeline] = useState<TimelineResponse | null>(null);
+  const [similarCases, setSimilarCases] = useState<SimilarCaseResponse[]>([]);
+  const [evidence, setEvidence] = useState<EvidenceResponse | null>(null);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const fromQuery = searchParams.get('case_id');
+    const fromStorage = typeof window !== 'undefined' ? localStorage.getItem('active_case_id') : null;
+    const nextCaseId = fromQuery || fromStorage || '';
+    if (nextCaseId) {
+      setCaseId(nextCaseId);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('active_case_id', nextCaseId);
+      }
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!caseId) {
+      return;
+    }
+
+    const loadData = async () => {
+      try {
+        const [insightData, timelineData, similarData, evidenceData] = await Promise.all([
+          insightService.getCaseInsights(caseId),
+          caseService.getTimeline(caseId),
+          caseService.getSimilarCases(caseId),
+          caseService.getEvidence(caseId),
+        ]);
+        setInsights(insightData);
+        setTimeline(timelineData);
+        setSimilarCases(similarData);
+        setEvidence(evidenceData);
+      } catch {
+        setInsights([]);
+        setTimeline(null);
+        setSimilarCases([]);
+        setEvidence(null);
+      }
+    };
+
+    void loadData();
+  }, [caseId]);
 
   // Dynamic content renderer based on active sidebar tab
   const renderActiveView = () => {
     switch (activeStep) {
-      case 'dashboard': return <IntelligenceDashboardView />;
+      case 'dashboard': return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} />;
       case 'create': return <CreateCaseView />;
       case 'upload': return <UploadDataView />;
-      case 'parse': return <ParsedDataView />;
-      case 'analyze': return <AIAnalysisView />;
-      case 'evidence': return <ReviewEvidenceView />;
+      case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
+      case 'analyze': return <AIAnalysisView similarCases={similarCases} />;
+      case 'evidence': return <ReviewEvidenceView evidence={evidence} />;
       case 'export': return <ExportReportView />;
   
-      default: return <IntelligenceDashboardView />;
+      default: return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} />;
     }
   };
 

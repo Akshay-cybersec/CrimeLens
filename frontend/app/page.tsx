@@ -46,15 +46,38 @@ const Icons = {
   X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 };
 
-const FLOW_STEPS: FlowStep[] = [
-  { id: 'create', label: 'Create Case', icon: FolderPlus },
-  { id: 'upload', label: 'Upload UFDR Data', icon: Upload },
-  { id: 'parse', label: 'View Parsed Data', icon: Database },
-  { id: 'analyze', label: 'Run AI Analysis', icon: Cpu },
-  { id: 'dashboard', label: 'Intelligence Dashboard', icon: LayoutDashboard },
-  { id: 'evidence', label: 'Review Evidence', icon: Search },
-  { id: 'export', label: 'Export Report', icon: FileText },
-  { id: 'close', label: 'Close Case', icon: Archive },
+// --- DATA ---
+const featuresData = [
+  {
+    title: "Digital Timeline Reconstructor 3D",
+    description: "Merges data from call logs, messages, and locations. Creates an interactive hour-by-hour timeline revealing suspicious data deletion gaps.",
+    icon: Icons.Clock,
+    tech: "Parse UFDR JSON/XML → Timeline graph",
+  },
+  {
+    title: "Social Network Graph Analyzer",
+    description: "Maps relationships to identify hidden connections and key figures. Includes 'Burner Phone Detector' to break false alibis.",
+    icon: Icons.Network,
+    tech: "NetworkX + D3.js visualization",
+  },
+  {
+    title: "Behavioral Anomaly Detection Engine",
+    description: "Learns a suspect's 'normal' patterns (sleep, app usage) and uses ML to flag 'out of character' actions during the crime period.",
+    icon: Icons.Activity,
+    tech: "Isolation Forest ML algorithm",
+  },
+  {
+    title: "Multi-Device Correlation Matrix",
+    description: "Cross-references data from phones, laptops, and smartwatches to catch sophisticated cover-ups and confirm timelines.",
+    icon: Icons.Devices,
+    tech: "Cross-device data triangulation",
+  },
+  {
+    title: "Intelligent Evidence Prioritizer",
+    description: "Auto-ranks evidence by importance using ML. Highlights 'smoking gun' data to save 100+ hours of manual UFDR report reading.",
+    icon: Icons.Target,
+    tech: "NLP + Custom Scoring Algorithm",
+  }
 ];
 
 // --- MAIN PAGE COMPONENT ---
@@ -97,140 +120,235 @@ export default function CrimeLensHome() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-slate-50 text-slate-900 font-sans">
-      <aside className="w-72 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-10">
-        <div className="p-6 flex items-center gap-3 border-b border-slate-800">
-          <div className="bg-blue-600 p-2 rounded-lg">
-            <Search className="w-6 h-6 text-white" />
-          </div>
-          <h1 className="text-xl font-bold text-white tracking-wide">
-            Nexus<span className="text-blue-500">Intel</span>
-          </h1>
-        </div>
+    <div className="min-h-screen bg-[#0B0F14] text-[#E6EDF3] font-sans selection:bg-[#00C2FF] selection:text-[#0B0F14] relative overflow-hidden">
+      <CustomStyles />
+      
+      {/* Dynamic Cursor Glow Effect */}
+      <div 
+        className="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300 ease-in-out"
+        style={{
+          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 194, 255, 0.04), transparent 80%)`
+        }}
+      />
 
-        <div className="px-4 py-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-          Case Workflow
-        </div>
-
-        <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
-          {FLOW_STEPS.map((step, index) => {
-            const Icon = step.icon;
-            const isActive = activeStep === step.id;
-
-            return (
-              <button
-                key={step.id}
-                onClick={() => setActiveStep(step.id)}
-                className={`w-full flex items-center justify-between px-3 py-3 rounded-md transition-all duration-200 ${
-                  isActive
-                    ? 'bg-blue-600/10 text-blue-400 border-l-4 border-blue-500'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border-l-4 border-transparent'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-blue-500' : 'text-slate-500'}`} />
-                  <span className="font-medium text-sm">{step.label}</span>
-                </div>
-                {index < FLOW_STEPS.length - 1 && (
-                  <div className="w-1 h-4 border-r border-slate-700 absolute left-8 mt-10 hidden lg:block" />
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        <div className="p-4 border-t border-slate-800 text-sm">
-          <div className="flex items-center gap-3 text-slate-400 hover:text-white cursor-pointer transition-colors">
-            <Settings className="w-5 h-5" />
-            <span>System Settings</span>
-          </div>
-        </div>
-      </aside>
-
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <span>Active Case</span>
-            <ChevronRight className="w-4 h-4" />
-            <span className="font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">CASE-2026-0042</span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button className="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border border-white" />
-            </button>
-            <div className="w-px h-6 bg-slate-200" />
-            <div className="flex items-center gap-3 cursor-pointer">
-              <div className="text-right hidden md:block">
-                <p className="text-sm font-semibold text-slate-700">Lead Investigator</p>
-                <p className="text-xs text-slate-500">Admin</p>
+      {/* --- NAVBAR --- */}
+      <nav className="fixed top-0 z-40 w-full bg-[#121821]/80 backdrop-blur-xl border-b border-[#1F2A36] transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center gap-2 group cursor-pointer animate-fade-in-up" style={{ animationDelay: '0s' }}>
+              <div className="text-[#00C2FF] group-hover:drop-shadow-[0_0_8px_rgba(0,194,255,0.8)] transition-all duration-300">
+                <Icons.Shield />
               </div>
-              <div className="bg-slate-200 p-2 rounded-full">
-                <User className="w-5 h-5 text-slate-600" />
-              </div>
+              <span className="text-xl font-bold tracking-wider">CRIME<span className="text-[#00C2FF] drop-shadow-[0_0_5px_rgba(0,194,255,0.4)]">LENS</span></span>
+            </div>
+            
+            <div className="flex items-center gap-5 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+              {!isLoggedIn ? (
+                <>
+                  <button 
+                    onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); }}
+                    className="text-[#7B8794] hover:text-[#E6EDF3] transition-colors text-sm font-medium relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-[#00C2FF] after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
+                  >
+                    Operator Login
+                  </button>
+                  <button 
+                    onClick={handleDashboardClick}
+                    className="relative overflow-hidden group bg-[#00C2FF]/5 border border-[#00C2FF]/50 px-5 py-2 rounded-md text-sm font-semibold text-[#00C2FF] transition-all hover:border-[#00C2FF] hover:shadow-[0_0_15px_rgba(0,194,255,0.25)]"
+                  >
+                    <span className="relative z-10 group-hover:text-[#E6EDF3] transition-colors duration-300">Access Dashboard</span>
+                    <div className="absolute inset-0 bg-[#00C2FF] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out z-0" />
+                  </button>
+                </>
+              ) : (
+                <button 
+                  onClick={handleDashboardClick}
+                  className="bg-[#00C2FF] text-[#0B0F14] px-5 py-2 rounded-md text-sm font-bold hover:shadow-[0_0_15px_rgba(0,194,255,0.4)] hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  Enter Terminal
+                </button>
+              )}
             </div>
           </div>
-        </header>
+        </div>
+      </nav>
 
-        <div className="flex-1 overflow-auto p-8 bg-slate-50">
-          <div className="max-w-7xl mx-auto">
-            {activeStep === 'dashboard' ? (
-              <IntelligenceDashboardView />
-            ) : (
-              <div className="flex flex-col items-center justify-center h-[60vh] text-slate-400">
-                {React.createElement(FLOW_STEPS.find((s) => s.id === activeStep)?.icon || Database, {
-                  className: 'w-16 h-16 mb-4 text-slate-300',
+      {/* --- HERO SECTION --- */}
+      <section className="relative min-h-[90vh] flex items-center justify-center pt-20 overflow-hidden">
+        {/* Background Gradients & Grid */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#121821_0%,_#0B0F14_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1F2A36_1px,transparent_1px),linear-gradient(to_bottom,#1F2A36_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-10" />
+        <div className="scanlines" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-float">
+          <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-[#161D26]/80 backdrop-blur-sm border border-[#00C2FF]/30 text-[#00C2FF] text-xs font-mono uppercase tracking-widest shadow-[0_0_15px_rgba(0,194,255,0.1)] animate-fade-in-up" style={{ opacity: 0, animationDelay: '0.2s' }}>
+            <span className="w-2 h-2 rounded-full bg-[#00C2FF] animate-pulse" />
+            Next-Gen UFDR Analytics Engine
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6 animate-fade-in-up" style={{ opacity: 0, animationDelay: '0.3s' }}>
+            Uncover the Truth with <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C2FF] via-[#22C55E] to-[#00C2FF] animate-gradient-x drop-shadow-[0_0_20px_rgba(0,194,255,0.2)]">
+              AI Forensics
+            </span>
+          </h1>
+          
+          <p className="max-w-2xl mx-auto text-[#7B8794] text-lg md:text-xl mb-10 leading-relaxed animate-fade-in-up" style={{ opacity: 0, animationDelay: '0.4s' }}>
+            Process massive UFDR extraction reports in seconds. Reconstruct timelines, map criminal networks, and find the smoking gun before the trail goes cold.
+          </p>
+          
+          <div className="flex justify-center gap-4 animate-fade-in-up" style={{ opacity: 0, animationDelay: '0.5s' }}>
+            <button 
+              onClick={handleDashboardClick}
+              className="group relative bg-[#00C2FF] text-[#0B0F14] px-8 py-4 rounded-md font-bold text-lg overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(0,194,255,0.3)] hover:-translate-y-1"
+            >
+              <div className="absolute inset-0 w-full h-full bg-white/20 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] skew-x-12" />
+              <style dangerouslySetInnerHTML={{__html: `@keyframes shimmer { 100% { transform: translateX(200%); } }`}} />
+              Start Investigation
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* --- FEATURES SECTION (Animated Timeline) --- */}
+      <section className="py-24 bg-[#0B0F14] relative border-t border-[#1F2A36]/50">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-[#00C2FF]/30 to-transparent" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#E6EDF3]">Core Capabilities</h2>
+            <p className="text-[#7B8794] max-w-2xl mx-auto text-lg">Real-time UFDR extraction tracking and analysis matrix.</p>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-12 items-center lg:items-stretch">
+            
+            {/* Left Column: Timeline Navigation */}
+            <div className="w-full lg:w-1/3 relative flex flex-col justify-between">
+              {/* Vertical Line */}
+              <div className="absolute left-[15px] top-4 bottom-4 w-0.5 bg-[#1F2A36] z-0" />
+              
+              {featuresData.map((feature, idx) => {
+                const isActive = activeFeature === idx;
+                return (
+                  <div 
+                    key={idx}
+                    onClick={() => setActiveFeature(idx)}
+                    className={`relative z-10 pl-12 py-4 cursor-pointer transition-all duration-300 group ${isActive ? 'opacity-100' : 'opacity-50 hover:opacity-80'}`}
+                  >
+                    {/* Timeline Node */}
+                    <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-[32px] h-[32px] rounded-full border-2 flex items-center justify-center transition-all duration-500 bg-[#0B0F14]
+                      ${isActive ? 'border-[#00C2FF] shadow-[0_0_15px_rgba(0,194,255,0.4)]' : 'border-[#1F2A36] group-hover:border-[#00C2FF]/50'}`}
+                    >
+                      <div className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${isActive ? 'bg-[#00C2FF] scale-100' : 'bg-transparent scale-0'}`} />
+                    </div>
+                    
+                    <h3 className={`font-bold text-lg transition-colors duration-300 ${isActive ? 'text-[#00C2FF]' : 'text-[#E6EDF3]'}`}>
+                      {feature.title}
+                    </h3>
+                    
+                    {/* Active Progress Bar indicator (Visual cue for the 1s timer) */}
+                    {isActive && (
+                      <div className="absolute bottom-0 left-12 right-4 h-px bg-[#1F2A36] overflow-hidden">
+                        <div className="h-full bg-[#00C2FF] animate-[progress_1s_linear_infinite]" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Right Column: Active Feature Display Card */}
+            <div className="w-full lg:w-2/3 h-full relative perspective-1000">
+              <div className="bg-[#121821]/80 backdrop-blur-md border border-[#00C2FF]/30 rounded-2xl p-8 md:p-12 shadow-[0_0_40px_rgba(0,194,255,0.1)] relative overflow-hidden flex flex-col justify-center min-h-[350px] transition-all duration-500">
+                
+                {/* Cyber corner accents */}
+                <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-[#00C2FF]/50 rounded-tl-2xl" />
+                <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-[#00C2FF]/50 rounded-br-2xl" />
+                
+                {featuresData.map((feature, idx) => {
+                  const ActiveIcon = feature.icon;
+                  return (
+                    <div 
+                      key={idx} 
+                      className={`absolute inset-0 p-8 md:p-12 flex flex-col justify-center transition-all duration-500 ease-in-out
+                        ${activeFeature === idx ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-12 pointer-events-none'}`}
+                    >
+                      <div className="flex items-center gap-6 mb-6">
+                        <div className="w-16 h-16 bg-[#0B0F14] border border-[#00C2FF] rounded-xl flex items-center justify-center text-[#00C2FF] shadow-[0_0_20px_rgba(0,194,255,0.2)]">
+                          <ActiveIcon />
+                        </div>
+                        <h3 className="text-2xl md:text-3xl font-bold text-[#E6EDF3]">{feature.title}</h3>
+                      </div>
+                      
+                      <p className="text-[#7B8794] text-lg leading-relaxed mb-8 max-w-2xl">
+                        {feature.description}
+                      </p>
+                      
+                      <div className="mt-auto pt-6 border-t border-[#1F2A36]">
+                        <div className="inline-flex items-center gap-3 bg-[#0B0F14] px-4 py-2 rounded-lg border border-[#1F2A36]">
+                          <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse" />
+                          <span className="text-[#7B8794] text-sm font-mono">Tech Stack:</span> 
+                          <span className="text-[#22C55E] text-sm font-mono font-semibold">{feature.tech}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
                 })}
-                <h2 className="text-2xl font-semibold text-slate-600">{FLOW_STEPS.find((s) => s.id === activeStep)?.label}</h2>
-                <p className="mt-2 text-sm">This module is currently under development.</p>
               </div>
-            )}
+            </div>
+
           </div>
         </div>
-      </main>
-    </div>
-  );
-}
+      </section>
 
-function IntelligenceDashboardView() {
-  return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex justify-between items-end">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-800">Intelligence Dashboard</h2>
-          <p className="text-slate-500 text-sm mt-1">AI-driven insights and parsed artifact overview.</p>
+      {/* --- FOOTER --- */}
+      <footer className="bg-[#121821] py-12 border-t border-[#1F2A36]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-3 text-[#7B8794]">
+            <div className="text-[#00C2FF] opacity-80">
+              <Icons.Shield />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold tracking-wider text-[#E6EDF3]">CRIME<span className="text-[#00C2FF]">LENS</span></span>
+              <span className="text-xs">© {new Date().getFullYear()} Advanced Forensic Systems.</span>
+            </div>
+          </div>
+          <div className="flex gap-8 text-sm text-[#7B8794] font-medium">
+            <a href="#" className="hover:text-[#00C2FF] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-px after:bg-[#00C2FF] hover:after:w-full after:transition-all after:duration-300">Privacy Protocol</a>
+            <a href="#" className="hover:text-[#00C2FF] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-px after:bg-[#00C2FF] hover:after:w-full after:transition-all after:duration-300">Terms of Service</a>
+            <a href="#" className="hover:text-[#00C2FF] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-px after:bg-[#00C2FF] hover:after:w-full after:transition-all after:duration-300">API Documentation</a>
+          </div>
         </div>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm text-sm font-medium transition-colors">
-          Generate Quick Report
-        </button>
-      </div>
+      </footer>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Total Artifacts', value: '142,893', color: 'border-blue-500' },
-          { label: 'Flagged Messages', value: '412', color: 'border-red-500' },
-          { label: 'Media Files', value: '8,431', color: 'border-purple-500' },
-          { label: 'Location Pins', value: '1,024', color: 'border-emerald-500' },
-        ].map((stat, i) => (
-          <div key={i} className={`bg-white p-5 rounded-xl border border-slate-200 shadow-sm border-t-4 ${stat.color}`}>
-            <p className="text-sm font-medium text-slate-500">{stat.label}</p>
-            <p className="text-3xl font-bold text-slate-800 mt-2">{stat.value}</p>
-          </div>
-        ))}
-      </div>
+      {/* --- AUTH MODAL --- */}
+      {isAuthModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-[#0B0F14]/90 backdrop-blur-md animate-[fadeIn_0.2s_ease-out]">
+          <style dangerouslySetInnerHTML={{__html: `@keyframes fadeIn { from { opacity: 0; backdrop-filter: blur(0px); } to { opacity: 1; backdrop-filter: blur(12px); } }`}} />
+          
+          <div className="relative w-full max-w-md bg-[#121821] border border-[#1F2A36] rounded-2xl shadow-[0_0_50px_rgba(0,194,255,0.1)] overflow-hidden transform transition-all">
+            
+            {/* Modal Glow Effect */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-[#00C2FF] to-transparent opacity-50" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-          <div className="flex items-center gap-2 mb-4 border-b border-slate-100 pb-4">
-            <Cpu className="w-5 h-5 text-indigo-600" />
-            <h3 className="font-semibold text-slate-800">AI Threat Analysis</h3>
-          </div>
-          <div className="space-y-4">
-            <div className="p-4 bg-red-50 border border-red-100 rounded-lg">
-              <div className="flex justify-between items-start">
-                <span className="text-sm font-semibold text-red-800">High Risk Keyword Match</span>
-                <span className="text-xs font-mono text-red-600 bg-red-100 px-2 py-1 rounded">Score: 98%</span>
+            {/* Modal Header */}
+            <div className="flex justify-between items-center p-6 border-b border-[#1F2A36]/50">
+              <h2 className="text-xl font-bold text-[#E6EDF3] flex items-center gap-2">
+                <Icons.Shield />
+                {authMode === 'login' ? 'System Authorization' : 'Register Operator'}
+              </h2>
+              <button 
+                onClick={() => setIsAuthModalOpen(false)}
+                className="text-[#7B8794] hover:text-[#FF3B3B] hover:bg-[#FF3B3B]/10 p-1 rounded-md transition-colors"
+              >
+                <Icons.X />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-8">
+              <div className="bg-[#FFB020]/10 border border-[#FFB020]/20 text-[#FFB020] px-4 py-3 rounded-lg text-xs font-mono mb-8 flex items-start gap-3">
+                <span className="text-lg leading-none pt-0.5">⚠️</span>
+                <p>WARNING: Authorized personnel only. Access to the UFDR Terminal requires active credentials.</p>
               </div>
 
               {/* --- UPDATED FORM ONSUBMIT --- */}
@@ -277,35 +395,10 @@ function IntelligenceDashboardView() {
                   {authMode === 'login' ? 'Submit request here' : 'Login here'}
                 </button>
               </div>
-              <p className="text-sm text-amber-700 mt-2">
-                Device GPS coordinates contradict cellular tower logs between 02:00 and 04:00 AM.
-              </p>
             </div>
           </div>
         </div>
-
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-          <h3 className="font-semibold text-slate-800 mb-4 border-b border-slate-100 pb-4">UFDR Summary</h3>
-          <ul className="space-y-3 text-sm">
-            <li className="flex justify-between">
-              <span className="text-slate-500">Device Model</span>
-              <span className="font-medium text-slate-800">iPhone 14 Pro</span>
-            </li>
-            <li className="flex justify-between">
-              <span className="text-slate-500">OS Version</span>
-              <span className="font-medium text-slate-800">iOS 17.2.1</span>
-            </li>
-            <li className="flex justify-between">
-              <span className="text-slate-500">Extraction Type</span>
-              <span className="font-medium text-slate-800">Full File System</span>
-            </li>
-            <li className="flex justify-between">
-              <span className="text-slate-500">Time to Parse</span>
-              <span className="font-medium text-slate-800">42m 18s</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
