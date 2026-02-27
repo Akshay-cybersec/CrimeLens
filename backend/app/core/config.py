@@ -38,7 +38,11 @@ class Settings(BaseSettings):
 
     max_upload_size_mb: int = 50
     rate_limit_per_minute: int = 120
+    insight_cache_ttl_seconds: int = 600
+    insight_regenerate_cooldown_seconds: int = 60
     behavior_cache_ttl_seconds: int = 600
+    insight_cache_ttl_seconds: int = 600
+    insight_regenerate_cooldown_seconds: int = 60
 
     super_admin_email: str = "superadmin@crimelens.local"
     super_admin_password: str = "change-super-admin-password"

@@ -11,7 +11,7 @@ from app.repositories.audits import AuditRepository
 from app.repositories.cases import CaseRepository
 from app.repositories.clusters import ClusterRepository
 from app.repositories.events import EventRepository
-from app.repositories.insights import InsightRepository
+from app.repositories.insight_repository import InsightRepository
 from app.repositories.user_repository import UserRepository
 from app.services.auth_service import AuthService
 from app.services.background_worker import BackgroundWorkerService
@@ -129,8 +129,10 @@ def get_insight_service(
     event_repo: EventRepository = Depends(get_event_repository),
     insight_repo: InsightRepository = Depends(get_insight_repository),
     llm_service: LLMService = Depends(get_llm_service),
+    redis_service: RedisService = Depends(get_redis_service),
+    settings: Settings = Depends(get_app_settings),
 ) -> InsightService:
-    return InsightService(event_repo, insight_repo, llm_service)
+    return InsightService(event_repo, insight_repo, llm_service, redis_service, settings)
 
 
 def get_case_behavior_service(

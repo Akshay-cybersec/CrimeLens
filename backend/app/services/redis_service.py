@@ -34,12 +34,12 @@ class RedisService:
     async def get_json(self, key: str) -> Optional[dict]:
         if self._client is None:
             return None
-        payload = await self._client.get(key)
-        if not payload:
+        raw = await self._client.get(key)
+        if not raw:
             return None
         try:
-            value = json.loads(payload)
-            return value if isinstance(value, dict) else None
+            data = json.loads(raw)
+            return data if isinstance(data, dict) else None
         except json.JSONDecodeError:
             return None
 
@@ -47,3 +47,14 @@ class RedisService:
         if self._client is None:
             return
         await self._client.set(key, json.dumps(value), ex=ttl_seconds)
+
+    async def set_if_absent(self, key: str, value: str, ttl_seconds: int) -> bool:
+        if self._client is None:
+            return True
+        result = await self._client.set(key, value, ex=ttl_seconds, nx=True)
+        return bool(result)
+
+    async def delete_key(self, key: str) -> None:
+        if self._client is None:
+            return
+        await self._client.delete(key)
