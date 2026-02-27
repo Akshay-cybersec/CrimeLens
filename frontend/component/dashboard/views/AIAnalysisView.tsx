@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { SimilarCaseResponse, TimelineResponse } from '@/types/api';
+import type { EvidenceResponse, InsightResponse, SimilarCaseResponse, TimelineResponse } from '@/types/api';
 
 interface CrimeEvidence {
   label: string;
@@ -15,6 +15,8 @@ interface CrimeEvidence {
 type Props = {
   similarCases?: SimilarCaseResponse[];
   timeline?: TimelineResponse | null;
+  insights?: InsightResponse[];
+  evidence?: EvidenceResponse | null;
 };
 
 function parseRawEventText(rawText: string): { eventTime: Date | null; fields: Record<string, string>; fallback: string } {
@@ -46,7 +48,7 @@ function parseRawEventText(rawText: string): { eventTime: Date | null; fields: R
   return { eventTime, fields, fallback: rawText };
 }
 
-export default function ForensicTimeline({ timeline }: Props) {
+export default function ForensicTimeline({ timeline, similarCases = [], insights = [], evidence }: Props) {
   const evidenceData = useMemo<CrimeEvidence[]>(() => {
     const timelineEvents = timeline?.timeline ?? [];
     if (!timelineEvents.length) {
@@ -91,6 +93,8 @@ export default function ForensicTimeline({ timeline }: Props) {
 
   const [activeStep, setActiveStep] = useState(0);
   const isComplete = activeStep === evidenceData.length - 1;
+  const topInsight = insights[0];
+  const topClusters = (evidence?.clusters ?? []).slice(0, 3);
 
   const width = 1000;
   const height = 300;
@@ -271,6 +275,61 @@ export default function ForensicTimeline({ timeline }: Props) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="text-xs font-bold tracking-widest text-slate-500">MODEL INSIGHT</p>
+          <p className="text-sm text-slate-700 mt-2">
+            {topInsight?.summary || 'No generated insight summary available for this case yet.'}
+          </p>
+          <p className="text-xs text-slate-500 mt-2">
+            Confidence: {topInsight ? `${Math.round(topInsight.confidence_score * 100)}%` : 'N/A'}
+          </p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="text-xs font-bold tracking-widest text-slate-500">SUSPICIOUS WINDOWS</p>
+          <ul className="mt-2 space-y-2 text-sm text-slate-700">
+            {(timeline?.suspicious_windows ?? []).slice(0, 4).map((item, idx) => (
+              <li key={`${item.start}-${idx}`} className="flex items-start gap-2">
+                <span className="mt-1.5 h-2 w-2 rounded-full bg-amber-500" />
+                <span>
+                  {new Date(item.start).toLocaleString()} to {new Date(item.end).toLocaleString()} • {item.reason}
+                </span>
+              </li>
+            ))}
+            {!(timeline?.suspicious_windows ?? []).length ? <li className="text-slate-500">No suspicious windows detected.</li> : null}
+          </ul>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <p className="text-xs font-bold tracking-widest text-slate-500">SIMILAR CASE MATCHING</p>
+        <div className="mt-3 space-y-2">
+          {similarCases.slice(0, 5).map((item) => (
+            <div key={item.case_id} className="rounded border border-slate-200 bg-slate-50 px-3 py-2">
+              <p className="text-sm font-semibold text-slate-700">{item.case_id}</p>
+              <p className="text-xs text-slate-600 mt-1">
+                Similarity: {(item.similarity_score * 100).toFixed(1)}%{item.crime_type ? ` • ${item.crime_type}` : ''}
+              </p>
+              <p className="text-xs text-slate-600 mt-1">{item.explanation}</p>
+            </div>
+          ))}
+          {!similarCases.length ? <p className="text-sm text-slate-500">No similar cases matched yet.</p> : null}
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <p className="text-xs font-bold tracking-widest text-slate-500">FLAGGED CLUSTERS</p>
+        <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-2">
+          {topClusters.map((cluster) => (
+            <div key={cluster.id} className="rounded border border-slate-200 bg-slate-50 p-3">
+              <p className="text-xs font-semibold text-slate-700">{cluster.anomaly_type}</p>
+              <p className="text-xs text-slate-500 mt-1">Risk: {Math.round(cluster.risk_score * 100)}%</p>
+            </div>
+          ))}
+          {!topClusters.length ? <p className="text-sm text-slate-500 md:col-span-3">No anomaly clusters generated yet.</p> : null}
+        </div>
+      </div>
     </div>
   );
 }

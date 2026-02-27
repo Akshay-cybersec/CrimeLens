@@ -114,29 +114,21 @@ export default function ForensicsDashboard() {
     }
 
     const loadData = async () => {
-      try {
-        const [insightData, timelineData, similarData, evidenceData, overviewData, graphData] = await Promise.all([
-          insightService.getCaseInsights(caseId),
-          caseService.getTimeline(caseId),
-          caseService.getSimilarCases(caseId),
-          caseService.getEvidence(caseId),
-          caseService.getCaseOverview(caseId),
-          caseService.getConnectionGraph(caseId),
-        ]);
-        setInsights(insightData);
-        setTimeline(timelineData);
-        setSimilarCases(similarData);
-        setEvidence(evidenceData);
-        setCaseOverview(overviewData);
-        setConnectionGraph(graphData);
-      } catch {
-        setInsights([]);
-        setTimeline(null);
-        setSimilarCases([]);
-        setEvidence(null);
-        setCaseOverview(null);
-        setConnectionGraph(null);
-      }
+      const [insightData, timelineData, similarData, evidenceData, overviewData, graphData] = await Promise.allSettled([
+        insightService.getCaseInsights(caseId),
+        caseService.getTimeline(caseId),
+        caseService.getSimilarCases(caseId),
+        caseService.getEvidence(caseId),
+        caseService.getCaseOverview(caseId),
+        caseService.getConnectionGraph(caseId),
+      ]);
+
+      setInsights(insightData.status === 'fulfilled' ? insightData.value : []);
+      setTimeline(timelineData.status === 'fulfilled' ? timelineData.value : null);
+      setSimilarCases(similarData.status === 'fulfilled' ? similarData.value : []);
+      setEvidence(evidenceData.status === 'fulfilled' ? evidenceData.value : null);
+      setCaseOverview(overviewData.status === 'fulfilled' ? overviewData.value : null);
+      setConnectionGraph(graphData.status === 'fulfilled' ? graphData.value : null);
     };
 
     void loadData();
@@ -171,11 +163,11 @@ export default function ForensicsDashboard() {
       case 'create': return <CreateCaseView cases={cases} selectedCaseId={caseId} onSelectCase={handleSelectCase} caseOverview={caseOverview} />;
       case 'upload': return <UploadDataView onUploadComplete={handleUploadComplete} />;
       case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
-      case 'analyze': return <AIAnalysisView similarCases={similarCases} timeline={timeline} />;
+      case 'analyze': return <AIAnalysisView similarCases={similarCases} timeline={timeline} insights={insights} evidence={evidence} />;
       case 'graph': return <GraphLinkingView graph={connectionGraph} />;
       case 'insights': return <InsightsEngineView caseId={caseId} insights={insights} />;
       case 'evidence': return <ReviewEvidenceView evidence={evidence} />;
-      case 'export': return <ExportReportView />;
+      case 'export': return <ExportReportView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} />;
       default: return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} cases={cases} overview={caseOverview} demoMetrics={dashboardMetrics} />;
     }
   };

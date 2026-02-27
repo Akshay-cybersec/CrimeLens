@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ShieldAlert } from 'lucide-react';
 import { insightService } from '@/services/insightService';
 import type { InsightResponse } from '@/types/api';
@@ -20,6 +20,11 @@ export default function InsightsEngineView({ caseId, insights }: Props) {
   const [rows, setRows] = useState<InsightResponse[]>(insights);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    setRows(insights);
+    setError('');
+  }, [caseId, insights]);
 
   const selected = rows[0];
   const contradictionTypes = useMemo(
