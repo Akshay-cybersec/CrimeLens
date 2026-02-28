@@ -109,7 +109,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
         clearInterval(timer);
         return prev;
       });
-    }, 2500); // Slightly faster for testing
+    }, 1900);
     return () => clearInterval(timer);
   }, [evidenceData.length]);
 
@@ -152,7 +152,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
           <motion.path
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
             d={generateProgressivePath(activeStep)}
             fill="none"
             stroke={isComplete ? "#059669" : "#1d4ed8"}
@@ -180,7 +180,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
                   cy={getY(d.count)}
                   initial={{ r: 5, opacity: 0.8 }}
                   animate={{ r: 25, opacity: 0 }}
-                  transition={{ repeat: Infinity, duration: 2 }}
+                  transition={{ repeat: Infinity, duration: 1.4 }}
                   className="fill-red-500"
                 />
               )}

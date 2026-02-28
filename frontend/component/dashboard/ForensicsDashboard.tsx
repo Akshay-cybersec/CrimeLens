@@ -12,6 +12,7 @@ import {
   FileText, 
   ShieldAlert,
   GitBranch,
+  Scale,
   Bell,
   Settings,
   User,
@@ -32,6 +33,7 @@ import InsightsEngineView from './views/InsightsEngineView';
 import GraphLinkingView from './views/GraphLinkingView';
 import ReviewEvidenceView from './views/ReviewEvidenceView';
 import ExportReportView from './views/ExportReportView';
+import CaseDecisionBetaView from './views/CaseDecisionBetaView';
 
 // --- Types ---
 type FlowStep = {
@@ -50,6 +52,7 @@ const FLOW_STEPS: FlowStep[] = [
   { id: 'graph', label: 'Graph Linking', icon: GitBranch },
   { id: 'insights', label: 'Insights Engine', icon: ShieldAlert },
   { id: 'evidence', label: 'Flag Anamolies', icon: Search },
+  { id: 'decision-beta', label: 'Case Decision (Beta)', icon: Scale },
   { id: 'export', label: 'Export Report', icon: FileText },
 ];
 
@@ -167,7 +170,8 @@ export default function ForensicsDashboard() {
       case 'graph': return <GraphLinkingView graph={connectionGraph} />;
       case 'insights': return <InsightsEngineView caseId={caseId} insights={insights} />;
       case 'evidence': return <ReviewEvidenceView evidence={evidence} />;
-      case 'export': return <ExportReportView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} />;
+      case 'decision-beta': return <CaseDecisionBetaView caseId={caseId} overview={caseOverview} timeline={timeline} insights={insights} evidence={evidence} similarCases={similarCases} />;
+      case 'export': return <ExportReportView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} overview={caseOverview} similarCases={similarCases} />;
       default: return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} cases={cases} overview={caseOverview} demoMetrics={dashboardMetrics} />;
     }
   };
