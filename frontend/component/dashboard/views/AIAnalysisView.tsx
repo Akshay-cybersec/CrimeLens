@@ -98,7 +98,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
 
   const width = 1000;
   const height = 300;
-  const paddingX = 0; // Set to 0 to completely eliminate left/right gap
+  const paddingX = 0; // Ensures no internal SVG offset
   const paddingY = 60;
 
   useEffect(() => {
@@ -136,7 +136,8 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto font-sans text-black p-10 space-y-12">
+    // Removed max-w-6xl, mx-auto, and p-10. Swapped to w-full px-4 so it hugs the left edge strictly.
+    <div className="w-full font-sans text-black px-4 py-8 space-y-12 overflow-hidden">
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
