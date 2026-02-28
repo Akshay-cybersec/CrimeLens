@@ -68,6 +68,12 @@ class InsightService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No events found for this case")
         return generated[0]
 
+    async def invalidate_case(self, case_id: str) -> None:
+        await self.insight_repo.delete_by_case(case_id)
+        await self.redis_service.delete_key(f"insight:case:{case_id}:latest")
+        await self.redis_service.delete_key(f"insight:regen:last:{case_id}")
+        await self.redis_service.delete_key(f"insight:lock:{case_id}")
+
     async def _generate(self, case_id: str, force: bool) -> list[InsightResponse]:
         lock = _case_locks.setdefault(case_id, asyncio.Lock())
         async with lock:
