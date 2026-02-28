@@ -215,8 +215,32 @@ class UFDRParserService:
             "suspect_id",
         }
 
-        def walk(node: Any) -> None:
+        profile_like_keys = {"victim_info", "secondary_victim", "suspect_info", "accused_info", "complainant_info"}
+        role_alias = {
+            "victim_info": "victim",
+            "secondary_victim": "secondary_victim",
+            "suspect_info": "suspect",
+            "accused_info": "suspect",
+            "complainant_info": "complainant",
+        }
+
+        def maybe_emit_profile_line(node: dict[str, Any], parent_key: str | None) -> None:
+            if not parent_key or parent_key not in profile_like_keys:
+                return
+            name = node.get("name")
+            if not isinstance(name, str) or not name.strip():
+                return
+            role = role_alias.get(parent_key, parent_key)
+            profile_parts = [f"role:{role}", f"name:{name.strip()}"]
+            for field in ("age", "status", "relation", "incident_type", "prior_record", "data_compromised"):
+                value = node.get(field)
+                if value is not None:
+                    profile_parts.append(f"{field}:{value}")
+            lines.append("profile_event | " + " | ".join(profile_parts))
+
+        def walk(node: Any, parent_key: str | None = None) -> None:
             if isinstance(node, dict):
+                maybe_emit_profile_line(node, parent_key)
                 ts = node.get("timestamp") or node.get("time") or node.get("date")
                 text = node.get("raw_text") or node.get("message") or node.get("text") or node.get("description")
                 event_type = node.get("event_type") or node.get("type") or node.get("action")
@@ -241,12 +265,12 @@ class UFDRParserService:
                     parts = [str(part) for part in [ts, event_type, summary_text] if part]
                     if parts:
                         lines.append(" | ".join(parts))
-                for value in node.values():
-                    walk(value)
+                for child_key, value in node.items():
+                    walk(value, child_key if isinstance(child_key, str) else None)
                 return
             if isinstance(node, list):
                 for item in node:
-                    walk(item)
+                    walk(item, parent_key)
                 return
 
         walk(payload)

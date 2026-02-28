@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
+import { Loader2 } from 'lucide-react';
 import type { CaseOverview, EvidenceResponse, InsightResponse, SimilarCaseResponse, TimelineResponse } from '@/types/api';
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
   insights: InsightResponse[];
   evidence: EvidenceResponse | null;
   similarCases: SimilarCaseResponse[];
+  onRegenerateResponse?: () => Promise<void>;
 };
 
 const parseRawFields = (rawText: string): Record<string, string> => {
@@ -39,7 +41,17 @@ const pickEntity = (fields: Record<string, string>, preferred: string[]): string
   return null;
 };
 
-export default function CaseDecisionBetaView({ caseId, overview, timeline, insights, evidence, similarCases }: Props) {
+type ProfileBag = {
+  victim?: string;
+  secondaryVictim?: string;
+  suspect?: string;
+  suspectRelation?: string;
+  complainant?: string;
+};
+
+export default function CaseDecisionBetaView({ caseId, overview, timeline, insights, evidence, similarCases, onRegenerateResponse }: Props) {
+  const [regenerating, setRegenerating] = React.useState(false);
+  const [statusNote, setStatusNote] = React.useState('');
   const topInsight = insights[0];
   const topCluster = evidence?.clusters?.[0];
   const topMatch = similarCases[0];
@@ -66,9 +78,24 @@ export default function CaseDecisionBetaView({ caseId, overview, timeline, insig
 
     const sorted = [...events].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
     const interactions: Array<{ from: string; to: string; when: string }> = [];
+    const profiles: ProfileBag = {};
+    const loweredRows = sorted.map((item) => (item.raw_text || '').toLowerCase());
+    const hasAny = (...tokens: string[]) => loweredRows.some((line) => tokens.some((token) => line.includes(token)));
 
     for (const event of sorted) {
       const fields = parseRawFields(event.raw_text || '');
+      const role = (fields.role || '').toLowerCase();
+      const profileName = pickEntity(fields, ['name', 'contact_name', 'person', 'owner_name']);
+      if (profileName) {
+        if (role === 'victim' && !profiles.victim) profiles.victim = profileName;
+        if (role === 'secondary_victim' && !profiles.secondaryVictim) profiles.secondaryVictim = profileName;
+        if (role === 'suspect' && !profiles.suspect) {
+          profiles.suspect = profileName;
+          if (fields.relation) profiles.suspectRelation = fields.relation;
+        }
+        if (role === 'complainant' && !profiles.complainant) profiles.complainant = profileName;
+      }
+
       const from = pickEntity(fields, ['from', 'sender', 'source', 'owner', 'caller', 'contact_from']);
       const to = pickEntity(fields, ['to', 'receiver', 'target', 'callee', 'contact_to', 'contact']);
       if (from && to && from !== to) {
@@ -80,12 +107,68 @@ export default function CaseDecisionBetaView({ caseId, overview, timeline, insig
       }
     }
 
+    const victimName = profiles.victim || 'the primary victim';
+    const suspectName = profiles.suspect || 'the primary suspect';
+    const secondaryName = profiles.secondaryVictim || 'the secondary victim';
+    const suspectLabel = profiles.suspectRelation
+      ? `${suspectName}, ${profiles.suspectRelation.toLowerCase()}`
+      : suspectName;
+
+    const hasDriveAccess = hasAny('google drive', 'cloud_download', 'drive export', 'personal folder');
+    const hasAnonAccount = hasAny('anonymous gmail', 'account_creation', 'anonymous account');
+    const hasTor = hasAny('tor_browser_install', 'tor browser install', 'tor browser');
+    const hasThreat = hasAny('threat', 'blackmail', 'extortion');
+    const hasTelegram = hasAny('telegram');
+    const hasCrypto = hasAny('crypto_wallet_creation', 'ethereum', 'wallet');
+    const hasSimSwap = hasAny('sim_swap', 'sim swap');
+    const hasResetSignal = hasAny('account reset', 'password reset', 'reset account', 'recovery changed');
+    const hasSearchDistress = hasAny('how to deal with blackmail humiliation', 'blackmail humiliation', 'search_query');
+    const hasGoodbye = hasAny('goodbye_message', 'goodbye message', 'i’m sorry', "i'm sorry", 'i can’t fix this', "i can't fix this");
+    const hasSelfHarmSignal = hasAny('self-harm', 'self harm', 'deceased');
+    const hasCleanup = hasAny('bulk_chat_deletion', 'chat deletion', 'deleted', 'removed', 'wiped');
+
+    const narrativeLines: string[] = [];
+    if (hasDriveAccess) {
+      narrativeLines.push(`${suspectLabel} appears to have gained access to private cloud content linked to ${secondaryName}.`);
+    }
+    if (hasAnonAccount || hasTor) {
+      const parts: string[] = [];
+      if (hasAnonAccount) parts.push('created an anonymous account');
+      if (hasTor) parts.push('used TOR to reduce traceability');
+      narrativeLines.push(`${suspectName} then likely ${parts.join(' and ')}.`);
+    }
+    if (hasThreat || hasTelegram || hasCrypto) {
+      const channel = hasTelegram ? 'via Telegram' : 'through direct digital messaging';
+      const demand = hasCrypto ? 'with cryptocurrency-linked coercion signals' : 'with coercive pressure signals';
+      narrativeLines.push(`${victimName} appears to have been contacted ${channel}, ${demand}, with threats around private data exposure.`);
+    }
+    if (hasSimSwap || hasResetSignal) {
+      const controlOps: string[] = [];
+      if (hasSimSwap) controlOps.push('possible SIM-swap behavior');
+      if (hasResetSignal) controlOps.push('account-control reset indicators');
+      narrativeLines.push(`Control escalation indicators were detected: ${controlOps.join(' and ')}.`);
+    }
+    if (hasSearchDistress) {
+      narrativeLines.push(`${victimName} searched for help related to blackmail pressure, indicating escalating emotional distress.`);
+    }
+    if (hasGoodbye || hasSelfHarmSignal) {
+      narrativeLines.push(`A goodbye/self-harm signal appears in the timeline, suggesting severe crisis before case closure events.`);
+    }
+    if (hasCleanup) {
+      narrativeLines.push(`Post-incident deletion/cleanup behavior is present, consistent with potential evidence suppression attempts.`);
+    }
+
+    if (narrativeLines.length >= 4) {
+      return narrativeLines.join(' ');
+    }
+
     if (interactions.length < 2) {
       const earliest = sorted[0];
       const latest = sorted[sorted.length - 1];
       const clusterRisk = topCluster ? `${Math.round(topCluster.risk_score * 100)}%` : 'N/A';
       const insightRisk = topInsight ? `${Math.round(topInsight.confidence_score * 100)}%` : 'N/A';
-      return `A complete X→Y→Z chain is not fully visible yet, but the extracted activity from ${new Date(earliest.timestamp).toLocaleString()} to ${new Date(latest.timestamp).toLocaleString()} still indicates behavioral irregularities. `
+      return `A complete X->Y->Z chain is not fully visible yet, but the extracted activity from ${new Date(earliest.timestamp).toLocaleString()} to ${new Date(latest.timestamp).toLocaleString()} still indicates behavioral irregularities. `
+        + `${suspectName} appears linked to pressure signals affecting ${victimName}, with potential spillover exposure involving ${secondaryName}. `
         + `Current indicators (cluster risk ${clusterRisk}, insight confidence ${insightRisk}) suggest possible coordinated or concealed communication patterns. `
         + `Working hypothesis: a small interaction set may be part of a larger hidden exchange, so this case should stay in active review while more communication artifacts are ingested.`;
     }
@@ -100,7 +183,15 @@ export default function CaseDecisionBetaView({ caseId, overview, timeline, insig
     });
 
     const aliases = new Map<string, string>();
-    uniquePeople.forEach((name, index) => aliases.set(name.toLowerCase(), `User ${String.fromCharCode(88 + (index % 3))}${index >= 3 ? index - 2 : ''}`));
+    const roleMapped = new Map<string, string>();
+    if (profiles.victim) roleMapped.set(profiles.victim.toLowerCase(), profiles.victim);
+    if (profiles.secondaryVictim) roleMapped.set(profiles.secondaryVictim.toLowerCase(), profiles.secondaryVictim);
+    if (profiles.suspect) roleMapped.set(profiles.suspect.toLowerCase(), profiles.suspect);
+    if (profiles.complainant) roleMapped.set(profiles.complainant.toLowerCase(), profiles.complainant);
+    uniquePeople.forEach((name, index) => {
+      const mapped = roleMapped.get(name.toLowerCase());
+      aliases.set(name.toLowerCase(), mapped || `User ${String.fromCharCode(88 + (index % 3))}${index >= 3 ? index - 2 : ''}`);
+    });
     const aliasOf = (name: string) => aliases.get(name.toLowerCase()) || name;
 
     const first = interactions[0];
@@ -137,6 +228,76 @@ export default function CaseDecisionBetaView({ caseId, overview, timeline, insig
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
 
+  const nextStepPlan = (() => {
+    const events = timeline?.timeline ?? [];
+    const rows = events.map((event) => ({
+      fields: parseRawFields(event.raw_text || ''),
+      raw: (event.raw_text || '').toLowerCase(),
+    }));
+    const hasAny = (...tokens: string[]) => rows.some((row) => tokens.some((token) => row.raw.includes(token)));
+
+    const profile: ProfileBag = {};
+    rows.forEach((row) => {
+      const role = (row.fields.role || '').toLowerCase();
+      const name = pickEntity(row.fields, ['name', 'contact_name', 'person', 'owner_name']);
+      if (!name) return;
+      if (role === 'victim' && !profile.victim) profile.victim = name;
+      if (role === 'secondary_victim' && !profile.secondaryVictim) profile.secondaryVictim = name;
+      if (role === 'suspect' && !profile.suspect) profile.suspect = name;
+    });
+
+    const victim = profile.victim || 'the victim';
+    const suspect = profile.suspect || 'the suspect';
+    const secondary = profile.secondaryVictim || 'the secondary victim';
+
+    const steps: string[] = [];
+    if (hasAny('telegram', 'threat', 'blackmail', 'extortion')) {
+      steps.push(`Extract and preserve full Telegram/message threads between ${suspect} and ${victim}, including deleted/recovered rows.`);
+    }
+    if (hasAny('sim_swap', 'sim swap')) {
+      steps.push(`Issue telecom CDR/SIM replacement request for ${victim} and related numbers to verify SIM-swap timeline.`);
+    }
+    if (hasAny('crypto_wallet_creation', 'ethereum', 'wallet')) {
+      steps.push('Trace wallet creation and transaction graph, then correlate with message timestamps and demand windows.');
+    }
+    if (hasAny('google drive', 'cloud_download', 'drive export')) {
+      steps.push(`Serve cloud-provider legal request for access logs and download history tied to ${secondary}'s compromised data.`);
+    }
+    if (hasAny('bulk_chat_deletion', 'chat deletion', 'deleted', 'wiped', 'removed')) {
+      steps.push('Prioritize forensic recovery of deleted chat artifacts (WAL/journal/cache) and preserve chain-of-custody hashes.');
+    }
+    if (hasAny('goodbye_message', 'self-harm', 'self harm', 'deceased', 'blackmail humiliation')) {
+      steps.push('Attach psychological coercion timeline annex for supervisory/legal review and victim-support context mapping.');
+    }
+
+    if (!steps.length) {
+      steps.push('Run focused re-extraction for messaging, account-recovery, and cloud-access logs to strengthen actor-chain confidence.');
+    }
+
+    const headline =
+      decision.verdict === 'Escalate for immediate review'
+        ? 'Priority action plan based on current high-risk signals'
+        : decision.verdict === 'Needs investigator validation'
+          ? 'Validation action plan to confirm the current hypothesis'
+          : 'Monitoring action plan to strengthen case confidence';
+
+    return { headline, steps: steps.slice(0, 5) };
+  })();
+
+  const handleRegenerateResponse = async () => {
+    if (!caseId || !onRegenerateResponse) return;
+    try {
+      setRegenerating(true);
+      setStatusNote('');
+      await onRegenerateResponse();
+      setStatusNote(`Case decision regenerated at ${new Date().toLocaleTimeString()}.`);
+    } catch {
+      setStatusNote('Failed to regenerate case decision. Please try again.');
+    } finally {
+      setRegenerating(false);
+    }
+  };
+
   return (
     <div className="space-y-4 animate-in fade-in duration-500">
       <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
@@ -147,8 +308,20 @@ export default function CaseDecisionBetaView({ caseId, overview, timeline, insig
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Case Decision (Beta)</p>
+        <div className="flex items-start justify-between gap-3">
+          <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Case Decision (Beta)</p>
+          <button
+            type="button"
+            disabled={!caseId || regenerating}
+            onClick={() => void handleRegenerateResponse()}
+            className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-60"
+          >
+            {regenerating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+            {regenerating ? 'Regenerating...' : 'Regenerate Response'}
+          </button>
+        </div>
         <h2 className="text-xl md:text-2xl font-bold text-slate-900 mt-2">Case {caseId || 'N/A'} Story & Conclusion</h2>
+        {statusNote ? <p className="text-[11px] text-slate-600 mt-2">{statusNote}</p> : null}
         <ul className="mt-3 space-y-2.5">
           {storyPoints.map((point, idx) => (
             <li key={`${point}-${idx}`} className="text-sm text-slate-700 leading-7">
@@ -175,13 +348,14 @@ export default function CaseDecisionBetaView({ caseId, overview, timeline, insig
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Recommended Next Step</p>
-        <p className="text-sm text-slate-700 mt-2 leading-7">
-          {decision.verdict === 'Escalate for immediate review'
-            ? 'Escalate this case for priority human review, preserve all linked artifacts, and validate the top anomaly timeline against witness/device context.'
-            : decision.verdict === 'Needs investigator validation'
-              ? 'Proceed with investigator validation of top anomaly clusters and suspicious windows before finalizing legal or operational conclusions.'
-              : 'Continue monitoring and ingest additional UFDR sources to raise confidence before escalation.'}
-        </p>
+        <p className="text-sm text-slate-700 mt-2 leading-relaxed">{nextStepPlan.headline}</p>
+        <ul className="mt-2 space-y-2">
+          {nextStepPlan.steps.map((step, idx) => (
+            <li key={`${step}-${idx}`} className="text-sm text-slate-700 leading-7">
+              <span className="font-semibold text-slate-900">Step {idx + 1}:</span> {step}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

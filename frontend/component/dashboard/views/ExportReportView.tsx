@@ -39,6 +39,89 @@ const splitSentences = (text: string, max = 6) =>
     .filter(Boolean)
     .slice(0, max);
 
+const pickEntity = (fields: Record<string, string>, keys: string[]) => {
+  for (const key of keys) {
+    const value = fields[key];
+    if (value && value.trim()) return value.trim();
+  }
+  return null;
+};
+
+const buildHypotheticalStory = (timeline?: TimelineResponse | null) => {
+  const events = timeline?.timeline ?? [];
+  if (!events.length) {
+    return {
+      story: 'Insufficient timeline artifacts for actor-chain hypothesis generation.',
+      points: ['Load UFDR timeline data to generate a narrative chain.'],
+    };
+  }
+
+  const sorted = [...events].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+  const rows = sorted.map((event) => ({
+    event,
+    fields: parseRawFields(event.raw_text || ''),
+    raw: (event.raw_text || '').toLowerCase(),
+  }));
+
+  const profile: { victim?: string; secondaryVictim?: string; suspect?: string } = {};
+  const interactions: Array<{ from: string; to: string; when: string }> = [];
+
+  rows.forEach((row) => {
+    const role = (row.fields.role || '').toLowerCase();
+    const name = pickEntity(row.fields, ['name', 'contact_name', 'person', 'owner_name']);
+    if (name) {
+      if (role === 'victim' && !profile.victim) profile.victim = name;
+      if (role === 'secondary_victim' && !profile.secondaryVictim) profile.secondaryVictim = name;
+      if (role === 'suspect' && !profile.suspect) profile.suspect = name;
+    }
+
+    const from = pickEntity(row.fields, ['from', 'sender', 'owner', 'caller', 'source']);
+    const to = pickEntity(row.fields, ['to', 'receiver', 'target', 'callee', 'contact']);
+    if (from && to && from !== to) {
+      interactions.push({ from, to, when: new Date(row.event.timestamp).toLocaleString() });
+    }
+  });
+
+  const hasAny = (...tokens: string[]) => rows.some((row) => tokens.some((token) => row.raw.includes(token)));
+  const victim = profile.victim || 'the primary victim';
+  const secondary = profile.secondaryVictim || 'the secondary victim';
+  const suspect = profile.suspect || 'the primary suspect';
+
+  const points: string[] = [];
+  if (hasAny('google drive', 'cloud_download', 'drive export')) {
+    points.push(`${suspect} appears linked to private cloud-data access associated with ${secondary}.`);
+  }
+  if (hasAny('anonymous gmail', 'account_creation', 'tor_browser_install', 'tor browser')) {
+    points.push(`Identity-masking behavior appears present (anonymous account/TOR usage signals).`);
+  }
+  if (hasAny('telegram', 'threat', 'blackmail', 'extortion')) {
+    points.push(`${victim} appears to have received coercive or threatening communication signals.`);
+  }
+  if (hasAny('sim_swap', 'sim swap', 'reset', 'password recovery')) {
+    points.push(`Control-escalation indicators (SIM/account control) are present in timeline artifacts.`);
+  }
+  if (hasAny('goodbye_message', 'i’m sorry', "i'm sorry", 'self-harm', 'self harm', 'deceased')) {
+    points.push(`Crisis-stage signals were detected before case-closing events.`);
+  }
+  if (hasAny('bulk_chat_deletion', 'chat deletion', 'deleted', 'wiped', 'removed')) {
+    points.push(`Post-incident deletion behavior suggests potential evidence cleanup attempts.`);
+  }
+  if (!points.length && interactions.length >= 2) {
+    const first = interactions[0];
+    const second = interactions[1];
+    points.push(`${first.from} communicated with ${first.to}, followed by ${second.from} -> ${second.to}.`);
+    points.push(`This chain may indicate intermediary transfer of sensitive information.`);
+  }
+  if (!points.length) {
+    points.push('Available data indicates suspicious behavioral variance but no strong direct actor-chain yet.');
+  }
+
+  return {
+    story: points.join(' '),
+    points,
+  };
+};
+
 const buildCaseDecision = (
   caseId: string,
   timeline?: TimelineResponse | null,
@@ -93,6 +176,7 @@ export default function ExportReportView({
   const flaggedItems = evidence?.clusters.length ?? 0;
   const hasTimeline = totalEvents > 0;
   const decision = buildCaseDecision(caseId, timeline, evidence, insights, similarCases);
+  const hypothetical = buildHypotheticalStory(timeline);
 
   const buildReportPayload = () => ({
     case_id: caseId || null,
@@ -111,6 +195,7 @@ export default function ExportReportView({
     insights,
     flagged_clusters: evidence?.clusters ?? [],
     similar_cases: similarCases,
+    ai_hypothetical_story: hypothetical,
     ai_case_decision: decision,
   });
 
@@ -154,6 +239,14 @@ export default function ExportReportView({
       doc.setLineWidth(0.4);
       doc.line(margin, y, pageWidth - margin, y);
       y += 10;
+    };
+
+    const subheading = (text: string) => {
+      ensureSpace(18);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.text(text, margin, y);
+      y += 14;
     };
 
     const paragraph = (text: string, fontSize = 10, indent = 0) => {
@@ -266,11 +359,18 @@ export default function ExportReportView({
       paragraph('No similar case matches available.');
     }
 
-    heading('6. AI Case Decision Story');
+    heading('6. AI Hypothetical Story');
+    paragraph(payload.ai_hypothetical_story.story);
+    subheading('Hypothesis Points');
+    payload.ai_hypothetical_story.points.forEach((point: string) => paragraph(`- ${point}`, 10, 12));
+
+    heading('7. AI Case Decision and Next Step');
     kv('Decision Score', `${payload.ai_case_decision.score}%`);
     kv('Verdict', payload.ai_case_decision.verdict);
-    paragraph(`AI Story: ${payload.ai_case_decision.story}`);
-    paragraph(`Next Step Note: ${payload.ai_case_decision.nextStep}`);
+    subheading('Decision Story');
+    splitSentences(payload.ai_case_decision.story, 12).forEach((line) => paragraph(`- ${line}`, 10, 12));
+    subheading('Next Step Note');
+    paragraph(payload.ai_case_decision.nextStep, 10, 12);
 
     doc.save(`case-report-${caseId || 'unknown'}.pdf`);
   };
