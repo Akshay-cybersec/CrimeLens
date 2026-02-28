@@ -29,8 +29,9 @@ export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, ca
 
   return (
     <div className="h-full flex gap-6 animate-in fade-in duration-500">
+      {/* Left Panel - Case List */}
       <div className="w-1/3 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col">
-        <div className="p-4 border-b border-slate-200 bg-slate-50 rounded-t-xl">
+        <div className="p-4 border-b border-slate-200 bg-slate-50 rounded-t-xl shrink-0">
           <h2 className="text-lg font-bold text-slate-800">Past Cases</h2>
           <p className="text-xs text-slate-500 mt-1">Select a case to inspect investigation details.</p>
           <div className="mt-3 relative">
@@ -64,8 +65,9 @@ export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, ca
         </div>
       </div>
 
-      <div className="flex-1 bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-        <div className="flex items-center gap-2 border-b border-slate-200 pb-4 mb-4">
+      {/* Right Panel - Case Detail (Added overflow-y-auto here) */}
+      <div className="flex-1 bg-white border border-slate-200 rounded-xl shadow-sm p-6 overflow-y-auto">
+        <div className="flex items-center gap-2 border-b border-slate-200 pb-4 mb-4 shrink-0">
           <Database className="w-5 h-5 text-indigo-600" />
           <h3 className="text-xl font-bold text-slate-800">Case Detail</h3>
         </div>
@@ -75,19 +77,19 @@ export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, ca
         ) : (
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg border border-slate-200 bg-slate-50">
+              <div className="p-4 rounded-lg border border-slate-200">
                 <p className="text-xs text-slate-500">Case ID</p>
                 <p className="text-sm font-semibold text-slate-800 mt-1">{caseOverview.case_id}</p>
               </div>
-              <div className="p-4 rounded-lg border border-slate-200 bg-slate-50">
+              <div className="p-4 rounded-lg border border-slate-200">
                 <p className="text-xs text-slate-500">Source File</p>
                 <p className="text-sm font-semibold text-slate-800 mt-1">{caseOverview.source_filename}</p>
               </div>
-              <div className="p-4 rounded-lg border border-slate-200 bg-slate-50">
+              <div className="p-4 rounded-lg border border-slate-200">
                 <p className="text-xs text-slate-500">Created At</p>
                 <p className="text-sm font-semibold text-slate-800 mt-1">{new Date(caseOverview.created_at).toLocaleString()}</p>
               </div>
-              <div className="p-4 rounded-lg border border-slate-200 bg-slate-50">
+              <div className="p-4 rounded-lg border border-slate-200">
                 <p className="text-xs text-slate-500">Total Events</p>
                 <p className="text-sm font-semibold text-slate-800 mt-1">{caseOverview.total_events}</p>
               </div>
@@ -107,7 +109,7 @@ export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, ca
               <p className="text-sm font-semibold text-slate-700 mb-2">Event Type Distribution</p>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(caseOverview.event_types).map(([eventType, count]) => (
-                  <span key={eventType} className="px-2 py-1 rounded text-xs bg-slate-100 text-slate-700 border border-slate-200">
+                  <span key={eventType} className="px-2.5 py-1 rounded text-xs font-medium bg-slate-100 text-slate-600">
                     {eventType}: {count}
                   </span>
                 ))}
@@ -119,14 +121,14 @@ export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, ca
 
             <div className="p-4 rounded-lg border border-slate-200">
               <p className="text-sm font-semibold text-slate-700 mb-2">Latest Events</p>
-              <div className="space-y-2 max-h-56 overflow-y-auto">
+              <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
                 {caseOverview.latest_events.map((event) => (
-                  <div key={event.id} className="p-3 border border-slate-100 rounded bg-slate-50">
+                  <div key={event.id} className="p-3 border border-slate-100 rounded-md bg-slate-50">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold bg-slate-200 text-slate-700 rounded px-2 py-0.5">{event.event_type}</span>
-                      <span className="text-xs text-slate-500 font-mono">{new Date(event.timestamp).toLocaleString()}</span>
+                      <span className="text-xs font-bold bg-slate-200 text-slate-700 rounded-md px-2.5 py-1">{event.event_type}</span>
+                      <span className="text-xs text-slate-500">{new Date(event.timestamp).toLocaleString()}</span>
                     </div>
-                    <p className="text-sm text-slate-700 mt-1">{event.raw_text}</p>
+                    <p className="text-sm text-slate-600 mt-2 leading-relaxed break-words whitespace-pre-wrap">{event.raw_text}</p>
                   </div>
                 ))}
                 {!caseOverview.latest_events.length ? (

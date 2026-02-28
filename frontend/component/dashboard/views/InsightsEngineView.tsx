@@ -38,7 +38,6 @@ const buildSummaryBullets = (summary: string, maxItems = 4): string[] => {
     return lineCandidates.slice(0, maxItems);
   }
 
-  // Split sentences only when punctuation is followed by a likely new sentence start.
   const sentenceCandidates = cleaned
     .split(/(?<=[.!?])\s+(?=[A-Z])/)
     .map((item) => item.trim())
@@ -172,83 +171,84 @@ export default function InsightsEngineView({ caseId, insights }: Props) {
   };
 
   return (
-    <div className="h-full bg-white border border-slate-200 rounded-xl shadow-sm p-6 animate-in fade-in duration-500 space-y-5">
-      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+    <div className="w-full bg-white border border-slate-200 rounded-xl shadow-sm p-6 animate-in fade-in duration-500 space-y-6">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-800">Investigative Insights Engine</h2>
-          <p className="text-sm text-slate-500 mt-1">Contradiction and behavioral pattern analysis with AI-assisted confidence scoring.</p>
+          <h2 className="text-xl font-bold text-slate-900">Investigative Insights Engine</h2>
+          <p className="text-sm text-slate-500 mt-1">Behavioral pattern analysis with AI confidence scoring.</p>
         </div>
         <button
           onClick={() => void handleRegenerate()}
           disabled={loading}
-          className="bg-slate-900 hover:bg-slate-800 text-white px-3 py-2 rounded text-sm disabled:opacity-60"
+          className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-60"
         >
           {loading ? 'Regenerating...' : 'Regenerate Insight'}
         </button>
       </div>
 
-      <div className="p-3 rounded-lg border border-indigo-200 bg-indigo-50 text-sm leading-relaxed text-indigo-700">
-        Insights are probabilistic and investigative-only. They do not determine guilt or legal conclusions.
+      <div className="p-3 rounded-lg border border-indigo-100 bg-indigo-50/50 text-sm leading-relaxed text-indigo-700">
+        <span className="font-bold">Investigative Note:</span> Insights are probabilistic and determine investigative paths, not legal guilt.
       </div>
 
-      {error ? (
-        <div className="p-3 rounded-lg border border-red-200 bg-red-50 text-sm text-red-700">{error}</div>
-      ) : null}
+      {error && (
+        <div className="p-3 rounded-lg border border-red-100 bg-red-50 text-sm text-red-700">{error}</div>
+      )}
 
       {!selected ? (
-        <div className="p-6 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-500">
-          No insights available for this case yet.
+        <div className="p-12 text-center rounded-lg border-2 border-dashed border-slate-200 bg-slate-50 text-slate-500">
+          No investigative insights available for this case.
         </div>
       ) : (
         <>
           <div className="flex items-center gap-3">
-            <span className={`inline-flex items-center rounded border px-3 py-1 text-xs font-semibold ${confidenceClass(selected.confidence_score)}`}>
-              Confidence: {Math.round(selected.confidence_score * 100)}%
+            <span className={`inline-flex items-center rounded-full border px-4 py-1 text-xs font-bold ${confidenceClass(selected.confidence_score)}`}>
+              Confidence Score: {Math.round(selected.confidence_score * 100)}%
             </span>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="text-sm font-semibold text-slate-800">Insight Summary</p>
-            <ul className="mt-3 space-y-2">
+          <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-5">
+            <p className="text-sm font-bold text-slate-900 uppercase tracking-tight">Insight Summary</p>
+            <ul className="mt-4 space-y-3">
               {(summaryBullets.length ? summaryBullets : [selected.summary]).map((item, idx) => (
-                <li key={`${item}-${idx}`} className="text-sm leading-relaxed text-slate-700">
-                  <span className="font-bold text-slate-900">Key Point:</span> {item}
+                <li key={`${item}-${idx}`} className="text-sm leading-relaxed text-slate-700 flex gap-2">
+                  <span className="font-black text-indigo-600">•</span>
+                  <span><span className="font-bold text-slate-900">Key Point:</span> {item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="rounded-lg border border-slate-200 p-4">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-slate-700" />
-              <p className="text-sm font-semibold text-slate-800">Signal Strength Graph</p>
+          <div className="rounded-xl border border-slate-200 p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <BarChart3 className="h-4 w-4 text-slate-600" />
+              <p className="text-sm font-bold text-slate-900 uppercase tracking-tight">Signal Strength Analysis</p>
             </div>
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {signalBars.map((bar) => (
                 <CircleMetric key={bar.label} label={bar.label} value={bar.value} colorClass={bar.color} />
               ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="rounded-lg border border-slate-200 p-4">
-              <p className="text-sm font-semibold text-slate-800">Contradictions / Patterns</p>
-              <ul className="mt-2 space-y-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="rounded-xl border border-slate-200 p-5">
+              <p className="text-sm font-bold text-slate-900 uppercase tracking-tight mb-4">Anomalous Patterns Detected</p>
+              <ul className="space-y-3">
                 {(contradictionTypes.length ? contradictionTypes : ['no_strong_contradiction_detected']).map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm leading-relaxed text-slate-700">
-                    <ShieldAlert className="w-4 h-4 mt-0.5 text-amber-600" />
+                  <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-slate-700 p-2 rounded-lg bg-amber-50/30 border border-amber-100/50">
+                    <ShieldAlert className="w-4 h-4 mt-0.5 text-amber-600 shrink-0" />
                     <span><span className="font-bold text-slate-900">Pattern:</span> {normalizeLabel(item)}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="rounded-lg border border-slate-200 p-4">
-              <p className="text-sm font-semibold text-slate-800">AI-Assisted Reasoning</p>
-              <ul className="mt-2 space-y-2">
+            <div className="rounded-xl border border-slate-200 p-5">
+              <p className="text-sm font-bold text-slate-900 uppercase tracking-tight mb-4">AI-Assisted Reasoning</p>
+              <ul className="space-y-3">
                 {reasoningBullets.map((item, idx) => (
-                  <li key={`${item}-${idx}`} className="flex items-start gap-2 text-sm leading-relaxed text-slate-700">
-                    <span className="w-1.5 h-1.5 mt-2 rounded-full bg-blue-600" />
+                  <li key={`${item}-${idx}`} className="flex items-start gap-3 text-sm leading-relaxed text-slate-700">
+                    <span className="w-1.5 h-1.5 mt-2 rounded-full bg-blue-600 shrink-0" />
                     <span><span className="font-bold text-slate-900">Reasoning:</span> {item}</span>
                   </li>
                 ))}
@@ -256,15 +256,18 @@ export default function InsightsEngineView({ caseId, insights }: Props) {
             </div>
           </div>
 
-          <div className="rounded-lg border border-slate-200 p-4">
-            <p className="text-sm font-semibold text-slate-700">Supporting Event References</p>
-            <p className="text-xs text-slate-500 mt-1">Count: {selected.supporting_event_ids.length}</p>
-            <div className="flex flex-wrap gap-2 mt-3">
+          <div className="rounded-xl border border-slate-200 p-5 bg-slate-50/30">
+            <p className="text-sm font-bold text-slate-900 uppercase tracking-tight">Supporting Event References</p>
+            <p className="text-xs text-slate-500 mt-1">Verified references: {selected.supporting_event_ids.length}</p>
+            <div className="flex flex-wrap gap-2 mt-4">
               {selected.supporting_event_ids.slice(0, 20).map((eventId) => (
-                <span key={eventId} className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded border border-slate-200 font-mono">
+                <span key={eventId} className="text-[10px] bg-white text-slate-600 px-2 py-1 rounded border border-slate-200 font-mono shadow-sm">
                   {eventId}
                 </span>
               ))}
+              {selected.supporting_event_ids.length > 20 && (
+                <span className="text-[10px] text-slate-400 self-center">+{selected.supporting_event_ids.length - 20} more</span>
+              )}
             </div>
           </div>
         </>
@@ -272,4 +275,3 @@ export default function InsightsEngineView({ caseId, insights }: Props) {
     </div>
   );
 }
-

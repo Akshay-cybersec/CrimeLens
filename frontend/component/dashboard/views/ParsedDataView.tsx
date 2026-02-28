@@ -68,12 +68,15 @@ export default function ParsedDataView({ caseId, timeline }: Props) {
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-sm h-full flex flex-col animate-in fade-in duration-500">
-      <div className="p-6 border-b border-slate-200 flex justify-between items-center">
-        <div>
+      <div className="p-6 border-b border-slate-200 flex justify-between items-center gap-6">
+        {/* Left Side: Title & Subtitle */}
+        <div className="flex-none">
           <h2 className="text-lg font-bold text-slate-800">Artifact Explorer</h2>
           <p className="text-sm text-slate-500">Raw parsed data from extraction.</p>
         </div>
-        <div className="flex gap-2">
+
+        {/* Center: Increased Size Input Box */}
+        <div className="flex-1 flex justify-center">
           <input 
             type="text" 
             placeholder="Try: give me whatsapp related messages"
@@ -85,13 +88,22 @@ export default function ParsedDataView({ caseId, timeline }: Props) {
                 void runSearch();
               }
             }}
-            className="border border-slate-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+            className="w-full max-w-2xl border border-slate-300 rounded-md px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
           />
-          <button onClick={() => void runSearch()} disabled={isSearching} className="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-md text-sm transition-colors disabled:opacity-60">
-            {isSearching ? 'Searching...' : 'Filter'}
+        </div>
+
+        {/* Right Side: Fixed Filter Button */}
+        <div className="flex-none">
+          <button 
+            onClick={() => void runSearch()} 
+            disabled={isSearching} 
+            className="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-4 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-60"
+          >
+            {isSearching ? 'Searching...' : 'Search'}
           </button>
         </div>
       </div>
+
       <div className="flex-1 overflow-auto">
         <div className="px-4 pt-4 flex flex-wrap gap-2">
           {[
@@ -120,7 +132,7 @@ export default function ParsedDataView({ caseId, timeline }: Props) {
               <ul className="mt-2 space-y-1.5">
                 {explanationBullets.map((point, index) => (
                   <li key={`${point}-${index}`} className="text-sm text-slate-700 flex items-start gap-2">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-blue-500" />
+                    <span className="mt-1 h-2 w-2 rounded-full bg-blue-500 shrink-0" />
                     <span>{point}</span>
                   </li>
                 ))}
@@ -133,8 +145,8 @@ export default function ParsedDataView({ caseId, timeline }: Props) {
             No related events found for this query in the current case. Try changing platform/contact keywords.
           </div>
         ) : null}
-        <table className="w-full text-left border-collapse text-sm">
-          <thead className="bg-slate-50 text-slate-600 sticky top-0 border-b border-slate-200 shadow-sm">
+        <table className="w-full text-left border-collapse text-sm mt-2">
+          <thead className="bg-slate-50 text-slate-600 sticky top-0 border-y border-slate-200 shadow-sm z-10">
             <tr>
               <th className="p-4 font-medium">Source</th>
               <th className="p-4 font-medium">Category</th>
