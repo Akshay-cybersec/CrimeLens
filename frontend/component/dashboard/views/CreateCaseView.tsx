@@ -8,11 +8,13 @@ type Props = {
   cases: CaseListItem[];
   selectedCaseId?: string;
   onSelectCase: (caseId: string) => void;
+  onUpdateCaseStatus?: (caseId: string, status: 'OPEN' | 'PENDING' | 'CLOSED') => Promise<void>;
   caseOverview?: CaseOverview | null;
 };
 
-export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, caseOverview }: Props) {
+export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, onUpdateCaseStatus, caseOverview }: Props) {
   const [query, setQuery] = useState('');
+  const [statusSaving, setStatusSaving] = useState(false);
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) {
@@ -55,6 +57,7 @@ export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, ca
               }`}
             >
               <p className="text-sm font-semibold text-slate-800">{item.case_id}</p>
+              <p className="text-[11px] mt-1 font-semibold text-slate-600">Status: {item.status}</p>
               <p className="text-sm text-slate-600 truncate mt-1">{item.title}</p>
               <p className="text-xs text-slate-500 mt-1">{new Date(item.updated_at).toLocaleString()}</p>
             </button>
@@ -93,6 +96,30 @@ export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, ca
                 <p className="text-xs text-slate-500">Total Events</p>
                 <p className="text-sm font-semibold text-slate-800 mt-1">{caseOverview.total_events}</p>
               </div>
+              <div className="p-4 rounded-lg border border-slate-200">
+                <p className="text-xs text-slate-500">Case Status</p>
+                <div className="mt-2 flex items-center gap-2">
+                  <select
+                    defaultValue={caseOverview.status}
+                    disabled={statusSaving}
+                    onChange={async (event) => {
+                      if (!onUpdateCaseStatus) return;
+                      try {
+                        setStatusSaving(true);
+                        await onUpdateCaseStatus(caseOverview.case_id, event.target.value as 'OPEN' | 'PENDING' | 'CLOSED');
+                      } finally {
+                        setStatusSaving(false);
+                      }
+                    }}
+                    className="border border-slate-300 rounded-md px-2 py-1 text-sm"
+                  >
+                    <option value="OPEN">OPEN</option>
+                    <option value="PENDING">PENDING</option>
+                    <option value="CLOSED">CLOSED</option>
+                  </select>
+                  <span className="text-xs text-slate-500">{statusSaving ? 'Updating...' : ''}</span>
+                </div>
+              </div>
             </div>
 
             <div className="p-4 rounded-lg border border-slate-200">
@@ -103,6 +130,17 @@ export default function CreateCaseView({ cases, selectedCaseId, onSelectCase, ca
             <div className="p-4 rounded-lg border border-slate-200">
               <p className="text-sm font-semibold text-slate-700">Description</p>
               <p className="text-sm text-slate-700 mt-1">{caseOverview.description || 'No description available.'}</p>
+            </div>
+
+            <div className="p-4 rounded-lg border border-slate-200">
+              <p className="text-sm font-semibold text-slate-700">All Source Files</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(caseOverview.source_filenames?.length ? caseOverview.source_filenames : [caseOverview.source_filename]).map((fileName) => (
+                  <span key={fileName} className="text-xs bg-slate-100 border border-slate-200 text-slate-700 px-2 py-1 rounded">
+                    {fileName}
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div className="p-4 rounded-lg border border-slate-200">

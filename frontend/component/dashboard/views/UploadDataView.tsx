@@ -1,19 +1,22 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { UploadCloud, AlertTriangle, FileBox, X, CheckCircle2 } from 'lucide-react';
+import { UploadCloud, AlertTriangle, FileBox } from 'lucide-react';
 import { caseService } from '@/services/caseService';
 import { toastError, toastSuccess } from '@/lib/toast';
 
 type Props = {
   onUploadComplete?: (caseId: string) => void;
+  selectedCaseId?: string;
+  selectedCaseStatus?: 'OPEN' | 'PENDING' | 'CLOSED' | null;
 };
 
-export default function UploadDataView({ onUploadComplete }: Props) {
+export default function UploadDataView({ onUploadComplete, selectedCaseId, selectedCaseStatus }: Props) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [mergeIntoCase, setMergeIntoCase] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -78,7 +81,11 @@ export default function UploadDataView({ onUploadComplete }: Props) {
     setUploadProgress(10);
     try {
       const title = selectedFile.name.replace(/\.[^/.]+$/, '') || `UFDR-${Date.now()}`;
-      const uploaded = await caseService.uploadCase(selectedFile, title, `Uploaded UFDR file: ${selectedFile.name}`);
+      const canMerge = Boolean(selectedCaseId && selectedCaseStatus && selectedCaseStatus !== 'CLOSED');
+      const shouldMerge = mergeIntoCase && canMerge;
+      const uploaded = shouldMerge
+        ? await caseService.appendUploadToCase(selectedCaseId as string, selectedFile)
+        : await caseService.uploadCase(selectedFile, title, `Uploaded UFDR file: ${selectedFile.name}`);
       setUploadProgress(70);
       try {
         await caseService.buildBehavioralIndex(uploaded.case_id);
@@ -92,7 +99,7 @@ export default function UploadDataView({ onUploadComplete }: Props) {
       }
 
       setTimeout(() => {
-        toastSuccess('File successfully ingested into Nexus DB.');
+        toastSuccess(shouldMerge ? 'UFDR merged into selected case successfully.' : 'File successfully ingested into Nexus DB.');
         setSelectedFile(null);
         setIsUploading(false);
         setUploadProgress(0);
@@ -203,6 +210,28 @@ export default function UploadDataView({ onUploadComplete }: Props) {
               </div>
             </div>
           )}
+        </div>
+
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={mergeIntoCase}
+              onChange={(e) => setMergeIntoCase(e.target.checked)}
+              disabled={!selectedCaseId || selectedCaseStatus === 'CLOSED' || isUploading}
+              className="mt-0.5 w-4 h-4"
+            />
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Merge upload into selected case</p>
+              <p className="text-xs text-slate-500 mt-1">
+                {selectedCaseId
+                  ? selectedCaseStatus === 'CLOSED'
+                    ? 'Selected case is CLOSED. Reopen it to allow merged UFDR uploads.'
+                    : `Selected case: ${selectedCaseId} (${selectedCaseStatus})`
+                  : 'Select a case in Initialize Investigation to enable merged upload.'}
+              </p>
+            </div>
+          </label>
         </div>
 
         {/* Warning Alert Box */}

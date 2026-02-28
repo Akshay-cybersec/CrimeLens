@@ -23,7 +23,7 @@ from app.schemas.analysis import (
     SearchResponse,
     SimilarCaseResponse,
 )
-from app.schemas.case import CaseCreateResponse, TimelineResponse
+from app.schemas.case import CaseCreateResponse, CaseStatusUpdateRequest, CaseStatusUpdateResponse, TimelineResponse
 from app.schemas.case import CaseListItemResponse, CaseOverviewResponse, DashboardMetricsResponse
 from app.services.background_worker import BackgroundWorkerService
 from app.services.case_behavior_service import CaseBehaviorService
@@ -50,6 +50,31 @@ async def upload_case(
     created = await case_service.upload_case(file=file, title=title, description=description, user=user)
     background_tasks.add_task(background_worker.process_case, created.case_id)
     return created
+
+
+@router.post("/{case_id}/upload", response_model=CaseCreateResponse)
+async def append_upload_to_case(
+    case_id: str,
+    background_tasks: BackgroundTasks,
+    file: UploadFile = File(...),
+    user: AuthUser = Depends(require_roles(["SUPER_ADMIN", "ADMIN", "INVESTIGATOR"])),
+    case_service: CaseService = Depends(get_case_service),
+    background_worker: BackgroundWorkerService = Depends(get_background_worker),
+) -> CaseCreateResponse:
+    created = await case_service.append_case_upload(case_id=case_id, file=file, user=user)
+    background_tasks.add_task(background_worker.process_case, created.case_id)
+    return created
+
+
+@router.patch("/{case_id}/status", response_model=CaseStatusUpdateResponse)
+async def update_case_status(
+    case_id: str,
+    payload: CaseStatusUpdateRequest,
+    user: AuthUser = Depends(require_roles(["SUPER_ADMIN", "ADMIN", "INVESTIGATOR"])),
+    case_service: CaseService = Depends(get_case_service),
+) -> CaseStatusUpdateResponse:
+    await case_service.update_case_status(case_id=case_id, status_value=payload.status, user=user)
+    return CaseStatusUpdateResponse(case_id=case_id, status=payload.status, message="Case status updated")
 
 
 @router.post("/{case_id}/behavioral-index", response_model=BehavioralIndexResponse)

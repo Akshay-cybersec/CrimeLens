@@ -29,6 +29,15 @@ export const caseService = {
     return data;
   },
 
+  async appendUploadToCase(caseId: string, file: File): Promise<{ case_id: string; events_ingested: number }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const { data } = await api.post<{ case_id: string; events_ingested: number }>(`/cases/${caseId}/upload`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return data;
+  },
+
   async getTimeline(caseId: string): Promise<TimelineResponse> {
     const { data } = await api.get<TimelineResponse>(`/cases/${caseId}/timeline`);
     return data;
@@ -41,6 +50,11 @@ export const caseService = {
 
   async getCaseOverview(caseId: string): Promise<CaseOverview> {
     const { data } = await api.get<CaseOverview>(`/cases/${caseId}/overview`);
+    return data;
+  },
+
+  async updateCaseStatus(caseId: string, status: 'OPEN' | 'PENDING' | 'CLOSED'): Promise<{ case_id: string; status: 'OPEN' | 'PENDING' | 'CLOSED' }> {
+    const { data } = await api.patch<{ case_id: string; status: 'OPEN' | 'PENDING' | 'CLOSED' }>(`/cases/${caseId}/status`, { status });
     return data;
   },
 

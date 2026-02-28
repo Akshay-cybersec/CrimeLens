@@ -48,6 +48,7 @@ export type CaseListItem = {
   description?: string | null;
   source_filename: string;
   owner_id: string;
+  status: 'OPEN' | 'PENDING' | 'CLOSED';
   created_at: string;
   updated_at: string;
 };
@@ -57,7 +58,9 @@ export type CaseOverview = {
   title: string;
   description?: string | null;
   source_filename: string;
+  source_filenames: string[];
   owner_id: string;
+  status: 'OPEN' | 'PENDING' | 'CLOSED';
   assigned_user_ids: string[];
   created_at: string;
   updated_at: string;
