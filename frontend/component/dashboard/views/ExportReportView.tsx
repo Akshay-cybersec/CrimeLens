@@ -221,24 +221,77 @@ export default function ExportReportView({
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 40;
     const contentWidth = pageWidth - margin * 2;
-    let y = margin;
+    let y = margin + 112;
+    const headerHeight = 94;
+
+    const drawWatermark = () => {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(72);
+      doc.setTextColor(238, 242, 247);
+      doc.text('CRIMELENS', pageWidth / 2, pageHeight / 2, {
+        align: 'center',
+        angle: 32,
+      });
+      doc.setTextColor(15, 23, 42);
+    };
 
     const ensureSpace = (needed = 24) => {
       if (y + needed > pageHeight - margin) {
         doc.addPage();
-        y = margin;
+        drawWatermark();
+        drawForensicBanner();
+        y = margin + 112;
       }
     };
 
-    const heading = (text: string) => {
-      ensureSpace(28);
+    const drawForensicBanner = () => {
+      doc.setFillColor(15, 23, 42);
+      doc.rect(0, 0, pageWidth, headerHeight, 'F');
+
+      const rightColWidth = 230;
+      const leftColWidth = pageWidth - margin * 2 - rightColWidth - 24;
+
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text(text, margin, y);
+      doc.setFontSize(17);
+      doc.setTextColor(255, 255, 255);
+      const titleLines = doc.splitTextToSize('CRIMELENS DIGITAL FORENSICS REPORT', leftColWidth);
+      const titleY = 34;
+      const titleLineHeight = 18;
+      doc.text(titleLines, margin, titleY);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(203, 213, 225);
+      const subtitleLines = doc.splitTextToSize(
+        'Forensic Timeline, AI Insight, Evidence Analysis, and Investigative Decision',
+        leftColWidth
+      );
+      const subtitleY = titleY + Math.max(1, titleLines.length) * titleLineHeight + 4;
+      doc.text(subtitleLines, margin, subtitleY);
+
+      const rightX = pageWidth - margin - rightColWidth;
+      doc.setFillColor(30, 41, 59);
+      doc.roundedRect(rightX, 20, rightColWidth, 54, 3, 3, 'F');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(226, 232, 240);
+      doc.text(`CASE: ${payload.case_id ?? 'N/A'}`, pageWidth - margin - 8, 42, { align: 'right' });
+      doc.text(`GENERATED: ${new Date(payload.generated_at).toLocaleString()}`, pageWidth - margin - 8, 61, { align: 'right' });
+
+      doc.setTextColor(15, 23, 42);
+    };
+
+    const heading = (text: string) => {
+      ensureSpace(30);
+      doc.setFillColor(241, 245, 249);
+      doc.roundedRect(margin, y - 14, contentWidth, 20, 3, 3, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(30, 41, 59);
+      doc.text(text, margin + 8, y);
       y += 18;
-      doc.setLineWidth(0.4);
-      doc.line(margin, y, pageWidth - margin, y);
-      y += 10;
+      doc.setTextColor(15, 23, 42);
     };
 
     const subheading = (text: string) => {
@@ -250,27 +303,50 @@ export default function ExportReportView({
     };
 
     const paragraph = (text: string, fontSize = 10, indent = 0) => {
-      doc.setFont('helvetica', 'normal');
+      doc.setFont('times', 'normal');
       doc.setFontSize(fontSize);
       const lines = doc.splitTextToSize(text, contentWidth - indent);
       lines.forEach((line: string) => {
         ensureSpace(14);
         doc.text(line, margin + indent, y);
-        y += 13;
+        y += 12;
       });
+      y += 3;
+    };
+
+    const kv = (k: string, v: string) => {
+      ensureSpace(16);
+      doc.setFont('times', 'bold');
+      doc.setFontSize(10);
+      doc.text(`${k}:`, margin, y);
+      doc.setFont('times', 'normal');
+      const wrapped = doc.splitTextToSize(v, contentWidth - 120);
+      doc.text(wrapped[0] || 'N/A', margin + 120, y);
+      y += 12;
+      for (const line of wrapped.slice(1)) {
+        ensureSpace(14);
+        doc.text(line, margin + 120, y);
+        y += 12;
+      }
       y += 2;
     };
 
-    const kv = (k: string, v: string) => paragraph(`${k}: ${v}`);
+    drawWatermark();
+    drawForensicBanner();
 
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(18);
-    doc.text('CrimeLens Full Forensic Report', margin, y);
-    y += 20;
-    doc.setFont('helvetica', 'normal');
+    doc.setFillColor(248, 250, 252);
+    doc.setDrawColor(226, 232, 240);
+    doc.roundedRect(margin, y - 4, contentWidth, 64, 4, 4, 'FD');
+    doc.setFont('times', 'bold');
+    doc.setFontSize(12);
+    doc.text('Report Metadata', margin + 10, y + 13);
+    doc.setFont('times', 'normal');
     doc.setFontSize(10);
-    doc.text(`Case ID: ${payload.case_id ?? 'N/A'} | Generated: ${new Date(payload.generated_at).toLocaleString()}`, margin, y);
-    y += 20;
+    doc.text(`Case ID: ${payload.case_id ?? 'N/A'}`, margin + 10, y + 31);
+    doc.text(`Source: ${payload.summary.source_filename ?? 'N/A'}`, margin + 10, y + 46);
+    doc.text(`Generated At: ${new Date(payload.generated_at).toLocaleString()}`, margin + contentWidth / 2, y + 31);
+    doc.text(`Case Title: ${payload.summary.case_title ?? 'N/A'}`, margin + contentWidth / 2, y + 46);
+    y += 78;
 
     heading('1. Executive Summary');
     kv('Case Title', payload.summary.case_title ?? 'N/A');
@@ -289,11 +365,11 @@ export default function ExportReportView({
     if (payload.suspicious_windows.length) {
       payload.suspicious_windows.forEach((row, idx) => {
         ensureSpace(56);
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('times', 'bold');
         doc.setFontSize(10);
         doc.text(`Window ${idx + 1}`, margin, y);
         y += 13;
-        doc.setFont('helvetica', 'normal');
+        doc.setFont('times', 'normal');
         paragraph(`Start: ${new Date(row.start).toLocaleString()}`, 10, 12);
         paragraph(`End: ${new Date(row.end).toLocaleString()}`, 10, 12);
         paragraph(`Severity: ${row.severity}`, 10, 12);
@@ -307,7 +383,7 @@ export default function ExportReportView({
     if (payload.insights.length) {
       payload.insights.forEach((insight, idx) => {
         ensureSpace(72);
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('times', 'bold');
         doc.setFontSize(11);
         doc.text(`AI Insight ${idx + 1}`, margin, y);
         y += 14;
@@ -325,7 +401,7 @@ export default function ExportReportView({
     if (payload.flagged_clusters.length) {
       payload.flagged_clusters.forEach((cluster, idx) => {
         ensureSpace(72);
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('times', 'bold');
         doc.setFontSize(11);
         doc.text(`Cluster ${idx + 1}: ${cluster.anomaly_type}`, margin, y);
         y += 14;
@@ -371,6 +447,15 @@ export default function ExportReportView({
     splitSentences(payload.ai_case_decision.story, 12).forEach((line) => paragraph(`- ${line}`, 10, 12));
     subheading('Next Step Note');
     paragraph(payload.ai_case_decision.nextStep, 10, 12);
+
+    const pages = doc.getNumberOfPages();
+    for (let page = 1; page <= pages; page += 1) {
+      doc.setPage(page);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(100, 116, 139);
+      doc.text(`CrimeLens Forensic Report | Page ${page} of ${pages}`, pageWidth - margin, pageHeight - 18, { align: 'right' });
+    }
 
     doc.save(`case-report-${caseId || 'unknown'}.pdf`);
   };
