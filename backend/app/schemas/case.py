@@ -5,6 +5,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from app.models.case import CaseStatus
 from app.schemas.event import EventResponse
 from app.utils.pagination import PageMeta
 
@@ -31,6 +32,7 @@ class CaseListItemResponse(BaseModel):
     description: Optional[str] = None
     source_filename: str
     owner_id: str
+    status: CaseStatus
     created_at: datetime
     updated_at: datetime
 
@@ -41,6 +43,8 @@ class CaseOverviewResponse(BaseModel):
     description: Optional[str] = None
     source_filename: str
     owner_id: str
+    status: CaseStatus
+    source_filenames: list[str] = Field(default_factory=list)
     assigned_user_ids: list[str]
     created_at: datetime
     updated_at: datetime
@@ -58,3 +62,13 @@ class DashboardMetricsResponse(BaseModel):
     flagged_messages: int
     media_files: int
     location_pins: int
+
+
+class CaseStatusUpdateRequest(BaseModel):
+    status: CaseStatus
+
+
+class CaseStatusUpdateResponse(BaseModel):
+    case_id: str
+    status: CaseStatus
+    message: str

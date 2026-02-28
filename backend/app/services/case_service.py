@@ -5,7 +5,7 @@ from typing import Any, Optional
 from fastapi import HTTPException, UploadFile, status
 
 from app.core.security import AuthUser
-from app.models.case import CaseDocument
+from app.models.case import CaseDocument, CaseStatus
 from app.repositories.cases import CaseRepository
 from app.repositories.dashboard_metrics import DashboardMetricsRepository
 from app.repositories.events import EventRepository
@@ -51,8 +51,10 @@ class CaseService:
             title=title,
             description=description,
             source_filename=file.filename or "unknown.pdf",
+            source_filenames=[file.filename or "unknown.pdf"],
             owner_id=user.id,
             assigned_user_ids=[user.id],
+            status="OPEN",
         )
         created_case = await self.case_repo.create(case_doc)
 
@@ -69,6 +71,43 @@ class CaseService:
             case_id=str(created_case.id),
             title=created_case.title,
             source_filename=created_case.source_filename,
+            events_ingested=len(inserted),
+        )
+
+    async def append_case_upload(
+        self,
+        case_id: str,
+        file: UploadFile,
+        user: AuthUser,
+    ) -> CaseCreateResponse:
+        case_doc = await self.authorize_case_access(case_id, user)
+        if case_doc.status == "CLOSED":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Cannot append UFDR data to a CLOSED case",
+            )
+
+        file_bytes = await file.read()
+        max_size = self.max_upload_size_mb * 1024 * 1024
+        if len(file_bytes) > max_size:
+            raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=f"File exceeds {self.max_upload_size_mb} MB",
+            )
+
+        events = await self.parser_service.parse_events(
+            case_id=case_doc.id,
+            file_bytes=file_bytes,
+            filename=file.filename,
+        )
+        inserted = await self.event_repo.insert_many(events)
+        await self.case_repo.register_source_file(case_id=case_id, filename=file.filename or "unknown.pdf")
+        await self.redis_service.enqueue_case_job(case_id)
+
+        return CaseCreateResponse(
+            case_id=case_id,
+            title=case_doc.title,
+            source_filename=file.filename or case_doc.source_filename,
             events_ingested=len(inserted),
         )
 
@@ -109,6 +148,7 @@ class CaseService:
                 description=case.description,
                 source_filename=case.source_filename,
                 owner_id=case.owner_id,
+                status=case.status,
                 created_at=case.created_at,
                 updated_at=case.updated_at,
             )
@@ -138,6 +178,8 @@ class CaseService:
             description=case_doc.description,
             source_filename=case_doc.source_filename,
             owner_id=case_doc.owner_id,
+            status=case_doc.status,
+            source_filenames=case_doc.source_filenames,
             assigned_user_ids=case_doc.assigned_user_ids,
             created_at=case_doc.created_at,
             updated_at=case_doc.updated_at,
@@ -149,3 +191,9 @@ class CaseService:
     async def get_dashboard_metrics(self) -> DashboardMetricsResponse:
         data = await self.metrics_repo.get_metrics()
         return DashboardMetricsResponse(**data)
+
+    async def update_case_status(self, case_id: str, status_value: CaseStatus, user: AuthUser) -> None:
+        await self.authorize_case_access(case_id, user)
+        updated = await self.case_repo.update_status(case_id=case_id, status=status_value)
+        if not updated:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Case not found")

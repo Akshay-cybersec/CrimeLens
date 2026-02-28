@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+import re
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 from statistics import mean
 from typing import Any, Optional
@@ -292,16 +294,25 @@ class InsightService:
                 "avg_gap_hours": round(mean(gaps), 3) if gaps else 0.0,
                 "max_gap_hours": round(max(gaps), 3) if gaps else 0.0,
             },
+            "entity_context": self._extract_entity_context(sorted_events),
+            "evidence_samples": self._build_event_samples(sorted_events, max_items=14),
         }
 
     async def _generate_ai(self, summary_payload: dict[str, Any]) -> dict[str, Any]:
         llm_result = await self.llm_service.structured_json(
             task_prompt=(
-                "Given the structured anomaly summary below, generate:\n"
-                "- Insight summary (max 5 sentences)\n"
-                "- Behavioral interpretation\n"
-                "- Confidence score between 0 and 1\n"
-                "- Supporting anomaly types\n"
+                "You are given case-level event stats, detected anomalies, entity context and evidence samples.\n"
+                "Generate a case-specific forensic insight grounded only in provided data.\n"
+                "Rules:\n"
+                "1) Do not invent people/events/apps.\n"
+                "2) Mention 2-4 concrete observed signals from provided evidence.\n"
+                "3) If evidence is sparse, explicitly say certainty is low and why.\n"
+                "4) Keep the summary concise and investigator-friendly.\n"
+                "Output fields:\n"
+                "- summary: max 4 short sentences with concrete signals\n"
+                "- confidence_score: 0..1, conservative when evidence is weak\n"
+                "- reasoning: 3-6 bullet-like statements in plain text\n"
+                "- supporting_types: anomaly types that support the summary\n"
                 "Return strictly JSON:\n"
                 '{"summary": "", "confidence_score": 0.0, "reasoning": "", "supporting_types": []}\n'
                 f"Structured summary: {summary_payload}"
@@ -328,12 +339,61 @@ class InsightService:
         reasoning_text = str(llm_result.get("reasoning", "")).strip()
         if not summary_text or not reasoning_text:
             return fallback
-        return llm_result
+        return self._normalize_ai_result(llm_result, summary_payload)
+
+    def _normalize_ai_result(self, llm_result: dict[str, Any], summary_payload: dict[str, Any]) -> dict[str, Any]:
+        event_stats = summary_payload.get("event_statistics", {}) if isinstance(summary_payload, dict) else {}
+        anomalies = summary_payload.get("anomalies_detected", []) if isinstance(summary_payload, dict) else []
+        entity_context = summary_payload.get("entity_context", {}) if isinstance(summary_payload, dict) else {}
+        total_events = int(event_stats.get("total_events", 0) or 0)
+        deletion_ratio = float(event_stats.get("deletion_ratio", 0.0) or 0.0)
+        anomaly_count = len(anomalies) if isinstance(anomalies, list) else 0
+        indicator_count = int(entity_context.get("indicator_hits_total", 0) or 0) if isinstance(entity_context, dict) else 0
+
+        confidence_raw = llm_result.get("confidence_score", 0.4)
+        try:
+            confidence = float(confidence_raw)
+        except (TypeError, ValueError):
+            confidence = 0.4
+        confidence = min(1.0, max(0.0, confidence))
+
+        # Confidence guardrail so small/noisy timelines do not look over-confident.
+        dynamic_ceiling = 0.95
+        if total_events < 20:
+            dynamic_ceiling = 0.62
+        elif total_events < 60:
+            dynamic_ceiling = 0.76
+        elif total_events < 150:
+            dynamic_ceiling = 0.88
+        if anomaly_count == 0 and indicator_count <= 1 and deletion_ratio < 0.03:
+            dynamic_ceiling = min(dynamic_ceiling, 0.52)
+        confidence = min(dynamic_ceiling, confidence)
+
+        supporting_type_candidates = llm_result.get("supporting_types", [])
+        supporting_types = (
+            [str(item).strip() for item in supporting_type_candidates if str(item).strip()]
+            if isinstance(supporting_type_candidates, list)
+            else []
+        )
+        if not supporting_types and isinstance(anomalies, list):
+            supporting_types = [
+                str(item.get("type", "")).strip()
+                for item in anomalies[:4]
+                if isinstance(item, dict) and str(item.get("type", "")).strip()
+            ]
+        return {
+            "summary": str(llm_result.get("summary", "")).strip(),
+            "confidence_score": round(confidence, 3),
+            "reasoning": str(llm_result.get("reasoning", "")).strip(),
+            "supporting_types": supporting_types,
+        }
 
     def _build_fallback_ai(self, summary_payload: dict[str, Any]) -> dict[str, Any]:
         event_stats = summary_payload.get("event_statistics", {}) if isinstance(summary_payload, dict) else {}
         timeline_summary = summary_payload.get("timeline_summary", {}) if isinstance(summary_payload, dict) else {}
         anomalies = summary_payload.get("anomalies_detected", []) if isinstance(summary_payload, dict) else []
+        entity_context = summary_payload.get("entity_context", {}) if isinstance(summary_payload, dict) else {}
+        evidence_samples = summary_payload.get("evidence_samples", []) if isinstance(summary_payload, dict) else []
 
         total_events = int(event_stats.get("total_events", 0) or 0)
         event_type_counts = event_stats.get("event_type_counts", {})
@@ -342,6 +402,10 @@ class InsightService:
         density = float(event_stats.get("activity_density_per_hour", 0.0) or 0.0)
         duration_hours = float(timeline_summary.get("duration_hours", 0.0) or 0.0)
         max_gap_hours = float(timeline_summary.get("max_gap_hours", 0.0) or 0.0)
+        named_entities = entity_context.get("named_entities", []) if isinstance(entity_context, dict) else []
+        app_signals = entity_context.get("app_signals", []) if isinstance(entity_context, dict) else []
+        indicators = entity_context.get("indicator_signals", []) if isinstance(entity_context, dict) else []
+        indicator_hits_total = int(entity_context.get("indicator_hits_total", 0) or 0) if isinstance(entity_context, dict) else 0
 
         anomaly_types = [
             str(item.get("type", "")).strip()
@@ -355,20 +419,42 @@ class InsightService:
             + min(0.30, len(anomaly_types) * 0.08)
             + min(0.20, deletion_ratio * 1.4)
             + min(0.20, max_gap_hours / 48.0)
+            + min(0.10, indicator_hits_total * 0.02)
         )
+        if total_events < 20:
+            confidence = min(confidence, 0.58)
+        elif total_events < 60:
+            confidence = min(confidence, 0.74)
         confidence = min(0.92, max(0.25, round(confidence, 3)))
 
         anomaly_text = ", ".join(supporting_types) if supporting_types else "no_strong_contradiction_detected"
+        named_text = ", ".join(str(item) for item in named_entities[:3]) if isinstance(named_entities, list) and named_entities else "no clear actor names"
+        apps_text = ", ".join(str(item) for item in app_signals[:4]) if isinstance(app_signals, list) and app_signals else "no dominant app signal"
+        indicator_text = ", ".join(str(item) for item in indicators[:5]) if isinstance(indicators, list) and indicators else "no explicit high-risk indicators"
+
         summary = (
             f"Case-level analysis processed {total_events} events across {event_type_count} event categories. "
-            f"Detected anomaly signals: {anomaly_text}. "
-            f"Observed deletion ratio is {deletion_ratio:.2f} with max inactivity gap {max_gap_hours:.2f} hours."
+            f"Observed actor/context signals include {named_text}; app/artefact focus: {apps_text}. "
+            f"Detected anomaly signals: {anomaly_text}; high-risk indicators: {indicator_text}. "
+            f"Deletion ratio is {deletion_ratio:.2f} with max inactivity gap {max_gap_hours:.2f} hours."
         )
 
+        sample_lines: list[str] = []
+        if isinstance(evidence_samples, list):
+            for item in evidence_samples[:3]:
+                if not isinstance(item, dict):
+                    continue
+                event_type = str(item.get("event_type", "SYSTEM"))
+                snippet = str(item.get("snippet", "")).strip()
+                if snippet:
+                    sample_lines.append(f"{event_type}: {snippet}")
+
+        sample_text = " | ".join(sample_lines) if sample_lines else "No high-signal sample lines available."
         reasoning = (
             f"The insight is based on structured anomaly detection, not legal conclusions. "
             f"Activity density is {density:.2f} events/hour over {duration_hours:.2f} hours, "
-            f"with pattern count {len(anomaly_types)}. "
+            f"with pattern count {len(anomaly_types)} and indicator hits {indicator_hits_total}. "
+            f"Representative evidence signals: {sample_text}. "
             f"Risk confidence increases when deletion behavior, long inactivity gaps, and multiple anomaly types co-occur."
         )
 
@@ -378,6 +464,141 @@ class InsightService:
             "reasoning": reasoning,
             "supporting_types": supporting_types,
         }
+
+    def _extract_entity_context(self, events: list[EventDocument]) -> dict[str, Any]:
+        named_entities: Counter[str] = Counter()
+        contact_handles: Counter[str] = Counter()
+        app_signals: Counter[str] = Counter()
+        indicator_signals: Counter[str] = Counter()
+
+        app_tokens = (
+            "telegram",
+            "whatsapp",
+            "gmail",
+            "tor",
+            "signal",
+            "instagram",
+            "facebook",
+            "crypto",
+            "bitcoin",
+            "binance",
+        )
+        risk_tokens = (
+            "blackmail",
+            "threat",
+            "extort",
+            "sim swap",
+            "anonymous",
+            "goodbye",
+            "suicide",
+            "deleted",
+            "reset",
+            "otp",
+            "phishing",
+            "ransom",
+        )
+
+        for event in events:
+            raw = event.raw_text or ""
+            raw_lower = raw.lower()
+            fields = self._extract_kv_fields(raw)
+
+            for key in ("name", "sender", "receiver", "contact_name", "victim", "suspect", "actor", "user"):
+                value = self._clean_entity_value(fields.get(key))
+                if value:
+                    named_entities[value] += 1
+            if fields.get("role") and fields.get("name"):
+                role_name = f"{fields.get('role')}:{fields.get('name')}"
+                cleaned = self._clean_entity_value(role_name)
+                if cleaned:
+                    named_entities[cleaned] += 2
+
+            for token in re.findall(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", raw):
+                contact_handles[token] += 1
+            for token in re.findall(r"\b\d{10,15}\b", raw):
+                contact_handles[token] += 1
+
+            for token in app_tokens:
+                if token in raw_lower:
+                    app_signals[token] += 1
+            for token in risk_tokens:
+                if token in raw_lower:
+                    indicator_signals[token] += 1
+
+        return {
+            "named_entities": [name for name, _ in named_entities.most_common(6)],
+            "contact_handles": [name for name, _ in contact_handles.most_common(6)],
+            "app_signals": [name for name, _ in app_signals.most_common(6)],
+            "indicator_signals": [name for name, _ in indicator_signals.most_common(8)],
+            "indicator_hits_total": int(sum(indicator_signals.values())),
+        }
+
+    def _build_event_samples(self, events: list[EventDocument], max_items: int = 12) -> list[dict[str, Any]]:
+        scored: list[tuple[int, EventDocument]] = []
+        for event in events:
+            raw_lower = (event.raw_text or "").lower()
+            score = 0
+            if event.event_type in {"DELETION", "CALL", "MESSAGE", "LOCATION"}:
+                score += 3
+            if event.is_deleted:
+                score += 4
+            if any(token in raw_lower for token in ("threat", "blackmail", "otp", "tor", "sim swap", "reset", "anonymous")):
+                score += 4
+            if "profile_event" in raw_lower:
+                score += 2
+            scored.append((score, event))
+
+        scored.sort(key=lambda row: (row[0], row[1].timestamp), reverse=True)
+        selected = [event for score, event in scored if score > 0][:max_items]
+        if len(selected) < max_items:
+            fallback = sorted(events, key=lambda item: item.timestamp, reverse=True)
+            for event in fallback:
+                if event in selected:
+                    continue
+                selected.append(event)
+                if len(selected) >= max_items:
+                    break
+
+        result: list[dict[str, Any]] = []
+        for event in selected[:max_items]:
+            result.append(
+                {
+                    "id": str(event.id) if event.id else "",
+                    "timestamp": event.timestamp.isoformat(),
+                    "event_type": event.event_type,
+                    "snippet": self._summarize_line(event.raw_text, 160),
+                    "deleted": bool(event.is_deleted),
+                }
+            )
+        return result
+
+    def _extract_kv_fields(self, raw_text: str) -> dict[str, str]:
+        fields: dict[str, str] = {}
+        for part in [item.strip() for item in raw_text.split("|") if item.strip()]:
+            if ":" not in part:
+                continue
+            key, value = part.split(":", 1)
+            key_clean = key.strip().lower().replace(" ", "_")
+            value_clean = value.strip()
+            if key_clean and value_clean:
+                fields[key_clean] = value_clean
+        return fields
+
+    def _clean_entity_value(self, value: Any) -> str:
+        if not isinstance(value, str):
+            return ""
+        cleaned = re.sub(r"\s+", " ", value).strip()
+        if not cleaned:
+            return ""
+        if len(cleaned) > 48:
+            return cleaned[:48].strip()
+        return cleaned
+
+    def _summarize_line(self, raw_text: str, limit: int = 160) -> str:
+        compact = re.sub(r"\s+", " ", raw_text or "").strip()
+        if len(compact) <= limit:
+            return compact
+        return compact[: max(1, limit - 3)].rstrip() + "..."
 
     def _build_insight_document(
         self,

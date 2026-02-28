@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -69,7 +70,7 @@ export default function ForensicsDashboard() {
   const [connectionGraph, setConnectionGraph] = useState<ConnectionGraphResponse | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
-
+
   useEffect(() => {
     const fromQuery = searchParams.get('case_id');
     const fromStorage = typeof window !== 'undefined' ? localStorage.getItem('active_case_id') : null;
@@ -81,7 +82,7 @@ export default function ForensicsDashboard() {
       }
     }
   }, [searchParams]);
-
+
   useEffect(() => {
     const loadMetrics = async () => {
       try {
@@ -94,22 +95,23 @@ export default function ForensicsDashboard() {
     void loadMetrics();
   }, []);
 
-  useEffect(() => {
-    const loadCases = async () => {
-      try {
-        const rows = await caseService.listCases(200);
-        setCases(rows);
-        const activeFromStorage = typeof window !== 'undefined' ? localStorage.getItem('active_case_id') : '';
-        const activeFromQuery = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('case_id') : '';
-        if (!activeFromStorage && !activeFromQuery && rows.length > 0) {
-          setCaseId(rows[0].case_id);
-        }
-      } catch {
-        setCases([]);
+  const reloadCases = useCallback(async () => {
+    try {
+      const rows = await caseService.listCases(200);
+      setCases(rows);
+      const activeFromStorage = typeof window !== 'undefined' ? localStorage.getItem('active_case_id') : '';
+      const activeFromQuery = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('case_id') : '';
+      if (!activeFromStorage && !activeFromQuery && rows.length > 0) {
+        setCaseId(rows[0].case_id);
       }
-    };
-    void loadCases();
+    } catch {
+      setCases([]);
+    }
   }, []);
+
+  useEffect(() => {
+    void reloadCases();
+  }, [reloadCases]);
 
   const reloadCaseData = useCallback(async (targetCaseId: string) => {
     const [insightData, timelineData, similarData, evidenceData, overviewData, graphData] = await Promise.allSettled([
@@ -159,6 +161,7 @@ export default function ForensicsDashboard() {
     }
     router.replace(`/dashboard?case_id=${nextCaseId}`);
     setActiveStep('analyze');
+    void reloadCases();
   };
 
   const handleSelectCase = (nextCaseId: string) => {
@@ -169,12 +172,20 @@ export default function ForensicsDashboard() {
     router.replace(`/dashboard?case_id=${nextCaseId}`);
   };
 
+  const handleUpdateCaseStatus = useCallback(async (targetCaseId: string, status: 'OPEN' | 'PENDING' | 'CLOSED') => {
+    await caseService.updateCaseStatus(targetCaseId, status);
+    await reloadCases();
+    if (targetCaseId === caseId) {
+      await reloadCaseData(targetCaseId);
+    }
+  }, [caseId, reloadCaseData, reloadCases]);
+
   // Dynamic content renderer based on active sidebar tab
   const renderActiveView = () => {
     switch (activeStep) {
       case 'dashboard': return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} cases={cases} overview={caseOverview} demoMetrics={dashboardMetrics} />;
-      case 'create': return <CreateCaseView cases={cases} selectedCaseId={caseId} onSelectCase={handleSelectCase} caseOverview={caseOverview} />;
-      case 'upload': return <UploadDataView onUploadComplete={handleUploadComplete} />;
+      case 'create': return <CreateCaseView cases={cases} selectedCaseId={caseId} onSelectCase={handleSelectCase} onUpdateCaseStatus={handleUpdateCaseStatus} caseOverview={caseOverview} />;
+      case 'upload': return <UploadDataView onUploadComplete={handleUploadComplete} selectedCaseId={caseId} selectedCaseStatus={caseOverview?.status ?? null} />;
       case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
       case 'analyze': return <AIAnalysisView similarCases={similarCases} timeline={timeline} insights={insights} evidence={evidence} />;
       case 'graph': return <GraphLinkingView graph={connectionGraph} timeline={timeline} />;
@@ -203,7 +214,7 @@ export default function ForensicsDashboard() {
         </div>
 
         <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
-          {FLOW_STEPS.map((step, index) => {
+          {FLOW_STEPS.map((step) => {
             const Icon = step.icon;
             const isActive = activeStep === step.id;
             
@@ -287,3 +298,5 @@ export default function ForensicsDashboard() {
     </div>
   );
 }
+
+

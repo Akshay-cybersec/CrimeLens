@@ -33,3 +33,23 @@ class CaseRepository(BaseRepository):
             {"_id": ObjectId(case_id)},
             {"$set": {"updated_at": datetime.now(timezone.utc)}},
         )
+
+    async def update_status(self, case_id: str, status: str) -> bool:
+        result = await self.collection.update_one(
+            {"_id": ObjectId(case_id)},
+            {"$set": {"status": status, "updated_at": datetime.now(timezone.utc)}},
+        )
+        return result.matched_count > 0
+
+    async def register_source_file(self, case_id: str, filename: str) -> bool:
+        result = await self.collection.update_one(
+            {"_id": ObjectId(case_id)},
+            {
+                "$set": {
+                    "source_filename": filename,
+                    "updated_at": datetime.now(timezone.utc),
+                },
+                "$addToSet": {"source_filenames": filename},
+            },
+        )
+        return result.matched_count > 0
