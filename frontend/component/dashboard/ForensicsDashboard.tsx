@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { 
   FolderPlus, 
@@ -111,31 +111,41 @@ export default function ForensicsDashboard() {
     void loadCases();
   }, []);
 
+  const reloadCaseData = useCallback(async (targetCaseId: string) => {
+    const [insightData, timelineData, similarData, evidenceData, overviewData, graphData] = await Promise.allSettled([
+      insightService.getCaseInsights(targetCaseId),
+      caseService.getTimeline(targetCaseId),
+      caseService.getSimilarCases(targetCaseId),
+      caseService.getEvidence(targetCaseId),
+      caseService.getCaseOverview(targetCaseId),
+      caseService.getConnectionGraph(targetCaseId),
+    ]);
+
+    setInsights(insightData.status === 'fulfilled' ? insightData.value : []);
+    setTimeline(timelineData.status === 'fulfilled' ? timelineData.value : null);
+    setSimilarCases(similarData.status === 'fulfilled' ? similarData.value : []);
+    setEvidence(evidenceData.status === 'fulfilled' ? evidenceData.value : null);
+    setCaseOverview(overviewData.status === 'fulfilled' ? overviewData.value : null);
+    setConnectionGraph(graphData.status === 'fulfilled' ? graphData.value : null);
+  }, []);
+
   useEffect(() => {
     if (!caseId) {
       return;
     }
+    void reloadCaseData(caseId);
+  }, [caseId, reloadCaseData]);
 
-    const loadData = async () => {
-      const [insightData, timelineData, similarData, evidenceData, overviewData, graphData] = await Promise.allSettled([
-        insightService.getCaseInsights(caseId),
-        caseService.getTimeline(caseId),
-        caseService.getSimilarCases(caseId),
-        caseService.getEvidence(caseId),
-        caseService.getCaseOverview(caseId),
-        caseService.getConnectionGraph(caseId),
-      ]);
+  const handleRefreshResponses = useCallback(async () => {
+    if (!caseId) return;
+    await reloadCaseData(caseId);
+  }, [caseId, reloadCaseData]);
 
-      setInsights(insightData.status === 'fulfilled' ? insightData.value : []);
-      setTimeline(timelineData.status === 'fulfilled' ? timelineData.value : null);
-      setSimilarCases(similarData.status === 'fulfilled' ? similarData.value : []);
-      setEvidence(evidenceData.status === 'fulfilled' ? evidenceData.value : null);
-      setCaseOverview(overviewData.status === 'fulfilled' ? overviewData.value : null);
-      setConnectionGraph(graphData.status === 'fulfilled' ? graphData.value : null);
-    };
-
-    void loadData();
-  }, [caseId]);
+  const handleRegenerateCaseDecision = useCallback(async () => {
+    if (!caseId) return;
+    await insightService.regenerateInsights(caseId);
+    await reloadCaseData(caseId);
+  }, [caseId, reloadCaseData]);
 
   // Route back to the absolute homepage of your application
   const handleBackToHome = () => {
@@ -167,10 +177,10 @@ export default function ForensicsDashboard() {
       case 'upload': return <UploadDataView onUploadComplete={handleUploadComplete} />;
       case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
       case 'analyze': return <AIAnalysisView similarCases={similarCases} timeline={timeline} insights={insights} evidence={evidence} />;
-      case 'graph': return <GraphLinkingView graph={connectionGraph} />;
+      case 'graph': return <GraphLinkingView graph={connectionGraph} timeline={timeline} />;
       case 'insights': return <InsightsEngineView caseId={caseId} insights={insights} />;
-      case 'evidence': return <ReviewEvidenceView evidence={evidence} />;
-      case 'decision-beta': return <CaseDecisionBetaView caseId={caseId} overview={caseOverview} timeline={timeline} insights={insights} evidence={evidence} similarCases={similarCases} />;
+      case 'evidence': return <ReviewEvidenceView caseId={caseId} evidence={evidence} onRegenerateResponse={handleRefreshResponses} />;
+      case 'decision-beta': return <CaseDecisionBetaView caseId={caseId} overview={caseOverview} timeline={timeline} insights={insights} evidence={evidence} similarCases={similarCases} onRegenerateResponse={handleRegenerateCaseDecision} />;
       case 'export': return <ExportReportView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} overview={caseOverview} similarCases={similarCases} />;
       default: return <IntelligenceDashboardView caseId={caseId} timeline={timeline} evidence={evidence} insights={insights} cases={cases} overview={caseOverview} demoMetrics={dashboardMetrics} />;
     }

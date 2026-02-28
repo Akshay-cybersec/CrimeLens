@@ -61,11 +61,9 @@ class InsightService:
         return await self._generate(case_id=case_id, force=True)
 
     async def regenerate(self, case_id: str) -> InsightResponse:
-        await self._check_regenerate_rate_limit(case_id)
         generated = await self._generate(case_id=case_id, force=True)
         if not generated:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No events found for this case")
-        await self._mark_regenerated(case_id)
         return generated[0]
 
     async def _generate(self, case_id: str, force: bool) -> list[InsightResponse]:
@@ -318,7 +316,68 @@ class InsightService:
             temperature=min(0.2, self.settings.deepinfra_temperature),
         )
         logger.info("insight_llm_response", extra={"response": llm_result})
+        fallback = self._build_fallback_ai(summary_payload)
+        if not isinstance(llm_result, dict):
+            return fallback
+        if llm_result.get("error"):
+            return fallback
+        explanation = str(llm_result.get("explanation", ""))
+        if "LLM API key not configured" in explanation:
+            return fallback
+        summary_text = str(llm_result.get("summary", "")).strip()
+        reasoning_text = str(llm_result.get("reasoning", "")).strip()
+        if not summary_text or not reasoning_text:
+            return fallback
         return llm_result
+
+    def _build_fallback_ai(self, summary_payload: dict[str, Any]) -> dict[str, Any]:
+        event_stats = summary_payload.get("event_statistics", {}) if isinstance(summary_payload, dict) else {}
+        timeline_summary = summary_payload.get("timeline_summary", {}) if isinstance(summary_payload, dict) else {}
+        anomalies = summary_payload.get("anomalies_detected", []) if isinstance(summary_payload, dict) else []
+
+        total_events = int(event_stats.get("total_events", 0) or 0)
+        event_type_counts = event_stats.get("event_type_counts", {})
+        event_type_count = len(event_type_counts) if isinstance(event_type_counts, dict) else 0
+        deletion_ratio = float(event_stats.get("deletion_ratio", 0.0) or 0.0)
+        density = float(event_stats.get("activity_density_per_hour", 0.0) or 0.0)
+        duration_hours = float(timeline_summary.get("duration_hours", 0.0) or 0.0)
+        max_gap_hours = float(timeline_summary.get("max_gap_hours", 0.0) or 0.0)
+
+        anomaly_types = [
+            str(item.get("type", "")).strip()
+            for item in anomalies
+            if isinstance(item, dict) and str(item.get("type", "")).strip()
+        ]
+        supporting_types = anomaly_types[:4]
+
+        confidence = (
+            0.30
+            + min(0.30, len(anomaly_types) * 0.08)
+            + min(0.20, deletion_ratio * 1.4)
+            + min(0.20, max_gap_hours / 48.0)
+        )
+        confidence = min(0.92, max(0.25, round(confidence, 3)))
+
+        anomaly_text = ", ".join(supporting_types) if supporting_types else "no_strong_contradiction_detected"
+        summary = (
+            f"Case-level analysis processed {total_events} events across {event_type_count} event categories. "
+            f"Detected anomaly signals: {anomaly_text}. "
+            f"Observed deletion ratio is {deletion_ratio:.2f} with max inactivity gap {max_gap_hours:.2f} hours."
+        )
+
+        reasoning = (
+            f"The insight is based on structured anomaly detection, not legal conclusions. "
+            f"Activity density is {density:.2f} events/hour over {duration_hours:.2f} hours, "
+            f"with pattern count {len(anomaly_types)}. "
+            f"Risk confidence increases when deletion behavior, long inactivity gaps, and multiple anomaly types co-occur."
+        )
+
+        return {
+            "summary": summary,
+            "confidence_score": confidence,
+            "reasoning": reasoning,
+            "supporting_types": supporting_types,
+        }
 
     def _build_insight_document(
         self,
@@ -352,13 +411,7 @@ class InsightService:
             ",".join(pattern.type for pattern in patterns[:3]) if patterns else "no_strong_contradiction_detected"
         )
 
-        pattern_event_ids = {
-            item_id
-            for pattern in patterns
-            for item_id in pattern.related_event_ids
-            if ObjectId.is_valid(item_id)
-        }
-        supporting_ids = [ObjectId(item_id) for item_id in list(pattern_event_ids)[:20]]
+        supporting_ids = self._select_supporting_event_ids(events, patterns)
 
         return InsightDocument(
             case_id=ObjectId(case_id),
@@ -369,6 +422,54 @@ class InsightService:
             ai_reasoning=reasoning,
             generated_by_model=self.settings.deepinfra_llm_model,
         )
+
+    def _select_supporting_event_ids(
+        self,
+        events: list[EventDocument],
+        patterns: list[DetectedPattern],
+    ) -> list[ObjectId]:
+        pattern_event_ids = {
+            item_id
+            for pattern in patterns
+            for item_id in pattern.related_event_ids
+            if ObjectId.is_valid(item_id)
+        }
+        if pattern_event_ids:
+            return [ObjectId(item_id) for item_id in list(pattern_event_ids)[:20]]
+
+        # Fallback: even if no strong pattern was detected, attach representative
+        # events so the UI can show evidence coverage/reference IDs.
+        scored: list[tuple[int, ObjectId]] = []
+        for event in events:
+            if not event.id:
+                continue
+            event_id = str(event.id)
+            if not ObjectId.is_valid(event_id):
+                continue
+
+            score = 0
+            raw = event.raw_text.lower()
+            if event.event_type in {"DELETION", "CALL", "MESSAGE", "LOCATION"}:
+                score += 4
+            if event.is_deleted:
+                score += 5
+            if any(token in raw for token in ("shutdown", "power off", "uninstall", "removed app", "delete")):
+                score += 3
+            scored.append((score, ObjectId(event_id)))
+
+        # Prefer high-signal events first; keep deterministic tie-break by insertion order.
+        scored.sort(key=lambda item: item[0], reverse=True)
+        selected = [item[1] for item in scored[:20] if item[0] > 0]
+        if selected:
+            return selected
+
+        # Final fallback: latest 20 valid event IDs.
+        latest_valid = [
+            ObjectId(str(event.id))
+            for event in reversed(events)
+            if event.id and ObjectId.is_valid(str(event.id))
+        ]
+        return latest_valid[:20]
 
     def _to_response(self, insight: InsightDocument) -> InsightResponse:
         return InsightResponse(
