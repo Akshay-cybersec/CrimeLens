@@ -284,6 +284,75 @@ export default function CaseDecisionBetaView({ caseId, overview, timeline, insig
     return { headline, steps: steps.slice(0, 5) };
   })();
 
+  const legalMapping = (() => {
+    const events = timeline?.timeline ?? [];
+    const rows = events.map((event) => ({
+      fields: parseRawFields(event.raw_text || ''),
+      raw: (event.raw_text || '').toLowerCase(),
+    }));
+    const hasAny = (...tokens: string[]) => rows.some((row) => tokens.some((token) => row.raw.includes(token)));
+
+    const profile: ProfileBag = {};
+    rows.forEach((row) => {
+      const role = (row.fields.role || '').toLowerCase();
+      const name = pickEntity(row.fields, ['name', 'contact_name', 'person', 'owner_name']);
+      if (!name) return;
+      if (role === 'victim' && !profile.victim) profile.victim = name;
+      if (role === 'secondary_victim' && !profile.secondaryVictim) profile.secondaryVictim = name;
+      if (role === 'suspect' && !profile.suspect) profile.suspect = name;
+    });
+
+    const suspect = profile.suspect || 'Primary Suspect (to be confirmed)';
+    const victim = profile.victim || 'Primary Victim';
+    const allegations: Array<{ title: string; sections: string; why: string }> = [];
+
+    if (hasAny('threat', 'blackmail', 'extortion', 'telegram')) {
+      allegations.push({
+        title: 'Criminal Intimidation / Extortion',
+        sections: 'IPC 384, 385, 503, 506 (verify current BNS equivalents)',
+        why: `Threat/coercion indicators tied to digital communication against ${victim}.`,
+      });
+    }
+    if (hasAny('google drive', 'cloud_download', 'data_compromised', 'private content')) {
+      allegations.push({
+        title: 'Unauthorized Data Access / Privacy Violation',
+        sections: 'IT Act 66C, 66E, 72 (context dependent)',
+        why: 'Signals suggest unauthorized access/handling of private digital content.',
+      });
+    }
+    if (hasAny('anonymous gmail', 'tor_browser_install', 'tor browser', 'identity mask')) {
+      allegations.push({
+        title: 'Identity Masking / Personation-Facilitated Fraud',
+        sections: 'IT Act 66D (plus allied cyber-forgery provisions if applicable)',
+        why: 'Anonymous account + anonymity tooling may indicate intent to conceal identity.',
+      });
+    }
+    if (hasAny('goodbye_message', 'self-harm', 'self harm', 'deceased', 'psychological coercion')) {
+      allegations.push({
+        title: 'Abetment / Psychological Coercion Linked Outcome',
+        sections: 'IPC 306 (verify threshold and evidentiary standard)',
+        why: 'Timeline includes coercion pressure markers and severe victim distress outcomes.',
+      });
+    }
+    if (hasAny('bulk_chat_deletion', 'chat deletion', 'deleted', 'removed', 'wiped')) {
+      allegations.push({
+        title: 'Destruction / Concealment of Evidence',
+        sections: 'IPC 201 and relevant digital evidence tampering provisions',
+        why: 'Post-incident deletion/cleanup behavior appears in recovered artifacts.',
+      });
+    }
+
+    if (!allegations.length) {
+      allegations.push({
+        title: 'Further Legal Classification Required',
+        sections: 'To be mapped by legal cell after deeper artifact review',
+        why: 'Current extracted signals are not yet sufficient for confident section mapping.',
+      });
+    }
+
+    return { suspect, victim, allegations: allegations.slice(0, 6) };
+  })();
+
   const handleRegenerateResponse = async () => {
     if (!caseId || !onRegenerateResponse) return;
     try {
@@ -356,6 +425,24 @@ export default function CaseDecisionBetaView({ caseId, overview, timeline, insig
             </li>
           ))}
         </ul>
+      </div>
+
+      <div className="rounded-xl border border-rose-200 bg-rose-50 p-4">
+        <p className="text-xs font-bold tracking-widest text-rose-700 uppercase">Preliminary Legal Mapping (Advisory)</p>
+        <p className="text-sm text-rose-900 mt-2 leading-relaxed">
+          Possible suspect: <span className="font-semibold">{legalMapping.suspect}</span>
+        </p>
+        <ul className="mt-2 space-y-2">
+          {legalMapping.allegations.map((item, idx) => (
+            <li key={`${item.title}-${idx}`} className="text-sm text-rose-900 leading-7">
+              <span className="font-semibold">{item.title}:</span> {item.sections}
+              <div className="text-xs text-rose-700 mt-0.5">{item.why}</div>
+            </li>
+          ))}
+        </ul>
+        <p className="text-[11px] text-rose-700 mt-3">
+          This section is investigative guidance only; final charges/sections must be confirmed by authorized legal counsel.
+        </p>
       </div>
     </div>
   );

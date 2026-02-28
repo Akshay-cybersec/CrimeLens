@@ -177,7 +177,7 @@ export default function ForensicsDashboard() {
       case 'upload': return <UploadDataView onUploadComplete={handleUploadComplete} />;
       case 'parse': return <ParsedDataView caseId={caseId} timeline={timeline} />;
       case 'analyze': return <AIAnalysisView similarCases={similarCases} timeline={timeline} insights={insights} evidence={evidence} />;
-      case 'graph': return <GraphLinkingView graph={connectionGraph} />;
+      case 'graph': return <GraphLinkingView graph={connectionGraph} timeline={timeline} />;
       case 'insights': return <InsightsEngineView caseId={caseId} insights={insights} />;
       case 'evidence': return <ReviewEvidenceView caseId={caseId} evidence={evidence} onRegenerateResponse={handleRefreshResponses} />;
       case 'decision-beta': return <CaseDecisionBetaView caseId={caseId} overview={caseOverview} timeline={timeline} insights={insights} evidence={evidence} similarCases={similarCases} onRegenerateResponse={handleRegenerateCaseDecision} />;
