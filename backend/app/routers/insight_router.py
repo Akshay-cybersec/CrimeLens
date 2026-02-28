@@ -25,11 +25,11 @@ async def get_case_insights(
 @router.post(
     "/{case_id}/insights/regenerate",
     response_model=RegenerateInsightResponse,
-    dependencies=[Depends(require_roles(["SUPER_ADMIN", "ADMIN"]))],
+    dependencies=[Depends(require_roles(["SUPER_ADMIN", "ADMIN", "INVESTIGATOR", "ANALYST"]))],
 )
 async def regenerate_case_insights(
     case_id: str,
-    user: AuthUser = Depends(require_roles(["SUPER_ADMIN", "ADMIN"])),
+    user: AuthUser = Depends(require_roles(["SUPER_ADMIN", "ADMIN", "INVESTIGATOR", "ANALYST"])),
     case_service: CaseService = Depends(get_case_service),
     insight_service: InsightService = Depends(get_insight_service),
 ) -> RegenerateInsightResponse:
