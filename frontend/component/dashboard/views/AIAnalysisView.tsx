@@ -98,7 +98,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
 
   const width = 1000;
   const height = 300;
-  const paddingX = 100; // Increased padding to prevent edge cut-off
+  const paddingX = 0; // Set to 0 to completely eliminate left/right gap
   const paddingY = 60;
 
   useEffect(() => {
@@ -141,9 +141,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
       <div className="flex justify-between items-start">
         <div>
           <p className="text-[10px] font-black tracking-[0.3em] text-red-600 uppercase mb-2">Forensic Report</p>
-         
         </div>
-        
       </div>
 
       {/* Visual Timeline Area */}
@@ -201,8 +199,8 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
                 style={{
                   left: `${(getX(i) / width) * 100}%`,
                   top: i % 2 === 0 ? '0%' : '55%', 
-                  // Fix for August (Last Box): Shift it left so it doesn't overflow
-                  transform: i === evidenceData.length - 1 ? 'translateX(-90%)' : 'translateX(-50%)'
+                  // Fix for first and last box to prevent overflowing bounds
+                  transform: i === 0 ? 'translateX(0%)' : i === evidenceData.length - 1 ? 'translateX(-100%)' : 'translateX(-50%)'
                 }}
               >
                 <div className="border-b border-slate-100 pb-1 mb-1.5 flex justify-between items-center text-[9px] font-bold">
