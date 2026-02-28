@@ -161,6 +161,7 @@ export default function ForensicsDashboard() {
     }
     router.replace(`/dashboard?case_id=${nextCaseId}`);
     setActiveStep('analyze');
+    void reloadCaseData(nextCaseId);
     void reloadCases();
   };
 

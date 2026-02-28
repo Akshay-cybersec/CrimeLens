@@ -215,22 +215,41 @@ class UFDRParserService:
             "suspect_id",
         }
 
-        profile_like_keys = {"victim_info", "secondary_victim", "suspect_info", "accused_info", "complainant_info"}
+        profile_like_keys = {"victim_info", "secondary_victim", "suspect_info", "accused_info", "complainant_info", "victim", "persons"}
         role_alias = {
             "victim_info": "victim",
             "secondary_victim": "secondary_victim",
             "suspect_info": "suspect",
             "accused_info": "suspect",
             "complainant_info": "complainant",
+            "victim": "victim",
         }
 
         def maybe_emit_profile_line(node: dict[str, Any], parent_key: str | None) -> None:
-            if not parent_key or parent_key not in profile_like_keys:
+            if not parent_key:
                 return
+            parent_key_l = parent_key.lower()
+            inferred_role: str | None = None
+            if parent_key_l in role_alias:
+                inferred_role = role_alias[parent_key_l]
+            elif parent_key_l.startswith("suspect"):
+                inferred_role = "suspect"
+            elif parent_key_l.startswith("victim"):
+                inferred_role = "victim"
+            elif parent_key_l.startswith("complainant"):
+                inferred_role = "complainant"
+            elif parent_key_l.startswith("accused"):
+                inferred_role = "suspect"
+            elif parent_key_l in profile_like_keys:
+                inferred_role = parent_key_l
+
+            if not inferred_role:
+                return
+
             name = node.get("name")
             if not isinstance(name, str) or not name.strip():
                 return
-            role = role_alias.get(parent_key, parent_key)
+            role = inferred_role
             profile_parts = [f"role:{role}", f"name:{name.strip()}"]
             for field in ("age", "status", "relation", "incident_type", "prior_record", "data_compromised"):
                 value = node.get(field)

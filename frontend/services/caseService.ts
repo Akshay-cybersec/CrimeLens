@@ -39,7 +39,9 @@ export const caseService = {
   },
 
   async getTimeline(caseId: string): Promise<TimelineResponse> {
-    const { data } = await api.get<TimelineResponse>(`/cases/${caseId}/timeline`);
+    const { data } = await api.get<TimelineResponse>(`/cases/${caseId}/timeline`, {
+      params: { page: 1, page_size: 500 },
+    });
     return data;
   },
 

@@ -10,6 +10,7 @@ from app.core.deps import (
     get_case_service,
     get_evidence_service,
     get_graph_link_service,
+    get_insight_service,
     get_search_service,
     get_similar_case_service,
     get_timeline_service,
@@ -30,6 +31,7 @@ from app.services.case_behavior_service import CaseBehaviorService
 from app.services.case_service import CaseService
 from app.services.evidence_service import EvidenceService
 from app.services.graph_link_service import GraphLinkService
+from app.services.insight_service import InsightService
 from app.services.search_service import SearchService
 from app.services.similar_case_service import SimilarCaseService
 from app.services.timeline_service import TimelineService
@@ -59,9 +61,11 @@ async def append_upload_to_case(
     file: UploadFile = File(...),
     user: AuthUser = Depends(require_roles(["SUPER_ADMIN", "ADMIN", "INVESTIGATOR"])),
     case_service: CaseService = Depends(get_case_service),
+    insight_service: InsightService = Depends(get_insight_service),
     background_worker: BackgroundWorkerService = Depends(get_background_worker),
 ) -> CaseCreateResponse:
     created = await case_service.append_case_upload(case_id=case_id, file=file, user=user)
+    await insight_service.invalidate_case(case_id)
     background_tasks.add_task(background_worker.process_case, created.case_id)
     return created
 

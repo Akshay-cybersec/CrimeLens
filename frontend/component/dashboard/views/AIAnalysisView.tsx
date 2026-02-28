@@ -92,7 +92,8 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
   }, [timeline]);
 
   const [activeStep, setActiveStep] = useState(0);
-  const isComplete = activeStep === evidenceData.length - 1;
+  const safeActiveStep = Math.max(0, Math.min(activeStep, Math.max(0, evidenceData.length - 1)));
+  const isComplete = safeActiveStep === evidenceData.length - 1;
   const topInsight = insights[0];
   const topClusters = (evidence?.clusters ?? []).slice(0, 3);
 
@@ -109,7 +110,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
         clearInterval(timer);
         return prev;
       });
-    }, 1900);
+    }, 1450);
     return () => clearInterval(timer);
   }, [evidenceData.length]);
 
@@ -122,8 +123,15 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
   const getY = (value: number) => height - (value * (height - paddingY * 2)) / 1000 - paddingY;
 
   const generateProgressivePath = (step: number) => {
+    if (!evidenceData.length) {
+      return '';
+    }
+    const boundedStep = Math.min(step, evidenceData.length - 1);
     let path = `M ${getX(0)} ${getY(evidenceData[0].count)}`;
-    for (let i = 1; i <= step; i++) {
+    for (let i = 1; i <= boundedStep; i++) {
+      if (!evidenceData[i] || !evidenceData[i - 1]) {
+        break;
+      }
       const prevX = getX(i - 1);
       const prevY = getY(evidenceData[i - 1].count);
       const currX = getX(i);
@@ -152,7 +160,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
-            d={generateProgressivePath(activeStep)}
+            d={generateProgressivePath(safeActiveStep)}
             fill="none"
             stroke={isComplete ? "#059669" : "#1d4ed8"}
             strokeWidth="4"
@@ -165,21 +173,21 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
               <motion.circle
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ 
-                  opacity: i <= activeStep ? 1 : 0.05, 
-                  scale: i <= activeStep ? 1 : 0.5,
-                  fill: i === activeStep && !isComplete ? "#ef4444" : "#1d4ed8" 
+                  opacity: i <= safeActiveStep ? 1 : 0.05, 
+                  scale: i <= safeActiveStep ? 1 : 0.5,
+                  fill: i === safeActiveStep && !isComplete ? "#ef4444" : "#1d4ed8" 
                 }}
                 cx={getX(i)}
                 cy={getY(d.count)}
-                r={i === activeStep ? 8 : 5}
+                r={i === safeActiveStep ? 8 : 5}
               />
-              {i === activeStep && !isComplete && (
+              {i === safeActiveStep && !isComplete && (
                 <motion.circle
                   cx={getX(i)}
                   cy={getY(d.count)}
                   initial={{ r: 5, opacity: 0.8 }}
                   animate={{ r: 25, opacity: 0 }}
-                  transition={{ repeat: Infinity, duration: 1.4 }}
+                  transition={{ repeat: Infinity, duration: 1.05 }}
                   className="fill-red-500"
                 />
               )}
@@ -190,7 +198,7 @@ export default function ForensicTimeline({ timeline, similarCases = [], insights
         {/* Floating Box Adjustment Logic */}
         {evidenceData.map((item, i) => (
           <AnimatePresence key={i}>
-            {i <= activeStep && (
+            {i <= safeActiveStep && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}

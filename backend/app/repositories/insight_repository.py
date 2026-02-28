@@ -33,3 +33,7 @@ class InsightRepository:
     async def last_generated_at(self, case_id: str) -> Optional[datetime]:
         latest = await self.latest_by_case(case_id)
         return latest.created_at if latest else None
+
+    async def delete_by_case(self, case_id: str) -> int:
+        result = await self.collection.delete_many({"case_id": ObjectId(case_id)})
+        return int(result.deleted_count)
